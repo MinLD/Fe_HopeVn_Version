@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const privateAdminPaths = ["/admin"];
-const authPaths = [
-  "/Authentication/Login",
-  "/Authentication/Sign",
-  "/Authentication/Verify/",
-];
+const authPaths = ["/authenticate/loggin", "/authenticate"];
 const sellerPaths = ["/seller/signup"];
 
 const privateSellerPaths = ["/seller/dashboard"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const sessionToken = request.cookies.get("token")?.value;
+  const sessionToken = request.cookies.get("authToken")?.value;
+
   const roles = request.cookies.get("roles")?.value;
 
   // nếu người dùng đã có roles là seller rồi thì ko được vào seller
@@ -31,7 +28,10 @@ export function middleware(request: NextRequest) {
   }
 
   // Nếu người dùng chua dang nhap thi chuyen huong ve trang login
-  if (privateSellerPaths.some((path) => pathname.startsWith(path)) && !sessionToken) {
+  if (
+    privateSellerPaths.some((path) => pathname.startsWith(path)) &&
+    !sessionToken
+  ) {
     return NextResponse.redirect(new URL("/Authentication/Login", request.url));
   }
 
@@ -61,7 +61,7 @@ export function middleware(request: NextRequest) {
 
   // Nếu người dùng truy cập trang authPaths mà có token thì chuyển hướng về trang home
   if (authPaths.some((path) => pathname.startsWith(path)) && sessionToken) {
-    return NextResponse.redirect(new URL("/accounts/orthers", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();

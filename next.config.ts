@@ -21,6 +21,16 @@ const nextConfig: NextConfig = {
     ],
   },
 };
+module.exports = {
+  async rewrites() {
+    return [
+      {
+        source: "/backend/:path*",
+        destination: "http://localhost:8080/api/:path*",
+      },
+    ];
+  },
+};
 // module.exports = {
 //   images: {
 //     remotePatterns: [

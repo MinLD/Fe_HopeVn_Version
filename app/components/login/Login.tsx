@@ -10,6 +10,7 @@ import { useFormik } from "formik";
 import InputBox from "@/app/components/InputBox";
 import { toast } from "sonner";
 import { OauthConfig } from "@/app/config/OauthConfig";
+import axios from "axios";
 
 type FormData = {
   email: string;
@@ -29,7 +30,6 @@ type Form = {
 export default function Login() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const data: Form[] = [
@@ -69,9 +69,9 @@ export default function Login() {
     : data;
 
   const validationSchema = Yup.object({
-    email: Yup.string().email("Email không hợp lệ").required("Bắt buộc"),
+    // email: Yup.string().email("Email không hợp lệ").required("Bắt buộc"),
     password: Yup.string()
-      .min(8, "Mật khẩu phải có ít nhất 8 ký tự")
+      .min(3, "Mật khẩu phải có ít nhất 8 ký tự")
       .required("Bắt buộc"),
     ...(isLogin
       ? {}
@@ -96,9 +96,31 @@ export default function Login() {
     onSubmit: async (values: FormData) => {
       setIsLoading(true);
       console.log(values);
-      // Thêm logic xử lý đăng nhập/đăng ký ở đây
-      setIsLoading(false);
-      // Ví dụ: router.push("/dashboard") sau khi đăng nhập thành công
+      if (isLogin) {
+        axios
+          .post(
+            "/api/login",
+            {
+              email: values.email,
+              password: values.password,
+            },
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            setIsLoading(false);
+            toast.success("Đăng nhập thành công");
+            window.location.href = "/profile";
+          })
+          .catch((err) => {
+            console.log(err);
+            setIsLoading(false);
+          });
+      } else {
+        alert("đăng ký thành công");
+      }
     },
   });
   const handleGoogleLogin = () => {
@@ -138,18 +160,10 @@ export default function Login() {
             >
               <Image src={Logo} alt="logo" width={60} height={50} />
             </Link>
-            {/* <h2 className="mt-6 text-3xl font-bold text-gray-900">
-              {isLogin ? "Chào mừng trở lại" : "Tạo tài khoản"}
-            </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              {isLogin
-                ? "Đăng nhập vào tài khoản của bạn để tiếp tục đồng hành cùng HopeVn"
-                : "Tham gia HopeVn và bắt đầu hành trình tìm cơ hội của bạn"}
-            </p> */}
           </div>
 
           {/* Form */}
-          <form onSubmit={formik.handleSubmit} className="space-y-6">
+          <form onSubmit={formik.handleSubmit} className="space-y-3">
             {filteredData.map((item) => (
               <InputBox
                 key={item.name}
@@ -188,7 +202,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#16a34a] text-white py-3 rounded-lg hover:from-[#16a34a] hover:to-[#16a34a] transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="hover:cursor-pointer scale-100 hover:scale-101 w-full bg-[#16a34a] text-white py-3 rounded-lg hover:from-[#16a34a] hover:to-[#16a34a] transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <div className="flex items-center justify-center">
@@ -204,13 +218,13 @@ export default function Login() {
           </form>
 
           {/* Toggle Form */}
-          <div className="mt-6 text-center">
+          <div className="mt-6 text-center ">
             <p className="text-sm text-gray-600">
               {isLogin ? "Bạn chưa có tài khoản?" : "Bạn đã có tài khoản?"}
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
-                className="ml-1 text-[#16a34a] hover:text-[#16a34a] font-medium"
+                className="ml-1 text-[#16a34a] hover:text-[#16a34a] font-medium hover:cursor-pointer"
               >
                 {isLogin ? "Đăng ký" : "Đăng nhập"}
               </button>

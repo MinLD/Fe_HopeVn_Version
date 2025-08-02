@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import Cookies from "js-cookie";
-import LoaddingBox from "@/app/components/BoxLoadding";
+import { exchangeCodeForToken } from "@/app/service/auth";
+import LoadingOverlay from "@/app/components/LoaddingOverlay";
 
 export default function AuthenticatePage() {
   const router = useRouter();
@@ -31,41 +32,41 @@ export default function AuthenticatePage() {
 
       if (code) {
         console.log("Authentication code received:", code);
-        // try {
-        //   const token = await exchangeCodeForToken(code);
-        //   if (token) {
-        //     Cookies.set("authToken", token, {
-        //       expires: 7,
-        //       secure: process.env.NODE_ENV === "production",
-        //       sameSite: "Lax",
-        //     });
-        //     // await fetchProfile();
-        //     // await fetchCart();
+        try {
+          const token = await exchangeCodeForToken(code);
+          if (token) {
+            Cookies.set("authToken", token, {
+              expires: 7,
+              secure: process.env.NODE_ENV === "production",
+              sameSite: "Lax",
+            });
+            //     await fetchProfile();
+            // await fetchCart();
 
-        //     const role = Cookies.get("roles");
+            const role = Cookies.get("roles");
 
-        //     if (role === "ADMIN") {
-        //       router.replace("/admin");
-        //     } else if (role === "SELLER") {
-        //       router.replace("/seller");
-        //     } else {
-        //       router.replace("/");
-        //     }
-        //     console.log("Token set in cookies directly.");
-        //     router.replace("/");
-        //   } else {
-        //     setError("Authentication failed: No token received from backend.");
-        //     setIsLoading(false);
-        //   }
-        // } catch (err: any) {
-        //   console.error("Authentication error:", err);
-        //   setError(
-        //     `Authentication failed: ${
-        //       err.message || "Unknown error during token exchange."
-        //     }`
-        //   );
-        //   setIsLoading(false);
-        // }
+            if (role === "ADMIN") {
+              router.replace("/admin");
+            } else if (role === "SELLER") {
+              router.replace("/seller");
+            } else {
+              router.replace("/");
+            }
+            console.log("Token set in cookies directly.");
+            router.replace("/");
+          } else {
+            setError("Authentication failed: No token received from backend.");
+            setIsLoading(false);
+          }
+        } catch (err: any) {
+          console.error("Authentication error:", err);
+          setError(
+            `Authentication failed: ${
+              err.message || "Unknown error during token exchange."
+            }`
+          );
+          setIsLoading(false);
+        }
       } else {
         // Nếu không có code và searchParams không phải null (đã được hydrate)
         setError(
@@ -91,7 +92,7 @@ export default function AuthenticatePage() {
   if (isLoading && !error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen space-y-4 bg-gray-100">
-        <LoaddingBox />
+        <LoadingOverlay message="Authenticating..." />
         <p className="text-lg text-gray-700">Authenticating...</p>
       </div>
     );

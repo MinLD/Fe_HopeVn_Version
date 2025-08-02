@@ -1,15 +1,6 @@
 "use client";
 import { useState } from "react";
-import {
-  IoIosArrowDown,
-  IoIosArrowUp,
-  IoIosNotifications,
-} from "react-icons/io";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-import { TiMessages } from "react-icons/ti";
 import MyLayout from "../../../Layout/MyLayOut";
-import { FaRegUser } from "react-icons/fa";
-import Cookies from "js-cookie";
 import logo from "../../../../public/logo/logoanhiu1.png";
 import {
   Briefcase,
@@ -19,13 +10,12 @@ import {
   LogOut,
   Signpost,
 } from "lucide-react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
+import { AiOutlineMenu } from "react-icons/ai";
+import { useStateStore } from "@/app/context/StoreProvider";
 function HeaderMenuBottom() {
   const navigate = useRouter();
-  const [isShowUserMenu, setShowUserMenu] = useState<boolean>(false);
   const data: { name: string; id: number }[] = [
     { id: 3, name: "Giới Thiệu" },
     { name: "Tuyển dụng", id: 1 },
@@ -45,15 +35,10 @@ function HeaderMenuBottom() {
     { id: 13, name: "Đổi mật khẩu", icon: <Lock /> },
     { id: 14, name: "Đăng xuất", icon: <LogOut /> },
   ];
+  const storeProvider = useStateStore();
+  const { IsOpenMenu, setIsOpenMenu } = storeProvider;
   const [isShowMenuChild, setShowMenuChild] = useState<boolean>(false);
-  const [isShowQr, setShowQr] = useState<boolean>(false);
-  const token = Cookies.get("token");
 
-  const handleReuturnPostJob = () => {
-    navigate.push("/app/register");
-  };
-
-  const handleClickMenuUser = (id: number) => {};
   const [hover, setHover] = useState<any>(false);
 
   const handleReturnComponent = (id: any) => {};
@@ -61,25 +46,28 @@ function HeaderMenuBottom() {
   return (
     <div className="flex h-[62px] w-full items-center justify-center bg-[#fff] shadow-2xl">
       <MyLayout>
-        <div className="flex items-center justify-between sm:gap-0">
-          <div className="flex items-center justify-center gap-6">
+        <div className="flex items-center justify-between sm:px-4 px-2 w-full">
+          <div className="flex items-center justify-center gap-6 md:gap-10 lg:gap-15">
+            {/* logo */}
             <span
               onClick={() => {
                 navigate.push("/");
                 window.scrollTo(0, 0);
               }}
+              className="cursor-pointer flex items-center justify-center"
             >
               <Image
                 src={logo}
                 alt="logo"
                 width={50}
                 height={58}
-                className="h-[48px] w-[40px] cursor-pointer"
+                className="h-[48px] w-[40px] md:w-[50px] md:h-[58px] cursor-pointer"
               />
             </span>
 
+            {/* menu */}
             <div
-              className="lgg:flex hidden gap-2"
+              className="md:flex hidden gap-10"
               onMouseLeave={() => setHover("")}
             >
               {data.map((item, k) => (
@@ -90,7 +78,7 @@ function HeaderMenuBottom() {
                   onMouseEnter={() => setHover(k)}
                 >
                   <h1
-                    className="text-[16px] font-medium"
+                    className="text-[16px] font-medium line-clamp-1 max-w-[100px] "
                     onClick={() => {
                       item.name === "Bài đăng" &&
                         setShowMenuChild(!isShowMenuChild);
@@ -138,7 +126,15 @@ function HeaderMenuBottom() {
             </div>
           </div>
 
+          {/* ShowMenu mobile */}
           <div
+            className="text-3xl  hover:cursor-pointer md:hidden"
+            onClick={() => setIsOpenMenu(true)}
+          >
+            <AiOutlineMenu />
+          </div>
+
+          {/* <div
             onMouseLeave={() => setShowUserMenu(false)}
             className="flex items-center gap-4"
           >
@@ -228,7 +224,7 @@ function HeaderMenuBottom() {
             ) : (
               <></>
             )}
-          </div>
+          </div> */}
         </div>
       </MyLayout>
     </div>

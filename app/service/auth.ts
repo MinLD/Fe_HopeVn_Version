@@ -23,3 +23,12 @@ const exchangeCodeForToken = async (
     );
   }
 };
+
+const login = async (email: string, password: string) => {
+  return await axiosClient.post("http://localhost:8080/api/auth/token", {
+    email,
+    password,
+  });
+};
+
+export { exchangeCodeForToken, login };
