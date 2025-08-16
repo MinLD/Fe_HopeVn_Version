@@ -20,31 +20,30 @@ function CommentPostCard({
   token,
 }: CommentPostCardProps) {
   const [isComment, setIsComment] = React.useState<string>("");
-  const handleComment = async () => {
-    await CommentPost(token, id, isComment || "")
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    onClose();
+  const handleComment = () => {
+    // await CommentPost(token, id, isComment || "")
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
   // Xử lý đóng modal khi nhấn phím Escape
-  useEffect(() => {
-    const handleEsc = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        handleComment;
-        onClose();
-      }
-    };
-    window.addEventListener("keydown", handleEsc);
+  // useEffect(() => {
+  //   const handleEsc = (event: KeyboardEvent) => {
+  //     if (event.key === "Escape") {
+  //       // handleComment;
+  //       // onClose();
+  //     }
+  //   };
+  //   window.addEventListener("keydown", handleEsc);
 
-    // Dọn dẹp event listener khi component bị hủy
-    return () => {
-      window.removeEventListener("keydown", handleEsc);
-    };
-  }, [onClose]);
+  //   // Dọn dẹp event listener khi component bị hủy
+  //   return () => {
+  //     window.removeEventListener("keydown", handleEsc);
+  //   };
+  // }, [onClose]);
 
   return (
     <div
@@ -136,14 +135,13 @@ function CommentPostCard({
         <div className="p-4 border-t border-gray-200 bg-gray-50">
           <form className="flex items-center space-x-3">
             <input
-              onChange={(e) => setIsComment(e.target.value || "")}
+              // onChange={(e) => setIsComment(e.target.value || "")}
               type="text"
               placeholder="Viết bình luận của bạn..."
               className="w-full px-4 py-2 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
             />
             <button
-              onClick={handleComment}
-              type="submit"
+              // onClick={handleComment}
               className="bg-[#009966] text-white p-2 rounded-full hover:bg-[#009988] transition-transform active:scale-95"
             >
               <Send size={20} />
