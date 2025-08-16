@@ -11,6 +11,8 @@ import InputBox from "@/app/components/InputBox";
 import { toast } from "sonner";
 import { OauthConfig } from "@/app/config/OauthConfig";
 import axios from "axios";
+import { useAuth } from "@/app/hooks/useAuth";
+import { register_Api } from "@/app/service/auth";
 
 type FormData = {
   email: string;
@@ -31,6 +33,7 @@ export default function Login() {
   const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const { setAuth } = useAuth();
 
   const data: Form[] = [
     {
@@ -71,11 +74,12 @@ export default function Login() {
   const validationSchema = Yup.object({
     // email: Yup.string().email("Email không hợp lệ").required("Bắt buộc"),
     password: Yup.string()
-      .min(3, "Mật khẩu phải có ít nhất 8 ký tự")
+      .min(3, "Mật khẩu phải có ít nhất 3 ký tự")
       .required("Bắt buộc"),
     ...(isLogin
       ? {}
       : {
+          email: Yup.string().email("Email không hợp lệ").required("Bắt buộc"),
           name: Yup.string()
             .min(3, "Họ tên phải có ít nhất 3 ký tự")
             .required("Bắt buộc"),
@@ -109,17 +113,29 @@ export default function Login() {
             }
           )
           .then((res) => {
-            console.log(res);
             setIsLoading(false);
+            setAuth(res?.data?.token);
             toast.success("Đăng nhập thành công");
-            window.location.href = "/profile";
+            window.location.href = "/";
           })
           .catch((err) => {
             console.log(err);
+            toast.error("Email/Mật khẩu không chính xác");
             setIsLoading(false);
           });
       } else {
-        alert("đăng ký thành công");
+        setIsLoading(true);
+        await register_Api(values.email, values.password, values.name || "")
+          .then(() => {
+            setIsLoading(false);
+            toast.success("Đăng ký tài khoản thành công");
+            setIsLogin(true);
+          })
+          .catch((err) => {
+            toast.error(err.response.data.message);
+            console.log(err);
+            setIsLoading(false);
+          });
       }
     },
   });

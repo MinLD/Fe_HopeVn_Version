@@ -1,34 +1,39 @@
-interface ProfileUser {
-  result: {
-    id: string;
-    email: string;
-    fund: string;
-    phone: string;
-    profile: profile;
-    roles: {
-      name: string;
-    }[];
-  };
-}
-
-interface profile {
-  address: string;
-  bio: string;
-  city: string;
-  company: string;
-  country: string;
-  disabilityDescription: string;
-  disabilityType: string;
-  dob: string;
-  fullName: string;
-  gender: string;
-  id: number;
+interface Ty_User {
+  id: string;
+  email: string;
+  fund: number;
   phone: string;
-  profilePicture: {
-    url: string;
-  };
-  seller: string;
+
+  profile: Ty_profile_User;
   roles: {
     name: string;
   }[];
+  accepted: boolean;
+}
+
+interface Ty_profile_User {
+  country: string;
+  address: string;
+
+  email: string;
+  bio: string;
+  city: string;
+  dob: string;
+  fullName: string;
+  gender: string;
+  id: string;
+  phone: string;
+  profilePicture: {
+    url: string | null;
+  };
+}
+
+interface DecodedToken {
+  sub: string;
+  scope?: string;
+  iss: string;
+  exp: number;
+  iat: number;
+  userId: string;
+  jti: string;
 }

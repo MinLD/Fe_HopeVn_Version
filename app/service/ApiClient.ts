@@ -8,11 +8,12 @@ export const axiosClient = axios.create({
     "Content-Type": "application/json",
   },
 });
+export const fetchClient = "http://localhost:8080/api/";
 
 // Interceptor cho request
 axiosClient.interceptors.request.use(
-  (config) => {
-    const sessionToken = Cookies.get("authToken");
+  async (config) => {
+    const sessionToken = await Cookies.get("authToken");
     if (sessionToken) {
       config.headers.Authorization = `Bearer ${sessionToken}`;
     }

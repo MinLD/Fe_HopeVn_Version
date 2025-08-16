@@ -1,6 +1,7 @@
 import AboutUsShop from "@/app/components/AboutUsShop";
 import AgencySection from "@/app/components/AgencySection";
 import Banner from "@/app/components/Banner";
+import FloatingActionButton from "@/app/components/FloatingActionButton";
 import GettingStarted from "@/app/components/GettingStarted";
 import HopeJobListing from "@/app/components/HopeJobListing";
 

@@ -1,31 +1,56 @@
 "use client";
-import { ComponentType, SVGProps, useState } from "react";
+import { ComponentType, SVGProps, useEffect, useState } from "react";
 import MyLayout from "../../../Layout/MyLayOut";
 import { IoIosArrowDown } from "react-icons/io";
-
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import MyButton from "@/app/components/Button";
+import * as React from "react";
 
-import { Bell, Search } from "lucide-react";
+import { Bell, ChevronDown, Search, User } from "lucide-react";
 
 import { IoSearchSharp } from "react-icons/io5";
-function HeaderMenuTop() {
+import { useProfileStore } from "@/app/zustand/userStore";
+import AvatarProfile from "@/app/components/AvatarProfile";
+
+import { useNav } from "@/app/hooks/useNav";
+import HeaderTopMenuDropdown from "@/app/components/HeaderTopMenuDropdown";
+
+type Props = {
+  token?: string | null;
+};
+function HeaderMenuTop({ token = "" }: Props) {
+  const navigate = useRouter();
+  const { setOpenMenuHeaderTop, isOpenMenuHeaderTop } = useNav();
+  // const displayProfile = await initialProfile;
+  // const { profileUser, isLoading } = useAutoFetchProfile();
+  const { fetchProfile, profileUser, isLoading } = useProfileStore();
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
   const icons: { name: ComponentType<SVGProps<SVGSVGElement>>; id: number }[] =
     [
       { id: 1, name: Bell },
       { id: 2, name: Search },
     ];
 
-  const token = Cookies.get("authToken");
-
-  const navigate = useRouter();
-
   const [isShowMenuSub, setIsShowMenuSub] = useState<boolean>(false);
 
-  const handleReturnToLoggin = (id: number) => {
+  const handleReturn = (id: number) => {
     if (id === 1) {
       navigate.push("/authenticate/loggin");
+    }
+    if (id === 2) {
+      navigate.push("/authenticate/loggin");
+    }
+    if (id === 3) {
+      navigate.push("/");
+    }
+    if (id === 4) {
+      navigate.push("/account/profile");
+    }
+    if (id === 5) {
+      navigate.push("/");
     }
   };
   return (
@@ -74,31 +99,31 @@ function HeaderMenuTop() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-1">
             {/* Loggin -pc*/}
             <div className="flex items-center justify-center gap-3 md:gap-2 ">
-              {icons.map((item, k) => {
-                const IconComponent = item.name;
-                return (
-                  <div key={k}>
-                    <IconComponent
-                      className={`w-[20px] h-[20px md:w-[25px] md:h-[25px] ${
-                        item.id === 2 && "md:hidden"
-                      }`}
-                    />
-                  </div>
-                );
-              })}
-
-              <div className="md:flex hidden items-center gap-1">
+              <div className="md:flex hidden items-center gap-2">
                 {token ? (
-                  ""
+                  <>
+                    {icons.map((item, k) => {
+                      const IconComponent = item.name;
+                      return (
+                        <div key={k}>
+                          <IconComponent
+                            className={`w-[20px] h-[20px md:w-[25px] md:h-[25px] ${
+                              item.id === 2 && "md:hidden"
+                            }`}
+                          />
+                        </div>
+                      );
+                    })}
+                  </>
                 ) : (
                   <div className="flex items-center gap-2 text-[14px]">
-                    <div onClick={() => handleReturnToLoggin(1)}>
+                    <div onClick={() => handleReturn(1)}>
                       <MyButton content={"Đăng nhập"} isColor="bg-[#00b14f]" />
                     </div>
-                    <div onClick={() => handleReturnToLoggin(2)}>
+                    <div onClick={() => handleReturn(2)}>
                       <MyButton content={"Đăng ký"} />
                     </div>
                   </div>
@@ -106,8 +131,33 @@ function HeaderMenuTop() {
               </div>
             </div>
             {/* Loggin-mb */}
-            {token ? (
-              ""
+
+            {token && token ? (
+              <div className="relative">
+                <div onClick={() => setOpenMenuHeaderTop(!isOpenMenuHeaderTop)}>
+                  <div className="flex items-center gap-1 hover:cursor-pointer">
+                    <AvatarProfile
+                      name={profileUser?.profile?.fullName || "?"}
+                      url={profileUser?.profile?.profilePicture?.url}
+                    />
+                    {/* {isLoading ? (
+                      <>
+                        {" "}
+                        <Skeleton animation="wave" height={52} width={48} />
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        <span>{profileUser?.result.profile.fullName}</span>
+                      </>
+                    )} */}
+                    <svg viewBox="0 0 24 24" width="1.2em" height="1.2em">
+                      <path fill="currentColor" d="m12 16l-6-6h12z"></path>
+                    </svg>
+                  </div>
+                </div>
+                {isOpenMenuHeaderTop && <HeaderTopMenuDropdown />}
+              </div>
             ) : (
               <>
                 <div className="md:hidden flex items-center justify-center gap-2">
@@ -125,13 +175,13 @@ function HeaderMenuTop() {
                       >
                         <p
                           className="h-[24px] w-[198px] cursor-pointer text-[16px] text-[#0b4d8d]"
-                          onClick={() => handleReturnToLoggin(1)}
+                          onClick={() => handleReturn(1)}
                         >
                           Đăng nhập
                         </p>
                         <p
                           className="h-[24px] w-[198px] cursor-pointer text-[16px] text-[#0b4d8d]"
-                          onClick={() => handleReturnToLoggin(2)}
+                          onClick={() => handleReturn(2)}
                         >
                           Đăng ký
                         </p>

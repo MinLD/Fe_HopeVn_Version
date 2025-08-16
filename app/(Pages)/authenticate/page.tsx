@@ -33,13 +33,24 @@ export default function AuthenticatePage() {
       if (code) {
         console.log("Authentication code received:", code);
         try {
-          const token = await exchangeCodeForToken(code);
+          const { token, refreshToken } = await exchangeCodeForToken(code);
+
           if (token) {
             Cookies.set("authToken", token, {
               expires: 7,
               secure: process.env.NODE_ENV === "production",
               sameSite: "Lax",
+              path: "/",
             });
+
+            if (refreshToken) {
+              Cookies.set("refreshToken", refreshToken, {
+                expires: 30,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "Lax",
+                path: "/",
+              });
+            }
             //     await fetchProfile();
             // await fetchCart();
 
@@ -53,6 +64,7 @@ export default function AuthenticatePage() {
               router.replace("/");
             }
             console.log("Token set in cookies directly.");
+            window.location.reload();
             router.replace("/");
           } else {
             setError("Authentication failed: No token received from backend.");

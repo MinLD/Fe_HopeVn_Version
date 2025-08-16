@@ -17,6 +17,8 @@ type ContextType = {
 
   IsOpenMenu: boolean;
   setIsOpenMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  isTypeSibar: string;
+  setTypeSibar: React.Dispatch<React.SetStateAction<string>>;
 
   clearVerifyState: () => void;
 };
@@ -28,6 +30,7 @@ type Props = {
 export const StoreContext = createContext<ContextType | undefined>(undefined);
 
 export function StoreProvider({ children }: Props) {
+  const [isTypeSibar, setTypeSibar] = useState<string>("d");
   const [user, setUser] = useState<string>("Ahihi");
   const [IsOpenMenu, setIsOpenMenu] = useState<boolean>(false);
 
@@ -73,6 +76,8 @@ export function StoreProvider({ children }: Props) {
         IsOpenMenu,
         setIsOpenMenu,
         clearVerifyState,
+        isTypeSibar,
+        setTypeSibar,
       }}
     >
       {children}

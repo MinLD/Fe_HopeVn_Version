@@ -2,16 +2,19 @@ import axiosClient from "@/app/service/ApiClient";
 
 const exchangeCodeForToken = async (
   authCode: string
-): Promise<string | null> => {
+): Promise<string | null | any> => {
   try {
     const response = await axiosClient.post(
       `/auth/outbound/authentication?code=${authCode}`,
       {}
     );
 
-    console.log("API response data for Google auth:", response.data);
+    console.log("API response data for Google auth:", response.data.result);
 
-    return response.data.result?.token || null;
+    return {
+      token: response.data.result.token,
+      refreshToken: response.data.result.refreshToken,
+    };
   } catch (error: any) {
     console.error(
       "Error exchanging code for Google token:",
@@ -24,11 +27,31 @@ const exchangeCodeForToken = async (
   }
 };
 
-const login = async (email: string, password: string) => {
-  return await axiosClient.post("http://localhost:8080/api/auth/token", {
+const login_Api = async (email: string, password: string) => {
+  return await axiosClient.post("/auth/token", {
     email,
     password,
   });
 };
+const register_Api = async (
+  email: string,
+  password: string,
+  fullName: string
+) => {
+  return await axiosClient.post("/users", {
+    email,
+    password,
+    fullName,
+  });
+};
 
-export { exchangeCodeForToken, login };
+const GetRoles_Api = async (token: string) => {
+  return fetch(`http://localhost:3000/api/get-roles`, {
+    method: "GET",
+    headers: {
+      Cookie: `authToken=${token}`,
+    },
+  });
+};
+
+export { exchangeCodeForToken, login_Api, GetRoles_Api, register_Api };

@@ -1,79 +1,85 @@
-// File: app/zustand/userStore.tsx
-// Mục đích: Quản lý trạng thái profile với Zustand, dùng cookie và initial data.
+"use client";
 import { create } from "zustand";
 import axios from "axios";
-import Cookies from "js-cookie";
+import { useEffect } from "react";
+
 interface ProfileState {
   isLoading: boolean;
   error: string | null;
-  profileUser: ProfileUser | null;
-  fetchProfile: (force?: boolean) => Promise<void>;
-  initialize: (initialData: ProfileUser | null) => void; // Hàm khởi tạo từ server
+  profileUser: Ty_User | null;
+  fetchProfile: () => Promise<void>;
+  initialize: (initialData: Ty_User | null) => void;
+  refreshToken: () => Promise<void>; // Thêm hàm refresh
 }
-export const useProfileStore = create<ProfileState>((set) => {
-  // Lấy profile từ cookie khi khởi tạo
-  const storedProfile = Cookies.get("profileUser");
-  let initialProfile: ProfileUser | null = null; // Biến tạm để lưu profile parse.
-  let initialRoles: string[] | null = null;
-  if (storedProfile) {
-    // Parse string từ cookie thành object.
-    try {
-      initialProfile = JSON.parse(storedProfile);
-    } catch (error) {
-      console.error("Lỗi parse profile từ cookie:", error);
-      Cookies.remove("profileUser");
-    }
-    // Nếu lỗi (string không phải JSON), log lỗi và xóa cookie để tránh lặp lại.
-  }
 
-  return {
-    //Khởi tạo state ban đầu với profileUser từ cookie.
-    profileUser: initialProfile,
+// Hàm khởi tạo store từ bên ngoài (dùng trong layout)
+let store: any;
+
+export const useProfileStore = create<ProfileState | any>((set) => {
+  const state = {
+    profileUser: null,
     isLoading: false,
     error: null,
-    initialize: (initialData: ProfileUser | null) => {
+    initialize: (initialData: Ty_User) => {
       if (initialData) {
         set({ profileUser: initialData, isLoading: false, error: null });
-        Cookies.set("profileUser", JSON.stringify(initialData));
       }
     },
-    //Hàm để set profile từ dữ liệu ban đầu (từ server). Set state và lưu vào cookie với JSON.stringify(initialData).
-
-    fetchProfile: async (force = false) => {
+    fetchProfile: async () => {
       set({ isLoading: true, error: null });
       try {
-        let profile: ProfileUser | null = null;
-
-        if (force || !initialProfile) {
-          const token = Cookies.get("authToken");
-          if (!token) throw new Error("No token found");
-
-          const response = await axios.get(
-            "http://localhost:3000/api/user/profile",
-            {
-              headers: {
-                Cookie: `authToken=${token}`,
-              },
+        const response = await axios.get("/api/user/profile", {
+          // API tự lấy token từ cookie
+        });
+        if (response.status !== 200) {
+          if (response.status === 401) {
+            // Tự động refresh nếu 401
+            await state.refreshToken();
+            // Fetch lại sau refresh
+            const retryResponse = await axios.get("/api/user/profile");
+            if (retryResponse.status !== 200) {
+              throw new Error("Failed to fetch profile after refresh");
             }
-          );
-
-          if (response.status !== 200) {
+            set({ profileUser: retryResponse.data, isLoading: false });
+          } else {
             throw new Error("Failed to fetch profile");
           }
-
-          profile = response.data;
-          Cookies.set("profileUser", JSON.stringify(profile));
-        } else {
-          profile = initialProfile;
         }
-
-        set({ profileUser: profile, isLoading: false });
+        set({ profileUser: response.data, isLoading: false });
       } catch (error: any) {
         set({ error: error.message, isLoading: false });
-        Cookies.remove("profileUser");
       }
     },
-
-    //Hàm async để fetch profile
+    refreshToken: async () => {
+      try {
+        const response = await axios.post("/api/refresh", {});
+        if (response.status !== 200) {
+          throw new Error("Refresh token failed");
+        }
+        console.log("Token refreshed");
+      } catch (error: any) {
+        console.error("Refresh token error:", error.message);
+      }
+    },
   };
+  store = state; // Lưu trữ state để khởi tạo từ layout
+  return state;
 });
+
+// Hàm khởi tạo store từ layout (SSR)
+export const initializeProfileStore = (initialData: Ty_User | null) => {
+  if (store && store.initialize) {
+    store.initialize(initialData);
+  }
+};
+
+// // Hook để tự động fetch khi mount
+export const useAutoFetchProfile = () => {
+  const { fetchProfile, profileUser, isLoading } = useProfileStore();
+  useEffect(() => {
+    if (!profileUser && !isLoading) {
+      fetchProfile();
+    }
+  }, [fetchProfile, profileUser, isLoading]);
+  return { profileUser, isLoading };
+};

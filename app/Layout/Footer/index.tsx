@@ -1,3 +1,4 @@
+"use client";
 import { useRouter } from "next/navigation";
 import logo from "../../../public/logo/logoanhiu1.png";
 import MyLayout from "@/app/Layout/MyLayOut";
@@ -177,7 +178,7 @@ function MyFooter() {
         </div>
 
         {/* footer */}
-        <div className="border-t border-gray-800  pt-5 mb-10 mx-60">
+        <div className="border-t border-gray-800  pt-5 mb-10 ">
           <div className="flex flex-col md:flex-row justify-center items-center">
             <div className="text-gray-400 text-sm">
               © 2024 HopeVn. Bảo lưu mọi quyền.

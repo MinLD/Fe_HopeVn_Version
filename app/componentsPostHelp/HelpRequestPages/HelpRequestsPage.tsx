@@ -127,6 +127,7 @@ export const HelpRequestsPage: React.FC = () => {
           </div>
         </div>
       </div>
+      <PostNews />
     </div>
   );
 };

@@ -6,6 +6,7 @@ import { Heart, Users, HelpingHand } from "lucide-react";
 import Image from "next/image";
 import bn2 from "../../../public/logo/hãy vẽ cho tôi niềm hi vọng 09-03-2025 at 22-01-35.jpeg";
 
+
 function Banner() {
   const textRef = useRef(null);
 
