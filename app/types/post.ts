@@ -37,3 +37,15 @@ export interface dataPost {
   userPic: string;
   like: number;
 }
+export interface Ty_dataCommentPost {
+  content: string;
+  createdAt: string;
+  id: number;
+  postId: number;
+  postTitle: string;
+  userId: string;
+  userEmail: string;
+  userName: string;
+  userProfilePicture: string;
+}
+export interface Ty_dataCommentPostVolunteer {}

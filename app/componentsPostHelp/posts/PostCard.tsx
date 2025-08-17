@@ -37,17 +37,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, onClick, type, token }) => {
 
   // State để lưu trữ chuỗi thời gian đã định dạng
   const [timeAgo, setTimeAgo] = useState("");
-  const handleLike = async () => {
-    await patchLikePost(token || "", post.id)
-      .then((res) => {
-        console.log(res);
-        router.refresh();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   useEffect(() => {
     const date = new Date(post.createdAt);
 
@@ -74,6 +63,17 @@ const PostCard: React.FC<PostCardProps> = ({ post, onClick, type, token }) => {
   if (!timeAgo) {
     return null;
   }
+  const handleLike = async () => {
+    await patchLikePost(token || "", post.id)
+      .then((res) => {
+        console.log(res);
+        router.refresh();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const formatDate = (date: Date) => {
     return date.toLocaleDateString("vi-VN", {
       day: "2-digit",

@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Cookies from "js-cookie";
 import { exchangeCodeForToken } from "@/app/service/auth";
 import LoadingOverlay from "@/app/components/LoaddingOverlay";
+import SplashScreen from "@/app/components/Splash Screen";
 
 export default function AuthenticatePage() {
   const router = useRouter();
@@ -104,8 +105,7 @@ export default function AuthenticatePage() {
   if (isLoading && !error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen space-y-4 bg-gray-100">
-        <LoadingOverlay message="Authenticating..." />
-        <p className="text-lg text-gray-700">Authenticating...</p>
+        <SplashScreen />
       </div>
     );
   }

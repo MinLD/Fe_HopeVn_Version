@@ -3,7 +3,9 @@ import PostVolunteerCard from "@/app/componentAdmin/postVolunteerCart";
 import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
 import SearchFilter from "@/app/components/SearchFilter";
 import VolunteerCard from "@/app/components/VolunteerCart";
-import CommentPostCart from "@/app/componentsPostHelp/CommentPostCart";
+import CommentPostCart, {
+  PostSkeleton,
+} from "@/app/componentsPostHelp/CommentPostCart";
 import CreatePost from "@/app/componentsPostHelp/CreatePost";
 import PostCard from "@/app/componentsPostHelp/posts/PostCard";
 import { mockPosts } from "@/app/data";
@@ -33,6 +35,7 @@ type prop = {
   dataPostFree: dataPost[];
   dataPostRequestHelp: dataPost[];
   dataPostGive: dataPost[];
+  isLoading: boolean;
 };
 function HelpPage({
   token,
@@ -41,6 +44,7 @@ function HelpPage({
   dataPostFree,
   dataPostRequestHelp,
   dataPostGive,
+  isLoading,
 }: prop) {
   const [isComment, setIsComment] = useState<number>(-1);
   const navigate = useRouter();
@@ -103,50 +107,59 @@ function HelpPage({
       case "all":
         return (
           <>
-            {" "}
-            {dataPost?.map((i, k) => (
-              <div key={k} className="mb-6">
-                <PostCard
-                  key={k}
-                  post={i}
-                  onClick={() => setIsComment(i.id)}
-                  token={token}
-                />
-                {isComment === i.id && (
-                  <>
-                    <CommentPostCart
-                      authorName={i.name}
-                      onClose={() => setIsComment(-1)}
-                      id={i.id}
-                      token={token}
-                    >
-                      <PostCard
-                        token={token}
-                        key={k}
-                        post={i}
-                        onClick={() => setIsComment(i.id)}
+            <>
+              {isLoading ? (
+                <PostSkeleton />
+              ) : (
+                <>
+                  {dataPost &&
+                    dataPost?.map((i, k) => (
+                      <div key={k} className="mb-6">
+                        <PostCard
+                          key={k}
+                          post={i}
+                          onClick={() => setIsComment(i.id)}
+                          token={token}
+                        />
+                        {isComment === i.id && (
+                          <>
+                            <CommentPostCart
+                              authorName={i.name}
+                              onClose={() => setIsComment(-1)}
+                              id={i.id}
+                              token={token}
+                            >
+                              <PostCard
+                                token={token}
+                                key={k}
+                                post={i}
+                                onClick={() => setIsComment(i.id)}
+                              />
+                            </CommentPostCart>
+                          </>
+                        )}
+                      </div>
+                    ))}
+
+                  {dataPost.length === 0 && (
+                    <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
+                      <Sprout
+                        size={80}
+                        color="#10B981"
+                        strokeWidth={1.5}
+                        className="mb-4 text-emerald-500"
                       />
-                    </CommentPostCart>
-                  </>
-                )}
-              </div>
-            ))}
-            {dataPost.length === 0 && (
-              <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
-                <Sprout
-                  size={80}
-                  color="#10B981"
-                  strokeWidth={1.5}
-                  className="mb-4 text-emerald-500"
-                />
-                <h2 className="text-2xl font-semibold text-gray-700">
-                  Chưa có bài viết nào
-                </h2>
-                <p className="text-gray-500 mt-2">
-                  Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
-                </p>
-              </div>
-            )}
+                      <h2 className="text-2xl font-semibold text-gray-700">
+                        Chưa có bài viết nào
+                      </h2>
+                      <p className="text-gray-500 mt-2">
+                        Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
           </>
         );
       case "help-request":

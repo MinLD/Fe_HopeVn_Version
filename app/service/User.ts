@@ -134,11 +134,10 @@ const getUserId = async (id: string) => {
 const CommentPost = async (
   token: string,
   postId?: number | null,
-
   content?: string | null
 ) => {
   return await axiosClient.post(
-    `/post/comments`,
+    `/comments`,
     {
       postId: postId || null,
       content: content,
@@ -149,6 +148,31 @@ const CommentPost = async (
       },
     }
   );
+};
+const CommentPostVolunteer = async (
+  token: string,
+  postVolunteerId?: number | null,
+  content?: string | null
+) => {
+  return await axiosClient.post(
+    `/comments`,
+    {
+      postVolunteerId: postVolunteerId || null,
+      content: content,
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+const getAllCommentsPost = async (token: string, postId: number) => {
+  return await axiosClient.get(`/comments/post/${postId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
 };
 export {
   GetProfileUser,
@@ -163,4 +187,6 @@ export {
   patchLikePost,
   patchLikePostVolunteer,
   CommentPost,
+  CommentPostVolunteer,
+  getAllCommentsPost,
 };

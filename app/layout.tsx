@@ -10,6 +10,9 @@ import { AuthProvider } from "@/app/context/AuthContext";
 import Layout from "@/app/Layout/index";
 import { cookies } from "next/headers";
 import { NavProvider } from "@/app/context/NavigationContext";
+import SplashScreen from "@/app/components/Splash Screen";
+import { Suspense } from "react";
+import { AppInitializer } from "@/app/components/AppInitializer";
 
 const roboto = Roboto({
   subsets: ["latin-ext"],
@@ -29,7 +32,9 @@ export default async function RootLayout({
           <NavProvider>
             <AuthProvider>
               <StoreProvider>
-                <Layout token={token || null}>{children}</Layout>
+                <AppInitializer token={token || null}>
+                  {children}
+                </AppInitializer>
                 <Toaster
                   richColors
                   duration={1500}

@@ -64,7 +64,7 @@ function HeaderTopMenuDropdown() {
               {profileUser?.profile?.fullName}
             </span>
             <span className="text-[12px] text-[#6e625e] font-medium ">
-              Số tiền: {Number(profileUser.fund).toLocaleString() || 0} VNĐ
+              Số tiền: {Number(profileUser?.fund)?.toLocaleString() || 0} VNĐ
             </span>
           </div>
         </div>
