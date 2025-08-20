@@ -1,6 +1,6 @@
 # Giai đoạn 1: Cài đặt Dependencies
-# Sử dụng base image Node.js phiên bản 18
-FROM node:18-alpine AS dependencies
+# Sử dụng base image Node.js phiên bản 22.12.0
+FROM node:22.12.0-alpine AS dependencies
 
 # Thiết lập môi trường sản xuất
 ENV NODE_ENV=production
@@ -8,8 +8,7 @@ ENV NODE_ENV=production
 # Thiết lập thư mục làm việc bên trong container
 WORKDIR /app
 
-# Sao chép package.json và package-lock.json (hoặc yarn.lock)
-# Ký tự * dùng để khớp với cả hai file
+# Sao chép package.json và package-lock.json
 COPY package*.json ./
 
 # Cài đặt dependencies cho môi trường sản xuất
@@ -18,7 +17,7 @@ RUN npm install --production
 # ---
 
 # Giai đoạn 2: Build ứng dụng
-FROM node:18-alpine AS builder
+FROM node:22.12.0-alpine AS builder
 
 WORKDIR /app
 
@@ -34,13 +33,12 @@ RUN npm run build
 
 # Giai đoạn 3: Chạy ứng dụng (Production)
 # Sử dụng base image Alpine nhỏ gọn nhất có thể
-FROM node:18-alpine AS runner
+FROM node:22.12.0-alpine AS runner
 
 WORKDIR /app
 
 # Thiết lập môi trường sản xuất
 ENV NODE_ENV=production
-# Tùy chọn: Đặt NEXT_TELEMETRY_DISABLED để tắt việc thu thập dữ liệu từ Next.js
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Tạo một user riêng để chạy ứng dụng (tăng tính bảo mật)
@@ -48,7 +46,6 @@ RUN addgroup --system --gid 1001 nextjs
 RUN adduser --system --uid 1001 nextjs
 
 # Sao chép thư mục .next đã được build ở dạng standalone
-# Đây là thư mục đã được Next.js tối ưu cho production
 COPY --from=builder --chown=nextjs:nextjs /app/.next/standalone ./
 
 # Sao chép thư mục public và .next/static
