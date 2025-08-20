@@ -94,7 +94,7 @@ const GettingStarted = () => {
 
         <div className="mt-6">
           {data.map((i, k) => (
-            <div key={k}>
+            <div key={i.id}>
               {activeTab === k && (
                 <div className="flex justify-between gap-1">
                   <p className="text-left text-lg">{i.label}</p>
@@ -115,7 +115,7 @@ const GettingStarted = () => {
           Cách thức hoạt động quyên góp từ thiện và giúp đỡ những người khó khăn
         </h2>
         {data.map((i, k) => (
-          <div key={k}>
+          <div key={i.id}>
             <BoxAdding label={i.label} src={i.src} title={i.title} id={i.id} />
           </div>
         ))}

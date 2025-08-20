@@ -1,26 +1,24 @@
 "use client";
-
-import PostVolunteerCard from "@/app/componentAdmin/postVolunteerCart";
 import EmptyState from "@/app/components/Empty State";
-import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
 import Spanning from "@/app/components/Spanning";
-import { GetAllPostVolunteer_non_Active } from "@/app/service/admin";
-import { Leaf, User } from "lucide-react";
+import PostCard from "@/app/componentsPostHelp/posts/PostCard";
+import { ActivePost, GetAllPost_non_Active } from "@/app/service/admin";
+import { dataPost } from "@/app/types/post";
+import { Leaf } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Props = {
   token: string;
 };
 
-function PostVolunteerNonActivepage({ token }: Props) {
-  const [data, setData] = useState<Ty_PostVolunteer[]>([]);
+function PostNonActivepage({ token }: Props) {
+  const [data, setData] = useState<dataPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingActive, setIsLoadingActive] = useState(false);
 
   const handleGetAllCompanyNonActive = async () => {
     setIsLoading(true);
     try {
-      const response = await GetAllPostVolunteer_non_Active(token);
+      const response = await GetAllPost_non_Active(token);
       if (response.status === 200) {
         console.log(response?.data.result?.data);
         setData(response?.data?.result?.data);
@@ -40,7 +38,7 @@ function PostVolunteerNonActivepage({ token }: Props) {
     <>
       <div className="p-6">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">
-          Danh sách bài viết hoàn vốn chưa phê duyệt
+          Danh sách bài viết chưa phê duyệt
         </h2>
         {isLoading ? (
           <>
@@ -53,7 +51,12 @@ function PostVolunteerNonActivepage({ token }: Props) {
                 <>
                   {data.map((item) => (
                     <div key={item.id}>
-                      <PostVolunteerCard post={item} token={token} />
+                      <PostCard
+                        admin
+                        post={item}
+                        token={token}
+                        handleGetAllPost={handleGetAllCompanyNonActive}
+                      />
                     </div>
                   ))}
                 </>
@@ -75,4 +78,4 @@ function PostVolunteerNonActivepage({ token }: Props) {
   );
 }
 
-export default PostVolunteerNonActivepage;
+export default PostNonActivepage;

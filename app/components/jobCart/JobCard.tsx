@@ -1,17 +1,7 @@
 import React from "react";
 
-import {
-  Building,
-  Calendar,
-  Clock,
-  Heart,
-  MapPin,
-  Share2,
-  Share2Icon,
-  Users,
-} from "lucide-react";
+import { Calendar, Heart, MapPin, Share2 } from "lucide-react";
 import { JobPostingProps } from "@/app/componentEmployer/JobPosting";
-import { Share } from "next/font/google";
 import Link from "next/link";
 
 interface JobCardProps {

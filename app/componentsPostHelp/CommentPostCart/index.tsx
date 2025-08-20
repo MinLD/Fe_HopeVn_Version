@@ -1,11 +1,15 @@
 "use client";
 
 import CommentListCart from "@/app/componentsPostHelp/CommentListCart";
-import { CommentPost, getAllCommentsPost } from "@/app/service/User";
+import {
+  CommentPost,
+  CommentPostVolunteer,
+  getAllCommentsPost,
+  getAllCommentsPostVolunteer,
+} from "@/app/service/User";
 import { Ty_dataCommentPost } from "@/app/types/post";
-import { X, Send, FileText } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import { X, Send } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 
 type CommentPostCardProps = {
   children: React.ReactNode;
@@ -13,6 +17,7 @@ type CommentPostCardProps = {
   authorName: string;
   id: number;
   token: string;
+  type?: string;
 };
 
 function CommentPostCard({
@@ -21,15 +26,36 @@ function CommentPostCard({
   authorName,
   id,
   token,
+  type = "post",
 }: CommentPostCardProps) {
   const [isComment, setIsComment] = React.useState<string>("");
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const observer = useRef<IntersectionObserver>(null);
   const [dataComments, setDataComments] = React.useState<Ty_dataCommentPost[]>(
     []
   );
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const handleGetAllCommentsPost = async () => {
     setIsLoading(true);
-    await getAllCommentsPost(token, id)
+    if (type === "post") {
+      await getAllCommentsPost(token, id)
+        .then((res) => {
+          console.log(res.data.result);
+          setDataComments(res.data.result.data);
+          setIsLoading(false);
+          return;
+        })
+        .catch((err) => {
+          console.log(err);
+          setIsLoading(false);
+          return;
+        });
+      return;
+    }
+
+    await getAllCommentsPostVolunteer(token, id)
       .then((res) => {
         console.log(res.data.result);
         setDataComments(res.data.result.data);
@@ -42,13 +68,25 @@ function CommentPostCard({
   };
   const handleComment = async () => {
     setIsLoading(true);
-    await CommentPost(token, id, isComment || "")
+    if (type === "post") {
+      await CommentPost(token, id, isComment || "")
+        .then(async (res) => {
+          console.log(res);
+          await handleGetAllCommentsPost();
+          setIsLoading(false);
+          return;
+        })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
+      return;
+    }
+    await CommentPostVolunteer(token, id, isComment || "")
       .then(async (res) => {
         console.log(res);
         await handleGetAllCommentsPost();
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 5000);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);

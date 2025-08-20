@@ -5,11 +5,11 @@ export const Achievements: React.FC<{ achievements: any[] }> = ({
     <div className="bg-white rounded-lg shadow-md p-6">
       <h2 className="text-xl font-semibold text-gray-900 mb-6">Achievements</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {achievements.map((achievement, index) => {
+        {achievements.map((achievement) => {
           const Icon = achievement.icon;
           return (
             <div
-              key={index}
+              key={achievement.id}
               className={`p-4 rounded-lg border-2 ${
                 achievement.earned
                   ? "border-green-200 bg-green-50"

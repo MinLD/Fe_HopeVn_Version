@@ -1,14 +1,11 @@
 "use client";
-// import LoaddingBox from "@/app/Components/BoxLoadding";
 
-// import { updateMyInfo } from "@/app/Service/User";
-// import { useProfileStore } from "@/app/zustand/store";
 import { X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
-import Spanning from "@/app/components/Spanning";
+
 import { UpdateUsers } from "@/app/service/admin";
 
 type Props = {

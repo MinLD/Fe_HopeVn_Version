@@ -3,7 +3,6 @@ import { useRouter } from "next/navigation";
 import logo from "../../../public/logo/logoanhiu1.png";
 import MyLayout from "@/app/Layout/MyLayOut";
 import Image from "next/image";
-import Link from "next/link";
 function MyFooter() {
   const Data: { title: string; label: string }[] = [
     {
@@ -118,9 +117,9 @@ function MyFooter() {
                 ĐỊA CHỈ VĂN PHÒNG
               </h2>
               <div className="flex h-auto flex-col xl:flex-row xl:flex-wrap xl:gap-[10px]">
-                {Data.map((i, k) => (
+                {Data.map((i) => (
                   <div
-                    key={k}
+                    key={i.title}
                     className="xl:w-[salce(1/2 - 10px)] flex flex-col gap-2"
                   >
                     <h3 className="h-[24px] text-[16px] font-medium">
@@ -158,8 +157,8 @@ function MyFooter() {
               </h2>
               <div className="flex h-[148px] w-full flex-col gap-7 lg:gap-4">
                 <div className="w-full md:flex md:gap-10 lg:flex-col lg:gap-4">
-                  {Data1.map((i, k) => (
-                    <h3 key={k} className="h-[24px] text-[16px] font-medium">
+                  {Data1.map((i) => (
+                    <h3 key={i.title} className="h-[24px] text-[16px] font-medium">
                       {i.title}
                     </h3>
                   ))}

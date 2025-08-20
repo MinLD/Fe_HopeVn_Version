@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import MyButton from "@/app/components/Button";
 import * as React from "react";
 
-import { Bell, ChevronDown, Search, User } from "lucide-react";
+import { Bell,  Search } from "lucide-react";
 
 import { IoSearchSharp } from "react-icons/io5";
 import { useProfileStore } from "@/app/zustand/userStore";
@@ -105,10 +105,10 @@ function HeaderMenuTop({ token = "" }: Props) {
               <div className="md:flex hidden items-center gap-2">
                 {token ? (
                   <>
-                    {icons.map((item, k) => {
+                    {icons.map((item) => {
                       const IconComponent = item.name;
                       return (
-                        <div key={k}>
+                        <div key={item.id}>
                           <IconComponent
                             className={`w-[20px] h-[20px md:w-[25px] md:h-[25px] ${
                               item.id === 2 && "md:hidden"

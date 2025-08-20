@@ -1,6 +1,5 @@
 "use client";
 import { JobPostingProps } from "@/app/componentEmployer/JobPosting";
-import { mockJobs } from "@/app/data";
 import MyLayout from "@/app/Layout/MyLayOut";
 import {
   ArrowLeft,
@@ -125,14 +124,12 @@ function RecruimentDetailPage({ job }: Props) {
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">
                     Quyền lợi và đặc quyền
                   </h2>
-                  {job.benefits.split(/,|\n/).map((benefit, index) => (
-                    <ListItem key={index} text={benefit.trim()} />
+                  {job.benefits.split(/,|\n/).map((benefit) => (
+                    <ListItem key={benefit + "1"} text={benefit.trim()} />
                   ))}
-                  {job.suitableForDisability
-                    .split(/,|\n/)
-                    .map((benefit, index) => (
-                      <ListItem key={index} text={benefit.trim()} />
-                    ))}
+                  {job.suitableForDisability.split(/,|\n/).map((benefit) => (
+                    <ListItem key={benefit + "2"} text={benefit.trim()} />
+                  ))}
                 </div>
 
                 {/* Company Information */}

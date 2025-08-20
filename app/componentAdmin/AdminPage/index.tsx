@@ -1,5 +1,6 @@
 "use client";
 import CompanyNonActiveManagement from "@/app/componentAdmin/CompanyNon-ActiveManagement";
+import PostNonActiveManagement from "@/app/componentAdmin/PostNon-ActiveManagement";
 import PostVolunteerNonActiveManagement from "@/app/componentAdmin/PostVolunteerNon-ActiveManagement";
 import UsersManagement from "@/app/componentAdmin/UsersManagement";
 import JobCategories from "@/app/componentEmployer/JobCategories";
@@ -9,7 +10,6 @@ import Layout from "@/app/Layout/index";
 import {
   BookImage,
   BriefcaseIcon,
-  ChartBarStacked,
   ChartColumnStacked,
   CheckCircleIcon,
   HandCoins,
@@ -31,7 +31,7 @@ function AdminPage({ token }: Props) {
       title: "Quản lý Bài Đăng",
       label: [
         {
-          id: "PostManagement",
+          id: "PostNonActiveManagement",
           name: "Quản lý bài viết",
           icon: BookImage,
         },
@@ -90,6 +90,8 @@ function AdminPage({ token }: Props) {
             <PostVolunteerNonActiveManagement token={token || ""} />
           </>
         );
+      case "PostNonActiveManagement":
+        return <PostNonActiveManagement token={token || ""} />;
       default:
         return <div>dass</div>;
     }

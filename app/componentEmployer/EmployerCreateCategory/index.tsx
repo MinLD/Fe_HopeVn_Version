@@ -2,7 +2,6 @@ import Spanning from "@/app/components/Spanning";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 import { useState } from "react";
-import axios from "axios";
 import { CreateJobsCategory } from "@/app/service/employer";
 
 type Props = {

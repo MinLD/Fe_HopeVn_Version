@@ -174,6 +174,13 @@ const getAllCommentsPost = async (token: string, postId: number) => {
     },
   });
 };
+const getAllCommentsPostVolunteer = async (token: string, postId: number) => {
+  return await axiosClient.get(`/comments/post-volunteer/${postId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 export {
   GetProfileUser,
   getInitialProfile,
@@ -189,4 +196,5 @@ export {
   CommentPost,
   CommentPostVolunteer,
   getAllCommentsPost,
+  getAllCommentsPostVolunteer,
 };

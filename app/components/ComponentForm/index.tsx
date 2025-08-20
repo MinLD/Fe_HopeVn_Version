@@ -18,8 +18,6 @@ import { CreateCompany } from "@/app/service/employer";
 import { toast } from "sonner";
 import Spanning from "@/app/components/Spanning";
 import { CompanyFormValues } from "@/app/types/employer";
-import Link from "next/link";
-import { Heart } from "lucide-react";
 
 const formFields = [
   {

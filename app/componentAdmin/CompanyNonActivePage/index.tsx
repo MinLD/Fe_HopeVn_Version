@@ -1,10 +1,12 @@
 "use client";
 
+import EmptyState from "@/app/components/Empty State";
 import PendingCompanyCard, {
   Ty_Company,
 } from "@/app/components/PendingCompanyCard";
 import Spanning from "@/app/components/Spanning";
 import { ActiveCompany, GetAllCompany_non_Active } from "@/app/service/admin";
+import { Leaf } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 type Props = {
@@ -83,21 +85,31 @@ function CompanyNonActivepage({ token }: Props) {
           </>
         ) : (
           <>
-            <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-              {data &&
-                data.map((item, index) => (
+            {data.length > 0 ? (
+              <div className="grid  grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                {data.map((item) => (
                   <div
-                    key={index}
+                    key={item.id}
                     onClick={() => handleActiveCompany(item?.id || "")}
                   >
                     <PendingCompanyCard
-                      key={index}
+                      key={item.id}
                       {...item}
                       isLoading={isLoadingActive}
                     />
                   </div>
                 ))}
-            </div>
+              </div>
+            ) : (
+              <>
+                <EmptyState Icons={Leaf}>
+                  {" "}
+                  <h2 className="text-2xl font-semibold text-gray-700">
+                    Chưa có bài viết nào
+                  </h2>
+                </EmptyState>
+              </>
+            )}
           </>
         )}
       </div>

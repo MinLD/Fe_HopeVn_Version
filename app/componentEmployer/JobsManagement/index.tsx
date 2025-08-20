@@ -4,7 +4,7 @@ import JobPosting, {
   JobPostingProps,
 } from "@/app/componentEmployer/JobPosting";
 import Spanning from "@/app/components/Spanning";
-import { GetAllJobByCompany, GetAllJobs } from "@/app/service/employer";
+import { GetAllJobByCompany } from "@/app/service/employer";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -107,8 +107,8 @@ function JobsManagement({ token }: Props) {
           ) : (
             <>
               {" "}
-              {data?.map((item, index) => (
-                <div key={index}>
+              {data?.map((item) => (
+                <div key={item.id}>
                   <JobPosting {...item} />
                 </div>
               ))}

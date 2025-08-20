@@ -2,8 +2,7 @@
 import Spanning from "@/app/components/Spanning";
 import { DonatePostVolunteer } from "@/app/service/User";
 import Button from "@/app/ui/Button";
-import Card from "@/app/ui/Card";
-import { Dog, DollarSign, Heart, Shield, XIcon } from "lucide-react";
+import { Dog, Heart, Shield, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";

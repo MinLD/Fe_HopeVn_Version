@@ -2,13 +2,9 @@
 import { JobPostingProps } from "@/app/componentEmployer/JobPosting";
 import JobCard from "@/app/components/jobCart/JobCard";
 import SearchFilter from "@/app/components/SearchFilter";
-import { mockJobs } from "@/app/data";
 import MyLayout from "@/app/Layout/MyLayOut";
 import { GetAllJobs } from "@/app/service/employer";
-import { Job } from "@/app/types/employer";
-import { Filter } from "lucide-react";
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type prop = {
   token: string;

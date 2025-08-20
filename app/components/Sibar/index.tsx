@@ -2,7 +2,6 @@
 import { LayoutDashboard, LogOut, LucideProps } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 
 import { useStateStore } from "@/app/context/StoreProvider";
 type Props = {

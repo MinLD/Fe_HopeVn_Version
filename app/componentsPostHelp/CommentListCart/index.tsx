@@ -2,6 +2,7 @@ import { Ty_dataCommentPost } from "@/app/types/post";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi } from "date-fns/locale";
 import { Heart, User } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 type prop = {
   data: Ty_dataCommentPost;
@@ -38,7 +39,9 @@ function CommentListCart({ data: post }: prop) {
     <>
       <div key={post.id} className="flex space-x-3">
         {post.userProfilePicture ? (
-          <img
+          <Image
+            width={40}
+            height={40}
             src={post.userProfilePicture || ""}
             alt={post.userName}
             className="w-10 h-10 rounded-full object-cover"

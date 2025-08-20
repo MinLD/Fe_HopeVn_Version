@@ -6,7 +6,6 @@ import { useStateStore } from "@/app/context/StoreProvider";
 import { useEffect } from "react";
 import Image from "next/image";
 import { DataCategory, DataMenuHamburger } from "@/app/types/MenuList";
-import logo from "../../../public/logo/logoanhiu1.png";
 
 function HamburgerMenu() {
   const { IsOpenMenu, setIsOpenMenu } = useStateStore();

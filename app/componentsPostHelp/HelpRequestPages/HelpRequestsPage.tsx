@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Plus, Search, Filter } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import PostNews from "@/app/componentsPostHelp/PostNews/PostNews";
 
 export const HelpRequestsPage: React.FC = () => {

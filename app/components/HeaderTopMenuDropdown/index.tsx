@@ -72,7 +72,7 @@ function HeaderTopMenuDropdown() {
           {dataCategoryInHeaderTop.map((item, k) => {
             return (
               <div
-                key={k}
+                key={item.id}
                 className="flex items-center gap-2 px-1 hover:cursor-pointer hover:bg-[#f5f5f5] py-2 rounded-md"
                 onClick={() => handleReturn(item.id)}
               >

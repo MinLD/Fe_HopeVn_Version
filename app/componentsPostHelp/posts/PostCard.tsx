@@ -1,19 +1,8 @@
+"use client";
 import React, { useEffect, useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi } from "date-fns/locale";
-import {
-  MapPin,
-  Calendar,
-  Heart,
-  MessageCircle,
-  Share,
-  Clock,
-  Target,
-  SquareDot,
-  Dot,
-  ChevronRight,
-} from "lucide-react";
-import { JobPost } from "@/app/types/PostCart";
+import { Calendar, Heart, MessageCircle, Share, User } from "lucide-react";
 import Card from "@/app/ui/Card";
 import Link from "next/link";
 import Button from "@/app/ui/Button";
@@ -22,18 +11,50 @@ import { dataPost } from "@/app/types/post";
 import ImageCarousel from "@/app/componentsPostHelp/ImageCarousel";
 import { patchLikePost } from "@/app/service/User";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Spanning from "@/app/components/Spanning";
+import { ActivePost } from "@/app/service/admin";
+import { toast } from "sonner";
 
 interface PostCardProps {
   post: dataPost;
   onClick?: () => void;
   type?: string;
   token?: string;
+  admin?: boolean;
+  handleGetAllPost?: () => void;
 }
-
-const PostCard: React.FC<PostCardProps> = ({ post, onClick, type, token }) => {
+const PostCard: React.FC<PostCardProps> = ({
+  post,
+  onClick,
+  type,
+  token,
+  admin = false,
+  handleGetAllPost,
+}) => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // const [reactions, setReactions] = useState(post.reactions);
+  const handleActive = async () => {
+    // Kiểm tra xem prop có được truyền vào không
+    if (!handleGetAllPost) return;
+
+    setIsLoading(true);
+    try {
+      await ActivePost(token || "", post.id);
+      toast.success("Phê duyệt bài viết thành công!");
+
+      // Gọi lại hàm để tải lại danh sách
+      handleGetAllPost();
+    } catch (err: any) {
+      console.log(err);  
+      toast.error(err.response?.data?.message || "Có lỗi xảy ra");
+    } finally {
+      // Dù thành công hay thất bại, luôn tắt trạng thái loading
+      setIsLoading(false);
+    }
+  };
 
   // State để lưu trữ chuỗi thời gian đã định dạng
   const [timeAgo, setTimeAgo] = useState("");
@@ -123,14 +144,24 @@ const PostCard: React.FC<PostCardProps> = ({ post, onClick, type, token }) => {
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-start space-x-3">
-          <img
-            src={
-              post.userPic ||
-              "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
-            }
-            alt={post.name}
-            className="w-10 h-10 rounded-full object-cover"
-          />
+          {post.userPic ? (
+            <>
+              <Image
+                width={40}
+                height={40}
+                src={post?.userPic}
+                alt={post.name}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            </>
+          ) : (
+            <>
+              {" "}
+              <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                <User />
+              </div>
+            </>
+          )}
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center  mb-1">
@@ -233,57 +264,71 @@ const PostCard: React.FC<PostCardProps> = ({ post, onClick, type, token }) => {
         )}
 
         {/* Reactions and Actions */}
-        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-          <div className="flex items-center space-x-4">
-            <button
-              className="flex items-center text-gray-500 hover:text-red-500 transition-colors"
-              onClick={handleLike}
-            >
-              <Heart className="w-5 h-5 mr-1" />
-              <span className="text-sm">{post.like || 0} </span>
-            </button>
-            <button
-              className="flex items-center text-gray-500 hover:text-green-600 transition-colors"
-              onClick={onClick}
-            >
-              <MessageCircle className="w-5 h-5 mr-1" />
-              <span className="text-sm">100</span>
-            </button>
-            <button className="flex items-center text-gray-500 hover:text-green-600 transition-colors">
-              <Share className="w-5 h-5 mr-1" />
-              <span className="text-sm">Share</span>
-            </button>
-          </div>
+        {!admin && (
+          <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+            <div className="flex items-center space-x-4">
+              <button
+                className="flex items-center text-gray-500 hover:text-red-500 transition-colors"
+                onClick={handleLike}
+              >
+                <Heart className="w-5 h-5 mr-1" />
+                <span className="text-sm">{post.like || 0} </span>
+              </button>
+              <button
+                className="flex items-center text-gray-500 hover:text-green-600 transition-colors"
+                onClick={onClick}
+              >
+                <MessageCircle className="w-5 h-5 mr-1" />
+                <span className="text-sm">100</span>
+              </button>
+              <button className="flex items-center text-gray-500 hover:text-green-600 transition-colors">
+                <Share className="w-5 h-5 mr-1" />
+                <span className="text-sm">Share</span>
+              </button>
+            </div>
 
-          <div className="flex space-x-2">
-            {post.type === "help-request" && (
-              <Link href={`/help/${post.id}`}>
-                <Button variant="primary" size="sm">
-                  View Details
-                </Button>
-              </Link>
-            )}
-            {/* {post.type === "giveaway" && (
+            <div className="flex space-x-2">
+              {post.type === "help-request" && (
+                <Link href={`/help/${post.id}`}>
+                  <Button variant="primary" size="sm">
+                    View Details
+                  </Button>
+                </Link>
+              )}
+              {/* {post.type === "giveaway" && (
               <Link href={`/help/${post.id}`}>
                 <Button variant="secondary" size="sm">
                   View Details
                 </Button>
               </Link>
             )} */}
-            {/* {post.type === "donation" && (
+              {/* {post.type === "donation" && (
               <Link href={`/help/${post.id}`}>
                 <Button variant="outline" size="sm">
                   View Details
                 </Button>
               </Link>
             )} */}
-            {/* <Link href={`/profile/${post.authorId}`}>
+              {/* <Link href={`/profile/${post.authorId}`}>
               <Button variant="outline" size="sm">
                 View Profile
               </Button>
             </Link> */}
+            </div>
           </div>
-        </div>
+        )}
+        {admin && (
+          <>
+            <div
+              className="flex space-x-2 items-center "
+              onClick={handleActive}
+            >
+              <Button variant="primary" size="sm">
+                {isLoading ? <Spanning /> : "Duyệt bài viết"}
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </Card>
   );

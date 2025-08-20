@@ -1,24 +1,13 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi } from "date-fns/locale";
-import {
-  MapPin,
-  Calendar,
-  Heart,
-  MessageCircle,
-  Share,
-  Clock,
-  Target,
-  SquareDot,
-  Dot,
-  ChevronRight,
-} from "lucide-react";
-import { JobPost } from "@/app/types/PostCart";
+import { Calendar } from "lucide-react";
+
 import Card from "@/app/ui/Card";
-import Link from "next/link";
+
 import Button from "@/app/ui/Button";
 import Badge from "@/app/ui/Badge";
-import { dataPost } from "@/app/types/post";
+
 import ImageCarousel from "@/app/componentsPostHelp/ImageCarousel";
 import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
 import { ActivePostVolunteer } from "@/app/service/admin";

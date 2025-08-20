@@ -66,11 +66,6 @@ const PendingCompanyCard = ({
     // Logic lưu tạm thời hoặc bookmark
   };
 
-  const handleShare = () => {
-    console.log(`Chia sẻ công ty: ${name}`);
-    // Logic chia sẻ (ví dụ: copy link)
-  };
-
   return (
     <div className="max-w-3xl mx-auto p-4 bg-white shadow-md rounded-lg sm:p-6">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between ">
@@ -118,7 +113,7 @@ const PendingCompanyCard = ({
       <div className="mt-4 text-sm text-gray-500 flex flex-col sm:flex-row sm:items-center sm:space-x-4">
         <span>📍 {address.split(", ").pop() || "Hà Nội"}</span>
         <span className="sm:mx-2">🗓 {registrationDate}</span>
-        <span>📝 0 hồ sơ chờ duyệt khác</span>
+        {/* <span>📝 0 hồ sơ chờ duyệt khác</span> */}
       </div>
       <div className="mt-4">
         <p className="text-sm font-medium text-gray-700">Yêu cầu xét duyệt:</p>

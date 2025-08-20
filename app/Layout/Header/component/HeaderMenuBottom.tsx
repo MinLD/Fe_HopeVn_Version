@@ -88,9 +88,9 @@ function HeaderMenuBottom() {
               className="md:flex hidden gap-10"
               onMouseLeave={() => setHover("")}
             >
-              {data.map((item, k) => (
+              {data.map((item,k) => (
                 <div
-                  key={k}
+                  key={item.id}
                   onClick={() => handleReturnComponent(k)}
                   className="relative cursor-pointer"
                   onMouseEnter={() => setHover(k)}

@@ -170,7 +170,7 @@ function UsersManagement({ token }: prop) {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {data.map((item, k) => (
-                  <tr key={k || item?.id}>
+                  <tr key={item?.id}>
                     <td className="px-6 py-4 whitespace-nowrap">{item?.id}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {item?.profile?.fullName}

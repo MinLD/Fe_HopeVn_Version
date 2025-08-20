@@ -427,7 +427,7 @@ function CreatePost({ onClose, token }: CreatePostProps) {
                   </h4>
                   <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
                     {formik.values.images.map((file, index) => (
-                      <div key={index} className="relative group">
+                      <div key={file + "1"} className="relative group">
                         <img
                           src={URL.createObjectURL(file)}
                           alt={`Preview ${index + 1}`}

@@ -92,7 +92,26 @@ const ActivePostVolunteer = async (token: string, id: number, fund: number) => {
     }
   );
 };
-
+//post
+const GetAllPost_non_Active = async (token: string) => {
+  return await axiosClient.get("/post/non-active", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+const ActivePost = async (token: string, id: number) => {
+  console.log(token);
+  return await axiosClient.patch(
+    `/post/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
 export {
   GetAllUsers,
   DeleteUsers,
@@ -103,4 +122,6 @@ export {
   ActiveCompany,
   GetAllPostVolunteer_non_Active,
   ActivePostVolunteer,
+  GetAllPost_non_Active,
+  ActivePost,
 };

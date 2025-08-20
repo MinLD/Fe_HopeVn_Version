@@ -1,24 +1,20 @@
 "use client";
-import PostVolunteerCard from "@/app/componentAdmin/postVolunteerCart";
 import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
 import SearchFilter from "@/app/components/SearchFilter";
+import Spanning from "@/app/components/Spanning";
 import VolunteerCard from "@/app/components/VolunteerCart";
 import CommentPostCart, {
   PostSkeleton,
 } from "@/app/componentsPostHelp/CommentPostCart";
 import CreatePost from "@/app/componentsPostHelp/CreatePost";
 import PostCard from "@/app/componentsPostHelp/posts/PostCard";
-import { mockPosts } from "@/app/data";
 import MyLayout from "@/app/Layout/MyLayOut";
-import { getAllPost, getUserId } from "@/app/service/User";
 import { dataPost } from "@/app/types/post";
-import { JobPost } from "@/app/types/PostCart";
+import { Sprout } from "lucide-react";
 
-import { Filter, Sprout } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { boolean } from "yup";
 
 interface FilterState {
   search: string;
@@ -37,6 +33,7 @@ type prop = {
   dataPostGive: dataPost[];
   isLoading: boolean;
 };
+
 function HelpPage({
   token,
   dataPost,
@@ -107,16 +104,128 @@ function HelpPage({
       case "all":
         return (
           <>
+            {isLoading ? (
+              <PostSkeleton />
+            ) : (
+              <>
+                {dataPost &&
+                  dataPost?.map((i, k) => (
+                    <div key={k} className="mb-6">
+                      <PostCard
+                        key={i.id}
+                        post={i}
+                        onClick={() => setIsComment(i.id)}
+                        token={token}
+                      />
+                      {isComment === i.id && (
+                        <>
+                          <CommentPostCart
+                            authorName={i.name}
+                            onClose={() => setIsComment(-1)}
+                            id={i.id}
+                            token={token}
+                          >
+                            <PostCard
+                              token={token}
+                              key={k}
+                              post={i}
+                              onClick={() => setIsComment(i.id)}
+                            />
+                          </CommentPostCart>
+                        </>
+                      )}
+                    </div>
+                  ))}
+
+                {dataPost.length === 0 && (
+                  <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
+                    <Sprout
+                      size={80}
+                      color="#10B981"
+                      strokeWidth={1.5}
+                      className="mb-4 text-emerald-500"
+                    />
+                    <h2 className="text-2xl font-semibold text-gray-700">
+                      Chưa có bài viết nào
+                    </h2>
+                    <p className="text-gray-500 mt-2">
+                      Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        );
+      case "help-request":
+        return (
+          <>
+            {isLoading ? (
+              <PostSkeleton />
+            ) : (
+              <>
+                {dataPostRequestHelp &&
+                  dataPostRequestHelp?.map((i, k) => (
+                    <div key={k} className="mb-6">
+                      <PostCard
+                        key={i.id}
+                        post={i}
+                        onClick={() => setIsComment(i.id)}
+                        token={token}
+                      />
+                      {isComment === i.id && (
+                        <>
+                          <CommentPostCart
+                            authorName={i.name}
+                            onClose={() => setIsComment(-1)}
+                            id={i.id}
+                            token={token}
+                          >
+                            <PostCard
+                              token={token}
+                              key={k}
+                              post={i}
+                              onClick={() => setIsComment(i.id)}
+                            />
+                          </CommentPostCart>
+                        </>
+                      )}
+                    </div>
+                  ))}
+
+                {dataPostRequestHelp.length === 0 && (
+                  <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
+                    <Sprout
+                      size={80}
+                      color="#10B981"
+                      strokeWidth={1.5}
+                      className="mb-4 text-emerald-500"
+                    />
+                    <h2 className="text-2xl font-semibold text-gray-700">
+                      Chưa có bài viết nào
+                    </h2>
+                    <p className="text-gray-500 mt-2">
+                      Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+          </>
+        );
+      case "free":
+        return (
+          <>
             <>
               {isLoading ? (
                 <PostSkeleton />
               ) : (
                 <>
-                  {dataPost &&
-                    dataPost?.map((i, k) => (
+                  {dataPostFree &&
+                    dataPostFree?.map((i, k) => (
                       <div key={k} className="mb-6">
                         <PostCard
-                          key={k}
+                          key={i.id}
                           post={i}
                           onClick={() => setIsComment(i.id)}
                           token={token}
@@ -141,7 +250,7 @@ function HelpPage({
                       </div>
                     ))}
 
-                  {dataPost.length === 0 && (
+                  {dataPostFree.length === 0 && (
                     <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
                       <Sprout
                         size={80}
@@ -162,81 +271,59 @@ function HelpPage({
             </>
           </>
         );
-      case "help-request":
-        return (
-          <>
-            {dataPostRequestHelp?.map((i, k) => (
-              <div key={k} className="mb-6">
-                <PostCard key={k} post={i} token={token} />
-              </div>
-            ))}
-            {dataPostRequestHelp.length === 0 && (
-              <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
-                <Sprout
-                  size={80}
-                  color="#10B981"
-                  strokeWidth={1.5}
-                  className="mb-4 text-emerald-500"
-                />
-                <h2 className="text-2xl font-semibold text-gray-700">
-                  Chưa có bài viết nào
-                </h2>
-                <p className="text-gray-500 mt-2">
-                  Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
-                </p>
-              </div>
-            )}
-          </>
-        );
-      case "free":
-        return (
-          <>
-            {dataPostFree?.map((i, k) => (
-              <div key={k} className="mb-6">
-                <PostCard key={k} post={i} token={token} />
-              </div>
-            ))}
-            {dataPostFree.length === 0 && (
-              <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
-                <Sprout
-                  size={80}
-                  color="#10B981"
-                  strokeWidth={1.5}
-                  className="mb-4 text-emerald-500"
-                />
-                <h2 className="text-2xl font-semibold text-gray-700">
-                  Chưa có bài viết nào
-                </h2>
-                <p className="text-gray-500 mt-2">
-                  Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
-                </p>
-              </div>
-            )}
-          </>
-        );
       case "giveaway":
         return (
           <>
-            {dataPostGive?.map((i, k) => (
-              <div key={k} className="mb-6">
-                <PostCard key={k} post={i} token={token} />
-              </div>
-            ))}
-            {dataPostGive.length === 0 && (
-              <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
-                <Sprout
-                  size={80}
-                  color="#10B981"
-                  strokeWidth={1.5}
-                  className="mb-4 text-emerald-500"
-                />
-                <h2 className="text-2xl font-semibold text-gray-700">
-                  Chưa có bài viết nào
-                </h2>
-                <p className="text-gray-500 mt-2">
-                  Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
-                </p>
-              </div>
+            {isLoading ? (
+              <PostSkeleton />
+            ) : (
+              <>
+                {dataPostGive &&
+                  dataPostGive?.map((i, k) => (
+                    <div key={k} className="mb-6">
+                      <PostCard
+                        key={i.id}
+                        post={i}
+                        onClick={() => setIsComment(i.id)}
+                        token={token}
+                      />
+                      {isComment === i.id && (
+                        <>
+                          <CommentPostCart
+                            authorName={i.name}
+                            onClose={() => setIsComment(-1)}
+                            id={i.id}
+                            token={token}
+                          >
+                            <PostCard
+                              token={token}
+                              key={k}
+                              post={i}
+                              onClick={() => setIsComment(i.id)}
+                            />
+                          </CommentPostCart>
+                        </>
+                      )}
+                    </div>
+                  ))}
+
+                {dataPostGive.length === 0 && (
+                  <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
+                    <Sprout
+                      size={80}
+                      color="#10B981"
+                      strokeWidth={1.5}
+                      className="mb-4 text-emerald-500"
+                    />
+                    <h2 className="text-2xl font-semibold text-gray-700">
+                      Chưa có bài viết nào
+                    </h2>
+                    <p className="text-gray-500 mt-2">
+                      Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
+                    </p>
+                  </div>
+                )}
+              </>
             )}
           </>
         );
@@ -244,18 +331,50 @@ function HelpPage({
       case "Hoàn vốn":
         return (
           <>
-            {dataPostVolunteer?.map((i, k) => (
-              <div key={k} className="mb-6">
-                <VolunteerCard key={k} post={i} token={token} />
+            {dataPostVolunteer?.map((i) => (
+              <div key={i.id} className="mb-6">
+                <VolunteerCard
+                  key={i.id}
+                  post={i}
+                  token={token}
+                  onClick={() => setIsComment(i.id)}
+                />
+                {isComment === i.id && (
+                  <>
+                    <CommentPostCart
+                      authorName={i.name}
+                      onClose={() => setIsComment(-1)}
+                      id={i.id}
+                      token={token}
+                      type="volunteer"
+                    >
+                      <VolunteerCard key={i.id} post={i} token={token} />
+                    </CommentPostCart>
+                  </>
+                )}
               </div>
             ))}
+            {dataPostVolunteer.length === 0 && (
+              <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
+                <Sprout
+                  size={80}
+                  color="#10B981"
+                  strokeWidth={1.5}
+                  className="mb-4 text-emerald-500"
+                />
+                <h2 className="text-2xl font-semibold text-gray-700">
+                  Chưa có bài viết nào
+                </h2>
+                <p className="text-gray-500 mt-2">
+                  Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
+                </p>
+              </div>
+            )}
           </>
         );
     }
-    return "";
   };
-  console.log(dataPost);
-  console.log(dataPostVolunteer);
+
   return (
     <MyLayout>
       {" "}

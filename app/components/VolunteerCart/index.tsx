@@ -1,15 +1,7 @@
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi } from "date-fns/locale";
-import {
-  MapPin,
-  Calendar,
-  Heart,
-  MessageCircle,
-  Share,
-  Target,
-  Link,
-} from "lucide-react";
+import { MapPin, Calendar, Heart, MessageCircle, Target } from "lucide-react";
 
 import Card from "@/app/ui/Card";
 
@@ -27,9 +19,10 @@ import { useRouter } from "next/navigation";
 interface PostCardProps {
   post: Ty_PostVolunteer;
   token: string;
+  onClick?: () => void;
 }
 
-const VolunteerCard: React.FC<PostCardProps> = ({ post, token }) => {
+const VolunteerCard: React.FC<PostCardProps> = ({ post, token, onClick }) => {
   const router = useRouter();
   const [isDonated, setDonated] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -231,7 +224,10 @@ const VolunteerCard: React.FC<PostCardProps> = ({ post, token }) => {
               <Heart className="w-5 h-5 mr-1" />
               <span className="text-sm">{post.like || 0}</span>
             </button>
-            <button className="flex items-center text-gray-500 hover:text-green-600 transition-colors">
+            <button
+              className="flex items-center text-gray-500 hover:text-green-600 transition-colors"
+              onClick={onClick}
+            >
               <MessageCircle className="w-5 h-5 mr-1" />
               <span className="text-sm">100</span>
             </button>

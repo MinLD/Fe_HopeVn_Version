@@ -1,6 +1,6 @@
 "use client";
 import React, { ComponentType, SVGProps, useState } from "react";
-import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { Mail, Lock, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Logo from "../../../public/logo/logoanhiu1.png";
