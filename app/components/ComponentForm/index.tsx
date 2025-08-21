@@ -199,7 +199,7 @@ const CompanyForm = ({ token }: props) => {
 
         <div className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg">
           {/* Mode Selector */}
-          <div className="flex justify-center mb-8">
+          {/* <div className="flex justify-center mb-8">
             <div className="bg-gray-100 p-1 rounded-lg">
               <button
                 onClick={() => setMode("employer")}
@@ -222,7 +222,7 @@ const CompanyForm = ({ token }: props) => {
                 Seller
               </button>
             </div>
-          </div>
+          </div> */}
           {mode === "employer" && (
             <>
               <h1 className="text-2xl font-bold mb-6 text-center">

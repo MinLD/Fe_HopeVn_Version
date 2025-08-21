@@ -3,6 +3,7 @@ import React from "react";
 
 export interface JobPostingProps {
   title: string;
+
   description: string;
   requirements: string;
   responsibilities: string;
@@ -14,21 +15,13 @@ export interface JobPostingProps {
   salaryMax: number;
   applicationDeadline: string;
   categoryId: number;
-  id: number;
+  companyId: number;
+  companyName: string;
+  companyPicture: string;
   jobCategory: {
     name: string;
   };
-  employer: {
-    profile: {
-      company: {
-        name: string;
-        description: string;
-        logo: {
-          url: string;
-        };
-      };
-    };
-  };
+  employerId: string;
   views: number;
 }
 
@@ -45,7 +38,9 @@ const JobPosting: React.FC<JobPostingProps> = ({
   salaryMax,
   applicationDeadline,
   categoryId,
-  id,
+  companyId,
+  companyName,
+  companyPicture,
   jobCategory,
   views,
 }) => {

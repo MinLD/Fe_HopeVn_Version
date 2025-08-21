@@ -64,7 +64,45 @@ const dataUpdateProfile = [
     type: "text",
   },
 ];
+const dataUpdateCv = [
+  {
+    id: 0,
+    label: "Họ và tên đầy đủ",
+    name: "name",
+    type: "text",
+  },
+  {
+    id: 1,
+    label: "E-mail",
+    name: "email",
+    type: "email",
+  },
+  {
+    id: 2,
+    label: "Số điện thoại",
+    name: "phone",
+    type: "text",
+  },
+  {
+    id: 3,
+    label: "Ngày sinh",
+    name: "dob",
+    type: "date",
+  },
+  {
+    id: 6,
+    label: "Giới tính",
+    name: "gender",
+    type: "text",
+  },
+  {
+    id: 4,
+    label: "Địa chỉ",
+    name: "address",
+    type: "text",
+  },
 
+];
 export const mockJobs = [
   {
     id: "1",
@@ -232,4 +270,4 @@ export const categories = [
   "Clothing",
   "General Help",
 ];
-export { dataCategoryInHeaderTop, dataUpdateProfile };
+export { dataCategoryInHeaderTop, dataUpdateProfile , dataUpdateCv};

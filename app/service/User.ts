@@ -181,6 +181,22 @@ const getAllCommentsPostVolunteer = async (token: string, postId: number) => {
     },
   });
 };
+
+//CV
+const getDataCv = async (token: string) => {
+  return await axiosClient.get("/cv/all", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+const CreateCv = async (token: string, data: Ty_Cv) => {
+  return await axiosClient.post("/cv", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 export {
   GetProfileUser,
   getInitialProfile,
@@ -197,4 +213,6 @@ export {
   CommentPostVolunteer,
   getAllCommentsPost,
   getAllCommentsPostVolunteer,
+  getDataCv,
+  CreateCv,
 };

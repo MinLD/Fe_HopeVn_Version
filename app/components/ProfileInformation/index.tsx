@@ -155,61 +155,80 @@ export const ProfileInformation: React.FC<{
       ) : (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-center space-x-3">
-              <User className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">Họ và tên đầy đủ</p>
-                <p className="font-medium text-gray-900">{formData.fullName}</p>
+            {formData.fullName && (
+              <div className="flex items-center space-x-3">
+                <User className="h-5 w-5 text-gray-400" />
+                <div>
+                  <p className="text-sm text-gray-600">Họ và tên đầy đủ</p>
+                  <p className="font-medium text-gray-900">
+                    {formData.fullName}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Mail className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">E-mail</p>
-                <p className="font-medium text-gray-900">{formData.email}</p>
+            )}
+            {formData.email && (
+              <div className="flex items-center space-x-3">
+                <Mail className="h-5 w-5 text-gray-400" />
+                <div>
+                  <p className="text-sm text-gray-600">E-mail</p>
+                  <p className="font-medium text-gray-900">{formData.email}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Calendar className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">Điện thoại</p>
-                <p className="font-medium text-gray-900">{formData.phone}</p>
+            )}
+            {formData.phone && (
+              <div className="flex items-center space-x-3">
+                <Calendar className="h-5 w-5 text-gray-400" />
+                <div>
+                  <p className="text-sm text-gray-600">Điện thoại</p>
+                  <p className="font-medium text-gray-900">{formData.phone}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Transgender className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">Giới tính</p>
-                <p className="font-medium text-gray-900">{formData.gender}</p>
+            )}
+            {formData.gender && (
+              <div className="flex items-center space-x-3">
+                <Transgender className="h-5 w-5 text-gray-400" />
+                <div>
+                  <p className="text-sm text-gray-600">Giới tính</p>
+                  <p className="font-medium text-gray-900">{formData.gender}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Cake className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">Ngày sinh</p>
-                <p className="font-medium text-gray-900">{formData.dob}</p>
+            )}
+            {formData.dob && (
+              <div className="flex items-center space-x-3">
+                <Cake className="h-5 w-5 text-gray-400" />
+                <div>
+                  <p className="text-sm text-gray-600">Ngày sinh</p>
+                  <p className="font-medium text-gray-900">{formData.dob}</p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <MapPinHouse className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">Địa chỉ</p>
-                <p className="font-medium text-gray-900">{formData.address}</p>
+            )}
+            {formData.address && (
+              <div className="flex items-center space-x-3">
+                <MapPinHouse className="h-5 w-5 text-gray-400" />
+                <div>
+                  <p className="text-sm text-gray-600">Địa chỉ</p>
+                  <p className="font-medium text-gray-900">
+                    {formData.address}
+                  </p>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Building2 className="h-5 w-5 text-gray-400" />
-              <div>
-                <p className="text-sm text-gray-600">Thành phố</p>
-                <p className="font-medium text-gray-900">{formData.city}</p>
+            )}
+            {formData.city && (
+              <div className="flex items-center space-x-3">
+                <Building2 className="h-5 w-5 text-gray-400" />
+                <div>
+                  <p className="text-sm text-gray-600">Thành phố</p>
+                  <p className="font-medium text-gray-900">{formData.city}</p>
+                </div>
               </div>
-            </div>
+            )}
           </div>
-
-          <div className="pt-4 border-t border-gray-200">
-            <p className="text-sm text-gray-600 mb-2">Mô tả</p>
-            <p className="text-gray-900">{formData.bio}</p>
-          </div>
+          {formData.bio && (
+            <div className="pt-4 border-t border-gray-200">
+              <p className="text-sm text-gray-600 mb-2">Mô tả</p>
+              <p className="text-gray-900">{formData.bio}</p>
+            </div>
+          )}
         </div>
       )}
     </div>

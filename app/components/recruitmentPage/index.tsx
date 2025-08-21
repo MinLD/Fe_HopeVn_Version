@@ -102,7 +102,7 @@ const RecruitmentPage = ({ token }: prop) => {
               <div className="lg:col-span-3">
                 <div className="space-y-6">
                   {data.map((job) => (
-                    <JobCard key={job.id} job={job} />
+                    <JobCard key={job.companyId} job={job} />
                   ))}
                 </div>
               </div>

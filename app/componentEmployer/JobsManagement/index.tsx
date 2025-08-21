@@ -5,6 +5,7 @@ import JobPosting, {
 } from "@/app/componentEmployer/JobPosting";
 import Spanning from "@/app/components/Spanning";
 import { GetAllJobByCompany } from "@/app/service/employer";
+import { Sprout } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -106,12 +107,27 @@ function JobsManagement({ token }: Props) {
             </div>
           ) : (
             <>
-              {" "}
-              {data?.map((item) => (
-                <div key={item.id}>
-                  <JobPosting {...item} />
+              {data.length === 0 ? (
+                <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
+                  <Sprout
+                    size={80}
+                    color="#10B981"
+                    strokeWidth={1.5}
+                    className="mb-4 text-emerald-500"
+                  />
+                  <h2 className="text-2xl font-semibold text-gray-700">
+                    Chưa có bài viết tuyển dụng nào
+                  </h2>
                 </div>
-              ))}
+              ) : (
+                <>
+                  {data?.map((item) => (
+                    <div key={item.companyId}>
+                      <JobPosting {...item} />
+                    </div>
+                  ))}
+                </>
+              )}
             </>
           )}
         </div>

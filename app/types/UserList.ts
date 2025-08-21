@@ -11,6 +11,20 @@ interface Ty_User {
   accepted: boolean;
 }
 
+interface Ty_Cv {
+  id?: string;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  dob: string;
+  skill: string;
+  exp: string;
+  education: string;
+  typeOfDisability: string;
+  typeOfJob: string;
+}
+
 interface Ty_profile_User {
   country: string;
   address: string;

@@ -62,10 +62,7 @@ function RecruimentDetailPage({ job }: Props) {
                           {job.title}
                         </h1>
                       </div>
-                      <InfoItem
-                        icon={Building}
-                        text={job.employer.profile.company.name}
-                      />
+                      <InfoItem icon={Building} text={job.companyName} />
                       <div className="flex flex-wrap gap-4 mt-4">
                         <InfoItem icon={MapPin} text={job.location} />
                         <InfoItem
@@ -135,20 +132,20 @@ function RecruimentDetailPage({ job }: Props) {
                 {/* Company Information */}
                 <div className="border border-gray-200 rounded-lg p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                    Giới thiệu về "{job?.employer.profile.company.name}"
+                    Giới thiệu về "{job?.companyName}"
                   </h2>
                   <div className="flex items-start space-x-4">
                     <div className="w-16 h-16  rounded-lg flex items-center justify-center flex-shrink-0">
                       {/* <Building className="w-8 h-8 text-green-600" /> */}
                       <img
-                        src={job?.employer.profile.company.logo.url || ""}
+                        src={job?.companyPicture || ""}
                         alt="Company Logo"
                         className="w-16 h-16 text-green-600 rounded-full"
                       />
                     </div>
                     <div>
                       <p className="text-gray-600 leading-relaxed mb-4">
-                        {job?.employer.profile.company.description}
+                        {/* {job?.companyDescription || ""} */}
                       </p>
                     </div>
                   </div>

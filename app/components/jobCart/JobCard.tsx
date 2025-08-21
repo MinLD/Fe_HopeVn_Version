@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Calendar, Heart, MapPin, Share2 } from "lucide-react";
+import { Building, Calendar, Heart, MapPin, Share2 } from "lucide-react";
 import { JobPostingProps } from "@/app/componentEmployer/JobPosting";
 import Link from "next/link";
 
@@ -35,13 +35,10 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
                 </>
               )} */}
             </div>
-            {/* <div className="flex items-center text-gray-600 mb-2">
+            <div className="flex items-center text-gray-600 mb-2">
               <Building className="w-4 h-4 mr-2" />
-              <span className="font-medium ">
-                {" "}
-             
-              </span>
-            </div> */}
+              <span className="font-medium ">{job.companyName} </span>
+            </div>
           </div>
           <div className="text-right">
             <div className="text-lg font-bold text-green-600 mb-1">
@@ -84,7 +81,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         {/* Actions */}
         <div className="flex space-x-3 pt-2 items-center">
           <span className="flex-1 w-full">
-            <Link href={`/recruitment/${job.id}`}>
+            <Link href={`/recruitment/${job.companyId}`}>
               <button className="bg-green-600 hover:cursor-pointer text-white px-4 py-2 rounded-lg  hover:bg-green-700 transition-colors">
                 Xem chi tiết
               </button>
