@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleUserRound, Search, X } from "lucide-react";
+import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useStateStore } from "@/app/context/StoreProvider";
 import { useEffect } from "react";
