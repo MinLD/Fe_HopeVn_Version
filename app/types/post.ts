@@ -48,4 +48,3 @@ export interface Ty_dataCommentPost {
   userName: string;
   userProfilePicture: string;
 }
-export interface Ty_dataCommentPostVolunteer {}

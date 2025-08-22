@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
+import Image from "next/image";
 
 interface ImageCarouselProps {
   images: { url: string }[];
@@ -30,6 +31,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isModalOpen, currentIndex]);
 
   if (!images || !images.length) return null;
@@ -56,7 +58,9 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
       <div className={`relative ${className}`}>
         {/* Carousel Display */}
         <div className="relative overflow-hidden rounded-lg group">
-          <img
+          <Image
+            width={500}
+            height={500}
             src={images[currentIndex].url}
             alt={`Post image ${currentIndex + 1}`}
             className="w-full h-48 sm:h-64 object-cover cursor-pointer transition-transform duration-300 group-hover:scale-105"
@@ -129,7 +133,8 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({
             </button>
 
             {/* Ảnh được đặt với object-cover để lấp đầy container */}
-            <img
+            <Image
+              fill
               src={images[currentIndex].url}
               alt={`Full screen ${currentIndex + 1}`}
               className="w-full h-full object-cover" // <-- THAY ĐỔI QUAN TRỌNG

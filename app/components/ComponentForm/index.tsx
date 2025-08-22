@@ -18,6 +18,7 @@ import { CreateCompany } from "@/app/service/employer";
 import { toast } from "sonner";
 import Spanning from "@/app/components/Spanning";
 import { CompanyFormValues } from "@/app/types/employer";
+import Image from "next/image";
 
 const formFields = [
   {
@@ -122,6 +123,8 @@ type props = {
 
 const CompanyForm = ({ token }: props) => {
   const [mode, setMode] = useState<"seller" | "employer">("employer");
+  setMode("employer");
+
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const formik = useFormik<CompanyFormValues>({
@@ -337,8 +340,11 @@ const CompanyForm = ({ token }: props) => {
                             {formik.errors[name as keyof CompanyFormValues]}
                           </p>
                         )}
+
                       {name === "companyImage" && previewImage && (
-                        <img
+                        <Image
+                          width={200}
+                          height={200}
                           src={previewImage}
                           alt="Xem trước hình ảnh công ty"
                           className="mt-2 w-32 h-32 object-cover rounded-md"

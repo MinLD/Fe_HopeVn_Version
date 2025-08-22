@@ -1,7 +1,6 @@
 "use client";
 import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
 import SearchFilter from "@/app/components/SearchFilter";
-import Spanning from "@/app/components/Spanning";
 import VolunteerCard from "@/app/components/VolunteerCart";
 import CommentPostCart, {
   PostSkeleton,
@@ -13,7 +12,7 @@ import { dataPost } from "@/app/types/post";
 import { Sprout } from "lucide-react";
 
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 interface FilterState {
@@ -60,6 +59,7 @@ function HelpPage({
     salaryMax: "",
     urgent: false,
   });
+  console.log(filters)
   const [selectedType, setSelectedType] = useState<
     "all" | "help-request" | "free" | "giveaway" | "Hoàn vốn"
   >("all");

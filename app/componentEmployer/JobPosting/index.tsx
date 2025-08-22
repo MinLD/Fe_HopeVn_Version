@@ -1,4 +1,3 @@
-import JobCategories from "@/app/componentEmployer/JobCategories";
 import React from "react";
 
 export interface JobPostingProps {
@@ -28,19 +27,10 @@ export interface JobPostingProps {
 const JobPosting: React.FC<JobPostingProps> = ({
   title,
   description,
-  requirements,
-  responsibilities,
-  benefits,
-  suitableForDisability,
-  jobType,
   location,
   salaryMin,
   salaryMax,
   applicationDeadline,
-  categoryId,
-  companyId,
-  companyName,
-  companyPicture,
   jobCategory,
   views,
 }) => {

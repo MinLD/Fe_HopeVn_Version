@@ -1,5 +1,6 @@
 import Spanning from "@/app/components/Spanning";
 import { CheckCircleIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 export interface Ty_Company {
   id: string;
@@ -61,11 +62,6 @@ const PendingCompanyCard = ({
     handeActive(id);
   };
 
-  const handleSave = () => {
-    console.log(`Lưu công ty: ${name}`);
-    // Logic lưu tạm thời hoặc bookmark
-  };
-
   return (
     <div className="max-w-3xl mx-auto p-4 bg-white shadow-md rounded-lg sm:p-6">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between ">
@@ -83,7 +79,9 @@ const PendingCompanyCard = ({
       </div>
       <div className="mt-4 flex flex-col sm:flex-row items-start space-y-4 sm:space-y-0 sm:space-x-4">
         {companyImage && (
-          <img
+          <Image
+            width={100}
+            height={100}
             src={companyImage}
             alt={`Hình ảnh ${name}`}
             className="w-16 h-16 object-cover rounded-md sm:w-20 sm:h-20"

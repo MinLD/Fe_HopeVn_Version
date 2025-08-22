@@ -19,7 +19,7 @@ type Props = {
   token?: string | null;
 };
 function AdminPage({ token }: Props) {
-  const { setTypeSibar, isTypeSibar } = useStateStore();
+  const { isTypeSibar } = useStateStore();
   const data = [
     {
       title: "Quản lý Users",

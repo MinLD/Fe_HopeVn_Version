@@ -13,6 +13,7 @@ import {
   Share2,
   Users,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -132,12 +133,14 @@ function RecruimentDetailPage({ job }: Props) {
                 {/* Company Information */}
                 <div className="border border-gray-200 rounded-lg p-6">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                    Giới thiệu về "{job?.companyName}"
+                    Giới thiệu về {job?.companyName}
                   </h2>
                   <div className="flex items-start space-x-4">
                     <div className="w-16 h-16  rounded-lg flex items-center justify-center flex-shrink-0">
                       {/* <Building className="w-8 h-8 text-green-600" /> */}
-                      <img
+                      <Image
+                        width={100}
+                        height={100}
                         src={job?.companyPicture || ""}
                         alt="Company Logo"
                         className="w-16 h-16 text-green-600 rounded-full"

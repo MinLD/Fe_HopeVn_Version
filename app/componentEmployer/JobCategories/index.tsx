@@ -17,9 +17,12 @@ type Props = {
 export default function JobCategories({ token }: Props) {
   const [categories, setCategories] = useState<JobCategory[]>([]);
   const [formData, setFormData] = useState({ name: "", description: "" });
+  console.log(formData);
   const [editingId, setEditingId] = useState<number | null>(null);
+  console.log(editingId);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditProfile, setIsEditProfile] = useState<number>(-1);
+  console.log(isEditProfile);
 
   const [AddUser, setAddUser] = useState<boolean>(false);
 
@@ -41,23 +44,23 @@ export default function JobCategories({ token }: Props) {
 
   console.log(categories);
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      if (editingId) {
-        // Update category
-        await axios.put(`/api/job-categories/${editingId}`, formData);
-      } else {
-        // Create new category
-        await axios.post("/api/job-categories", formData);
-      }
-      fetchCategories();
-      resetForm();
-    } catch (error) {
-      console.error("Error saving category:", error);
-    }
-  };
+  // // Handle form submission
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     if (editingId) {
+  //       // Update category
+  //       await axios.put(`/api/job-categories/${editingId}`, formData);
+  //     } else {
+  //       // Create new category
+  //       await axios.post("/api/job-categories", formData);
+  //     }
+  //     fetchCategories();
+  //     resetForm();
+  //   } catch (error) {
+  //     console.error("Error saving category:", error);
+  //   }
+  // };
 
   // Handle delete
   const handleDelete = async (id: number) => {
@@ -78,13 +81,14 @@ export default function JobCategories({ token }: Props) {
   };
 
   // Reset form
-  const resetForm = () => {
-    setFormData({ name: "", description: "" });
-    setEditingId(null);
-  };
+  // const resetForm = () => {
+  //   setFormData({ name: "", description: "" });
+  //   setEditingId(null);
+  // };
   // Fetch categories
   useEffect(() => {
     fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div className="container mx-auto py-2 ">

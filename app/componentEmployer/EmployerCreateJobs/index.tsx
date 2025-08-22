@@ -46,6 +46,7 @@ function EmployerCreateJob({ setClose, token, handleGetAllJobs }: Props) {
   // Fetch categories on component mount
   useEffect(() => {
     fetchCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchCategories = async () => {

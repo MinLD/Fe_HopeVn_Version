@@ -1,7 +1,7 @@
 import { Ty_dataCommentPost } from "@/app/types/post";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi } from "date-fns/locale";
-import { Heart, User } from "lucide-react";
+import { User } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 type prop = {

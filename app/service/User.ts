@@ -1,5 +1,5 @@
 import axiosClient from "@/app/service/ApiClient";
-import { headers } from "next/headers";
+import { Ty_Cv, Ty_profile_User, Ty_User } from "@/app/types/UserList";
 
 // Cache để tránh gọi lại liên tục
 export const profileCache = new Map<string, Ty_profile_User | null>();

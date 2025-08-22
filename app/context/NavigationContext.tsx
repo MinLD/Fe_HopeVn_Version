@@ -15,11 +15,14 @@ export function NavProvider({ children }: { children: ReactNode }) {
   const [isOpenMenuHeaderTop, setOpenMenuHeaderTop] = useState<boolean>(false);
   const pathname = usePathname(); // Lấy đường dẫn hiện tại
   const closeAll = () => {
-    isOpenMenuHeaderTop && setOpenMenuHeaderTop(false);
+    if (isOpenMenuHeaderTop) {
+      setOpenMenuHeaderTop(false);
+    }
   };
 
   useEffect(() => {
     closeAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
   return (

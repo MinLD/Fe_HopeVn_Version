@@ -1,11 +1,11 @@
 "use client";
 
-import { useAuth } from "@/app/hooks/useAuth";
 import { useProfileStore } from "@/app/zustand/userStore";
 import { useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useRouter } from "next/navigation"; // Thêm import
+import { Ty_profile_User } from "@/app/types/UserList";
 
 interface Props {
   initialProfile: Ty_profile_User | null;
@@ -15,8 +15,7 @@ interface Props {
 export default function ProfileClient({ initialProfile, token }: Props) {
   const router = useRouter();
 
-  const {  profileUser, isLoading, error, initialize } =
-    useProfileStore();
+  const { profileUser, isLoading, error, initialize } = useProfileStore();
 
   useEffect(() => {
     if (!token) {
@@ -26,9 +25,9 @@ export default function ProfileClient({ initialProfile, token }: Props) {
     if (initialProfile) {
       initialize(initialProfile);
     } else {
-       // Truyền token từ props
+      // Truyền token từ props
     }
-  }, [ initialize, initialProfile, token, router]);
+  }, [initialize, initialProfile, token, router]);
 
   const displayProfile = profileUser || initialProfile;
 

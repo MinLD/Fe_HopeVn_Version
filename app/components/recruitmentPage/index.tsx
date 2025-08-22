@@ -9,15 +9,16 @@ import { useEffect, useState } from "react";
 type prop = {
   token: string;
 };
-const RecruitmentPage = ({ token }: prop) => {
+const RecruitmentPage = ({}: prop) => {
   const [data, setData] = useState<JobPostingProps[]>([]);
 
   const [isLoading, setLoading] = useState<boolean>(true);
+  console.log(isLoading);
 
   const handleGetAllJobs = async () => {
     try {
       setLoading(true);
-      const response = await GetAllJobs(token);
+      const response = await GetAllJobs();
       if (response.status === 200) {
         console.log(response.data.result);
         setData(response?.data?.result?.data);

@@ -2,6 +2,7 @@
 import { create } from "zustand";
 import axios from "axios";
 import { useEffect } from "react";
+import { Ty_User } from "@/app/types/UserList";
 
 interface ProfileState {
   isLoading: boolean;

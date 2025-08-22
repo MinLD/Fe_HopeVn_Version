@@ -1,4 +1,4 @@
-interface Ty_User {
+export interface Ty_User {
   id: string;
   email: string;
   fund: number;
@@ -11,7 +11,7 @@ interface Ty_User {
   accepted: boolean;
 }
 
-interface Ty_Cv {
+export interface Ty_Cv {
   id?: string;
   name: string;
   phone: string;
@@ -25,7 +25,7 @@ interface Ty_Cv {
   typeOfJob: string;
 }
 
-interface Ty_profile_User {
+export interface Ty_profile_User {
   country: string;
   address: string;
 
@@ -42,7 +42,7 @@ interface Ty_profile_User {
   };
 }
 
-interface DecodedToken {
+export interface DecodedToken {
   sub: string;
   scope?: string;
   iss: string;

@@ -1,6 +1,7 @@
 import React from "react";
 import { Heart, DollarSign, Clock, AlertCircle, Flag } from "lucide-react";
 import { HelpPost } from "@/app/types/PostCart";
+import Image from "next/image";
 
 interface HelpPostCardProps {
   post: HelpPost;
@@ -38,7 +39,9 @@ export const HelpPostCard: React.FC<HelpPostCardProps> = ({
     <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden">
       {post.images.length > 0 && (
         <div className="h-48 bg-gray-200 overflow-hidden">
-          <img
+          <Image
+            width={0}
+            height={0}
             src={post.images[0]}
             alt={post.title}
             className="w-full h-full object-cover"

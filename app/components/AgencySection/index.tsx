@@ -1,10 +1,14 @@
+import Image from "next/image";
+
 function AgencySection() {
   return (
     <div>
       <div className="flex flex-col items-center px-6 py-6 text-center">
         {/* Icon */}
         <div className="mb-4">
-          <img
+          <Image
+            width={100}
+            height={100}
             src="https://cdn-icons-png.flaticon.com/128/16964/16964717.png"
             alt="Icon"
             className="h-25 w-30"
@@ -13,7 +17,7 @@ function AgencySection() {
 
         {/* Tiêu đề */}
         <h2 className="text-2xl font-bold text-[#44337A] md:text-3xl">
-          "Lá lành đùm lá rách"
+          Lá lành đùm lá rách
         </h2>
 
         {/* Nội dung */}

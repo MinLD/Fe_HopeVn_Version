@@ -4,6 +4,7 @@ import { Post, PostVolunteer } from "@/app/service/User";
 import Card from "@/app/ui/Card";
 import { useFormik } from "formik";
 import { CreditCard, MapPinHouse, Upload, X } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "sonner";
@@ -47,6 +48,7 @@ type CreatePostProps = {
 // --- Component ---
 
 function CreatePost({ onClose, token }: CreatePostProps) {
+  const navigator = useRouter();
   const [isLoading, setLoading] = useState(false);
 
   // --- Formik and Yup Validation ---
@@ -91,7 +93,6 @@ function CreatePost({ onClose, token }: CreatePostProps) {
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       if (!token) {
-        const navigator = useRouter();
         toast.warning("Vui lòng đăng nhập để được đăng bài viết!");
         return navigator.push("/authenticate/loggin");
       }
@@ -428,7 +429,9 @@ function CreatePost({ onClose, token }: CreatePostProps) {
                   <div className="grid grid-cols-3 md:grid-cols-5 gap-4">
                     {formik.values.images.map((file, index) => (
                       <div key={file + "1"} className="relative group">
-                        <img
+                        <Image
+                          width={100}
+                          height={100}
                           src={URL.createObjectURL(file)}
                           alt={`Preview ${index + 1}`}
                           className="w-full h-24 object-cover rounded-lg border border-gray-200"

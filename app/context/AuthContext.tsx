@@ -2,6 +2,7 @@
 
 import { createContext, useState, useEffect, ReactNode } from "react";
 import { jwtDecode } from "jwt-decode";
+import { DecodedToken } from "@/app/types/UserList";
 
 interface AuthState {
   token: string | null;
@@ -10,7 +11,6 @@ interface AuthState {
   setAuth: (token: string) => void;
   logout: () => void;
 }
-
 
 export const AuthContext = createContext<AuthState | undefined>(undefined);
 

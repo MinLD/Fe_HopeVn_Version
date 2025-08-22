@@ -1,6 +1,5 @@
 import { UpdateProfileUser } from "@/app/service/User";
 
-import { profileCache } from "@/app/service/User";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 

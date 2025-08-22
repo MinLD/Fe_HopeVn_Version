@@ -1,79 +1,14 @@
 "use client";
 import React, { useState } from "react";
-import { Shield, Award, Heart, DollarSign, Edit } from "lucide-react";
 import { ProfileHeader } from "@/app/components/ProfileHeader";
 import { ProfileInformation } from "@/app/components/ProfileInformation";
-import { Achievements } from "@/app/components/Achievements";
-import { Statistics } from "@/app/components/Statistics";
 import { QuickActions } from "@/app/components/QuickActions";
 
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { updateProfile } from "@/app/actions/updateProfile";
-import { CvInformation } from "@/app/components/CvInformation";
-import { CreateCv } from "@/app/service/User";
 import CVBuilder from "@/app/components/BuilderCV";
-
-// Mock fake data for user profile
-const mockUser = {
-  id: "user123",
-  name: "John Doe",
-  email: "john.doe@example.com",
-  role: "patient",
-  verified: true,
-  createdAt: "2024-01-01T00:00:00Z",
-};
-
-// Additional fake data for statistics
-const mockUserStats = {
-  totalContributions: 15,
-  totalDonated: 1250.75,
-  helpRequestsCreated: 3, // For patient role
-  jobsPosted: 0, // For business role
-  productsListed: 12, // For patient role
-  peopleHelped: 23,
-  joinDate: "2024-01-01T00:00:00Z",
-};
-
-// Fake achievements data
-const mockAchievements = [
-  {
-    icon: Heart,
-    title: "Compassionate Helper",
-    description: "Made 10+ contributions",
-    earned: true,
-  },
-  {
-    icon: DollarSign,
-    title: "Generous Donor",
-    description: "Donated over $1,000",
-    earned: true,
-  },
-  {
-    icon: Award,
-    title: "Community Champion",
-    description: "Helped 20+ people",
-    earned: true,
-  },
-  {
-    icon: Shield,
-    title: "Trusted Member",
-    description: "Account verified",
-    earned: true,
-  },
-  {
-    icon: Heart,
-    title: "Newbie Helper",
-    description: "Made first contribution",
-    earned: true,
-  }, // Added extra fake achievement
-  {
-    icon: Award,
-    title: "Super Helper",
-    description: "Helped 50+ people",
-    earned: false,
-  }, // Added extra fake achievement
-];
+import { Ty_Cv, Ty_User } from "@/app/types/UserList";
 
 type ProfilePageProps = {
   initialCv: Ty_Cv | null;
@@ -81,18 +16,19 @@ type ProfilePageProps = {
   token: string | null;
 };
 // Main Profile Page Component
-const ProfilePage = ({ initialUser, token, initialCv }: ProfilePageProps) => {
+const ProfilePage = ({ initialUser, initialCv }: ProfilePageProps) => {
   const [isTypeShowPage, setIsTypeShowPage] = useState<"profile" | "cv">(
     "profile"
   );
   const [isLoadingUpdateProfile, setIsLoadingUpdateProfile] = useState(false);
-  const [isLoadingUpdateCv, setIsLoadingUpdateCv] = useState(false);
+  // const [isLoadingUpdateCv, setIsLoadingUpdateCv] = useState(false);
   console.log("Initial User:", initialUser);
   console.log("Initial Cv:", initialCv);
-  const currentUser = initialUser || mockUser;
   const [isEditing, setIsEditing] = useState(false);
 
-  const [isEditingCv, setIsEditingCv] = useState(false);
+  // const [isEditingCv, setIsEditingCv] = useState(false);
+
+  // console.log("isEditingCv", isEditingCv);
 
   const router = useRouter();
 
@@ -108,23 +44,23 @@ const ProfilePage = ({ initialUser, token, initialCv }: ProfilePageProps) => {
 
     profilePicture: initialUser?.profile?.profilePicture?.url || "",
   });
-  const [formDataCv, setFormDataCv] = useState<Ty_Cv>({
-    name: initialCv?.name || "",
-    phone: initialCv?.phone || "",
-    email: initialCv?.email || "",
-    address: initialCv?.address || "",
-    dob: initialCv?.dob || "",
-    skill: initialCv?.skill || "",
-    exp: initialCv?.exp || "",
-    education: initialCv?.education || "",
-    typeOfDisability: initialCv?.typeOfDisability || "",
-    typeOfJob: initialCv?.typeOfJob || "",
-  });
+  // const [formDataCv, setFormDataCv] = useState<Ty_Cv>({
+  //   name: initialCv?.name || "",
+  //   phone: initialCv?.phone || "",
+  //   email: initialCv?.email || "",
+  //   address: initialCv?.address || "",
+  //   dob: initialCv?.dob || "",
+  //   skill: initialCv?.skill || "",
+  //   exp: initialCv?.exp || "",
+  //   education: initialCv?.education || "",
+  //   typeOfDisability: initialCv?.typeOfDisability || "",
+  //   typeOfJob: initialCv?.typeOfJob || "",
+  // });
 
-  const userStats = mockUserStats; // Use fake stats
-  const achievements = mockAchievements; // Use fake achievements
+  // const userStats = mockUserStats; // Use fake stats
+  // const achievements = mockAchievements; // Use fake achievements
 
-  const handleSave = async (img?: string | "") => {
+  const handleSave = async () => {
     const formDataUpdated = new FormData();
     formDataUpdated.append("fullName", formData.fullName);
     formDataUpdated.append("phone", formData.phone);
@@ -171,42 +107,42 @@ const ProfilePage = ({ initialUser, token, initialCv }: ProfilePageProps) => {
     //     setIsLoadingUpdateProfile(false);
     //   });
   };
-  const handleSaveCv = async () => {
-    console.log(formDataCv);
-    try {
-      setIsLoadingUpdateCv(true);
-      const response = await CreateCv(token || "", formDataCv);
-      if (response.status !== 200) {
-        toast.error(response.data.message);
-        setIsEditingCv(false);
-        setIsLoadingUpdateCv(false);
-        return;
-      }
-      toast.success(response.data.message);
-      setIsEditingCv(false);
-      setIsLoadingUpdateCv(false);
-      console.log(response);
-    } catch (error: any) {
-      console.log(error.response.data.message);
-    } finally {
-      setIsLoadingUpdateCv(false);
-    }
-  };
-  const handleCancelCv = () => {
-    setFormDataCv({
-      name: initialCv?.name || "",
-      phone: initialCv?.phone || "",
-      email: initialCv?.email || "",
-      address: initialCv?.address || "",
-      dob: initialCv?.dob || "",
-      skill: initialCv?.skill || "",
-      exp: initialCv?.exp || "",
-      education: initialCv?.education || "",
-      typeOfDisability: initialCv?.typeOfDisability || "",
-      typeOfJob: initialCv?.typeOfJob || "",
-    });
-    setIsEditingCv(false);
-  };
+  // const handleSaveCv = async () => {
+  //   console.log(formDataCv);
+  //   try {
+  //     setIsLoadingUpdateCv(true);
+  //     const response = await CreateCv(token || "", formDataCv);
+  //     if (response.status !== 200) {
+  //       toast.error(response.data.message);
+  //       setIsEditingCv(false);
+  //       setIsLoadingUpdateCv(false);
+  //       return;
+  //     }
+  //     toast.success(response.data.message);
+  //     setIsEditingCv(false);
+  //     setIsLoadingUpdateCv(false);
+  //     console.log(response);
+  //   } catch (error: any) {
+  //     console.log(error.response.data.message);
+  //   } finally {
+  //     setIsLoadingUpdateCv(false);
+  //   }
+  // };
+  // const handleCancelCv = () => {
+  //   setFormDataCv({
+  //     name: initialCv?.name || "",
+  //     phone: initialCv?.phone || "",
+  //     email: initialCv?.email || "",
+  //     address: initialCv?.address || "",
+  //     dob: initialCv?.dob || "",
+  //     skill: initialCv?.skill || "",
+  //     exp: initialCv?.exp || "",
+  //     education: initialCv?.education || "",
+  //     typeOfDisability: initialCv?.typeOfDisability || "",
+  //     typeOfJob: initialCv?.typeOfJob || "",
+  //   });
+  //   setIsEditingCv(false);
+  // };
   const handleCancel = () => {
     setFormData({
       email: initialUser?.email || "",

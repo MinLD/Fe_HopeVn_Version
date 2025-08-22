@@ -6,7 +6,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 import Cookies from "js-cookie";
 import { exchangeCodeForToken } from "@/app/service/auth";
-import LoadingOverlay from "@/app/components/LoaddingOverlay";
 import SplashScreen from "@/app/components/Splash Screen";
 
 export default function AuthenticatePage() {

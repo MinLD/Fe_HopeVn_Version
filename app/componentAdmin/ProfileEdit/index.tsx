@@ -2,11 +2,8 @@
 
 import { X } from "lucide-react";
 import { useState, useEffect } from "react";
-import { toast } from "sonner";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
-
-import { UpdateUsers } from "@/app/service/admin";
 
 type Props = {
   fullName: string | undefined;
@@ -26,23 +23,19 @@ type Props = {
 };
 
 function ProfileEdit({
-  token,
   fullName,
   phone = "phone",
   email,
   setClose,
-  id,
   dob,
   gender,
-  type = "user",
+
   country = "",
   city = "",
   address = "",
 }: Props) {
   countries.registerLocale(enLocale);
-  const countryList = Object.entries(
-    countries.getNames("en", { select: "official" })
-  );
+
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -53,7 +46,7 @@ function ProfileEdit({
     city: "",
     address: "",
   });
-  const [loading, setLoading] = useState<boolean>(false);
+
   // const { fetchProfile } = useProfileStore();
   useEffect(() => {
     setFormData({
@@ -127,82 +120,82 @@ function ProfileEdit({
     },
   ];
 
-  const handleSubmit = async () => {
-    setLoading(true);
+  // const handleSubmit = async () => {
+  //   setLoading(true);
 
-    //typeof: lấy kiểu dữ liệu của formData
+  //   //typeof: lấy kiểu dữ liệu của formData
 
-    // if (formData.fullName !== (fullName || "")) {
-    //   if (formData.fullName.length < 3) {
-    //     toast.error("Full name must be at least 3 characters.");
-    //     setLoading(false);
-    //     return;
-    //   }
-    //   updatedFields.fullName = formData.fullName;
-    // }
-    // if (formData.phone !== (phone || "")) {
-    //   if (formData.phone.length !== 10) {
-    //     toast.error("Phone number must be 10 digits.");
-    //     setLoading(false);
-    //     return;
-    //   }
-    //   updatedFields.phone = formData.phone;
-    // }
-    // if (formData.dob !== (dob || "")) {
-    //   updatedFields.dob = formData.dob;
-    // }
-    // if (formData.gender !== (gender || "")) {
-    //   updatedFields.gender = formData.gender;
-    // }
-    // if (formData.address !== (address || "")) {
-    //   updatedFields.address = formData.address;
-    // }
-    // if (city !== formData.city) {
-    //   updatedFields.city = formData.city;
-    // }
-    // if (country !== formData.country) {
-    //   updatedFields.country = formData.country;
-    // }
-    // Email bị disable nên không cần kiểm tra
+  //   // if (formData.fullName !== (fullName || "")) {
+  //   //   if (formData.fullName.length < 3) {
+  //   //     toast.error("Full name must be at least 3 characters.");
+  //   //     setLoading(false);
+  //   //     return;
+  //   //   }
+  //   //   updatedFields.fullName = formData.fullName;
+  //   // }
+  //   // if (formData.phone !== (phone || "")) {
+  //   //   if (formData.phone.length !== 10) {
+  //   //     toast.error("Phone number must be 10 digits.");
+  //   //     setLoading(false);
+  //   //     return;
+  //   //   }
+  //   //   updatedFields.phone = formData.phone;
+  //   // }
+  //   // if (formData.dob !== (dob || "")) {
+  //   //   updatedFields.dob = formData.dob;
+  //   // }
+  //   // if (formData.gender !== (gender || "")) {
+  //   //   updatedFields.gender = formData.gender;
+  //   // }
+  //   // if (formData.address !== (address || "")) {
+  //   //   updatedFields.address = formData.address;
+  //   // }
+  //   // if (city !== formData.city) {
+  //   //   updatedFields.city = formData.city;
+  //   // }
+  //   // if (country !== formData.country) {
+  //   //   updatedFields.country = formData.country;
+  //   // }
+  //   // Email bị disable nên không cần kiểm tra
 
-    // Gửi updatedFields nếu có thay đổi
+  //   // Gửi updatedFields nếu có thay đổi
 
-    //Object.keys(obj) trả về một mảng chứa tất cả các key (dưới dạng string).
+  //   //Object.keys(obj) trả về một mảng chứa tất cả các key (dưới dạng string).
 
-    const formData1 = new FormData();
-    formData1.append("fullName", formData.fullName || "");
-    formData1.append("phone", formData.phone || "");
-    formData1.append("dob", formData.dob || "");
-    formData1.append("gender", formData.gender || "");
-    formData1.append("country", formData.country || "");
-    formData1.append("city", formData.city || "");
-    formData1.append("address", formData.address || "");
+  //   const formData1 = new FormData();
+  //   formData1.append("fullName", formData.fullName || "");
+  //   formData1.append("phone", formData.phone || "");
+  //   formData1.append("dob", formData.dob || "");
+  //   formData1.append("gender", formData.gender || "");
+  //   formData1.append("country", formData.country || "");
+  //   formData1.append("city", formData.city || "");
+  //   formData1.append("address", formData.address || "");
 
-    formData1.forEach((value, key) => {
-      console.log(`${key}: ${value}`);
-    });
-    console.log(id);
-    console.log(token);
+  //   formData1.forEach((value, key) => {
+  //     console.log(`${key}: ${value}`);
+  //   });
+  //   console.log(id);
+  //   console.log(token);
 
-    await UpdateUsers(token, formData1, id)
-      .then((res) => {
-        console.log(res);
-        toast.success("Update successfully.");
-        setClose();
-        setLoading(false);
-        window.location.reload();
-      })
-      .catch((error) => {
-        toast.error(error?.response?.data?.message);
-        console.log(error);
-        setLoading(false);
-      });
+  //   await UpdateUsers(token, formData1, id)
+  //     .then((res) => {
+  //       console.log(res);
+  //       toast.success("Update successfully.");
+  //       setClose();
+  //       setLoading(false);
+  //       window.location.reload();
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error?.response?.data?.message);
+  //       console.log(error);
+  //       setLoading(false);
+  //     });
 
-    //  else {
-    //   toast.warning("No changes made.");
-    //   setLoading(false);
-    // }
-  };
+  //   //  else {
+  //   //   toast.warning("No changes made.");
+  //   //   setLoading(false);
+  //   // }
+  // };
 
   return (
     <div>

@@ -9,14 +9,6 @@ interface JobCardProps {
 }
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
-
   return (
     <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
       <div className="space-y-4">

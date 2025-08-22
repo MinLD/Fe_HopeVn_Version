@@ -37,6 +37,7 @@ function HeaderTopMenuDropdown() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpenMenuHeaderTop, isOpenMenuHeaderTop === false]);
 
   if (!isOpenMenuHeaderTop) return null;

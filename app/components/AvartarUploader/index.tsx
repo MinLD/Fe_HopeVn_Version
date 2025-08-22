@@ -2,6 +2,7 @@
 
 import { updateProfile } from "@/app/actions/updateProfile";
 import { X } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import "react-image-crop/dist/ReactCrop.css";
@@ -17,7 +18,6 @@ type Props = {
 
 const AvatarUploader = ({
   children,
-  handleSave,
   handleClose,
   setFormData,
   formData,
@@ -112,7 +112,9 @@ const AvatarUploader = ({
               <X size={24} color="black" />
             </button>
 
-            <img
+            <Image
+              width={600}
+              height={600}
               src={image}
               alt="Crop"
               className="max-w-full w-[600px] h-auto"

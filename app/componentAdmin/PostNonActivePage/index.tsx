@@ -2,7 +2,7 @@
 import EmptyState from "@/app/components/Empty State";
 import Spanning from "@/app/components/Spanning";
 import PostCard from "@/app/componentsPostHelp/posts/PostCard";
-import { ActivePost, GetAllPost_non_Active } from "@/app/service/admin";
+import { GetAllPost_non_Active } from "@/app/service/admin";
 import { dataPost } from "@/app/types/post";
 import { Leaf } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -33,6 +33,7 @@ function PostNonActivepage({ token }: Props) {
 
   useEffect(() => {
     handleGetAllCompanyNonActive();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

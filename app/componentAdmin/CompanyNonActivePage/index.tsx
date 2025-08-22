@@ -17,21 +17,7 @@ function CompanyNonActivepage({ token }: Props) {
   const [data, setData] = useState<Ty_Company[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingActive, setIsLoadingActive] = useState(false);
-  // Giả sử dữ liệu từ API
-  const companyData = {
-    name: "Pho Saigon",
-    description:
-      "Nhà hàng chuyên món phở Sài Gòn, tuyển dụng nhân viên phục vụ.",
-    industry: "Food & Beverage",
-    website: "https://phosaigon.com",
-    phoneNumber: "+84 123 456 789",
-    email: "contact@phosaigon.com",
-    address: "123 Đường ABC, Hà Nội",
-    size: "Medium",
-    companyImage: "/path/to/image.jpg", // URL hình ảnh
-    taxCode: "TAX123456",
-    registrationDate: "09/08/2025", // Ngày hiện tại
-  };
+
   const handleGetAllCompanyNonActive = async () => {
     setIsLoading(true);
     try {
@@ -72,6 +58,7 @@ function CompanyNonActivepage({ token }: Props) {
   };
   useEffect(() => {
     handleGetAllCompanyNonActive();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

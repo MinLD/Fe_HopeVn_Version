@@ -10,6 +10,7 @@ function FloatingActionButton() {
   //   >("job");
 
   const openModal = (type: "job" | "help-request" | "donation") => {
+    console.log(type);
     // setModalType(type);
     // setShowModal(true);
     setShowMenu(false);

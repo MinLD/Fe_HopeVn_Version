@@ -20,7 +20,7 @@ type Props = {
 
 function Sibar({ isSidebarOpen, data }: Props) {
   const router = useRouter();
-  const { setTypeSibar, isTypeSibar } = useStateStore();
+  const { setTypeSibar } = useStateStore();
   return (
     <div>
       <div

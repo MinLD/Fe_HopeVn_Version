@@ -13,6 +13,7 @@ import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
 import { ActivePostVolunteer } from "@/app/service/admin";
 import { toast } from "sonner";
 import Spanning from "@/app/components/Spanning";
+import Image from "next/image";
 
 interface PostCardProps {
   post: Ty_PostVolunteer;
@@ -87,7 +88,9 @@ const PostVolunteerCard: React.FC<PostCardProps> = ({ post, token }) => {
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-start space-x-3">
-          <img
+          <Image
+            width={40}
+            height={40}
             src={
               post.userPic ||
               "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"

@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import BoxAdding from "./Component/BoxAdding";
+import Image from "next/image";
 
 const GettingStarted = () => {
   const [activeTab, setActiveTab] = useState<number>(0);
@@ -98,7 +99,9 @@ const GettingStarted = () => {
               {activeTab === k && (
                 <div className="flex justify-between gap-1">
                   <p className="text-left text-lg">{i.label}</p>
-                  <img
+                  <Image
+                    width={100}
+                    height={100}
                     src={i.src}
                     alt=""
                     className="h-auto w-1/2 object-cover"
@@ -114,7 +117,7 @@ const GettingStarted = () => {
         <h2 className="mb-2 pt-5 text-[20px] font-bold">
           Cách thức hoạt động quyên góp từ thiện và giúp đỡ những người khó khăn
         </h2>
-        {data.map((i, k) => (
+        {data.map((i) => (
           <div key={i.id}>
             <BoxAdding label={i.label} src={i.src} title={i.title} id={i.id} />
           </div>

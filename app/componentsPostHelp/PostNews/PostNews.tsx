@@ -143,9 +143,11 @@ function PostNews({ onClick = () => {} }: Props) {
     },
   ]);
   const [searchTerm, setSearchTerm] = useState("");
+  setSearchTerm("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  setSelectedCategory("");
   const [selectedType, setSelectedType] = useState("");
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  setSelectedType("");
   const [selectedPost, setSelectedPost] = useState<HelpPost | null>(null);
   const [showContributeModal, setShowContributeModal] = useState(false);
   const [showReportModal, setShowReportModal] = useState(false);
@@ -170,7 +172,7 @@ function PostNews({ onClick = () => {} }: Props) {
     setShowReportModal(true);
   };
 
-  const handleContributionSubmit = (amount: number, description: string) => {
+  const handleContributionSubmit = (amount: number) => {
     if (selectedPost) {
       setPosts((prev) =>
         prev.map((post) =>
@@ -190,7 +192,7 @@ function PostNews({ onClick = () => {} }: Props) {
         <div className="flex items-center gap-2" onClick={onClick}>
           <FaUserCircle size={50} />
           <p className="w-[100%] rounded-3xl pl-2 text-[#94979b] outline-none">
-            What's on your mind ?
+            {/* What's on your mind  */}
           </p>
         </div>
 

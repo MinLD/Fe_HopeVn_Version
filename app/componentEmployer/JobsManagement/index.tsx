@@ -14,8 +14,8 @@ type Props = {
 function JobsManagement({ token }: Props) {
   const [data, setData] = useState<JobPostingProps[]>([]);
   const [isEditProfile, setIsEditProfile] = useState<number>(-1);
+  console.log(isEditProfile);
   const [isLoading, setLoading] = useState<boolean>(true);
-  const [ConfirmDelete, setConfirmDelete] = useState<string>("");
   const [AddUser, setAddUser] = useState<boolean>(false);
 
   const handleGetAllJobs = async () => {
@@ -36,6 +36,7 @@ function JobsManagement({ token }: Props) {
 
   useEffect(() => {
     handleGetAllJobs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   console.log(data);
 

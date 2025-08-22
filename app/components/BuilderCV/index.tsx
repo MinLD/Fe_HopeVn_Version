@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 import {
-  ArrowLeft,
   Plus,
   Edit,
   Trash2,
@@ -18,7 +17,6 @@ import {
   Award,
   Heart,
 } from "lucide-react";
-import Link from "next/link";
 import Button from "@/app/ui/Button";
 import Card from "@/app/ui/Card";
 import Badge from "@/app/ui/Badge";

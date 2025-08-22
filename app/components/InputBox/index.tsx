@@ -1,6 +1,6 @@
 "use client";
 
-import { Eye, EyeOff, Icon } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
 import { ComponentType, SVGProps, useState } from "react";
 
 type Props = {
@@ -22,9 +22,7 @@ function InputBox({
   label,
   Formik,
   name,
-  disabled = false,
 }: Props) {
-  const isErr = Formik?.touched[name!] && Formik.errors[name!];
   const messageErr = Formik?.errors[name!];
   const [showPassword, setShowPassword] = useState(false);
   console.log(messageErr);

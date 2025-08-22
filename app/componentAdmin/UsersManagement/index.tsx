@@ -6,6 +6,7 @@ import ProfileSellerEdit from "@/app/componentAdmin/ProfileSellerEdit";
 import ModalConfirm from "@/app/components/ModalConfirm";
 import Spanning from "@/app/components/Spanning";
 import { BanUsers, DeleteUsers, GetAllUsers } from "@/app/service/admin";
+import { Ty_User } from "@/app/types/UserList";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -92,6 +93,7 @@ function UsersManagement({ token }: prop) {
   };
   useEffect(() => {
     handleGetAllUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   console.log(data);
 

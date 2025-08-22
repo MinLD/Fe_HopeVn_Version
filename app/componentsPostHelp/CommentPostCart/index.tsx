@@ -9,7 +9,7 @@ import {
 } from "@/app/service/User";
 import { Ty_dataCommentPost } from "@/app/types/post";
 import { X, Send } from "lucide-react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 
 type CommentPostCardProps = {
   children: React.ReactNode;
@@ -29,10 +29,10 @@ function CommentPostCard({
   type = "post",
 }: CommentPostCardProps) {
   const [isComment, setIsComment] = React.useState<string>("");
-  const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [hasNextPage, setHasNextPage] = useState(true);
-  const observer = useRef<IntersectionObserver>(null);
+  // const [page, setPage] = useState(1);
+  // const [loading, setLoading] = useState(false);
+  // const [hasNextPage, setHasNextPage] = useState(true);
+  // const observer = useRef<IntersectionObserver>(null);
   const [dataComments, setDataComments] = React.useState<Ty_dataCommentPost[]>(
     []
   );
@@ -110,6 +110,7 @@ function CommentPostCard({
 
   useEffect(() => {
     handleGetAllCommentsPost();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

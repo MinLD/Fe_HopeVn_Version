@@ -1,6 +1,6 @@
-import { CvData } from "@/app/components/CvInformation";
 import ProfilePage from "@/app/components/profile/ProfilePage";
 import { getDataCv, getInitialProfile } from "@/app/service/User";
+import { Ty_Cv, Ty_User } from "@/app/types/UserList";
 import { cookies } from "next/headers";
 
 const page = async () => {

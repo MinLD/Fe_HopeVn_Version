@@ -6,7 +6,7 @@ type props = {
   id: number;
 };
 
-function BoxAdding({ src, label, title, id }: props) {
+function BoxAdding({  label, title, id }: props) {
   const [isOpen, setIsOpen] = useState(id===0);
 
   return (
@@ -22,7 +22,7 @@ function BoxAdding({ src, label, title, id }: props) {
         <div
           className={`space-y-2 p-4 text-gray-700 transition-all duration-500 ${isOpen ? "opacity-[100%]" : "opacity-[0%]"}`}
         >
-          <img src={src} alt="" />
+          {/* <img src={src} alt="" /> */}
           <p>{label}</p>
 
           <div className="mt-4 flex flex-col gap-2 text-green-600 md:flex-row md:justify-between"></div>

@@ -27,7 +27,6 @@ interface PostCardProps {
 const PostCard: React.FC<PostCardProps> = ({
   post,
   onClick,
-  type,
   token,
   admin = false,
   handleGetAllPost,
@@ -48,7 +47,7 @@ const PostCard: React.FC<PostCardProps> = ({
       // Gọi lại hàm để tải lại danh sách
       handleGetAllPost();
     } catch (err: any) {
-      console.log(err);  
+      console.log(err);
       toast.error(err.response?.data?.message || "Có lỗi xảy ra");
     } finally {
       // Dù thành công hay thất bại, luôn tắt trạng thái loading
@@ -93,21 +92,6 @@ const PostCard: React.FC<PostCardProps> = ({
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString("vi-VN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    }).format(amount);
   };
 
   // const getProgressPercentage = () => {

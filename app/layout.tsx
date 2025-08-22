@@ -7,11 +7,8 @@ import { StoreProvider } from "@/app/context/StoreProvider";
 import HamburgerMenu from "@/app/components/HamburgerMenu";
 import { AuthProvider } from "@/app/context/AuthContext";
 
-import Layout from "@/app/Layout/index";
 import { cookies } from "next/headers";
 import { NavProvider } from "@/app/context/NavigationContext";
-import SplashScreen from "@/app/components/Splash Screen";
-import { Suspense } from "react";
 import { AppInitializer } from "@/app/components/AppInitializer";
 
 const roboto = Roboto({

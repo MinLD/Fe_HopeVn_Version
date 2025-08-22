@@ -37,7 +37,7 @@ const CreatePostJob = async (token: string, data: any) => {
     },
   });
 };
-const GetAllJobs = async (token: string) => {
+const GetAllJobs = async () => {
   return await axiosClient.get("/job/getAll");
 };
 

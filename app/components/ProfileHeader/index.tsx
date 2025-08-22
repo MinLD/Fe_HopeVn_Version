@@ -1,5 +1,6 @@
 import AvatarUploader from "@/app/components/AvartarUploader";
 import AvatarProfile from "@/app/components/AvatarProfile";
+import { Ty_User } from "@/app/types/UserList";
 import { Camera, Edit } from "lucide-react";
 
 export const ProfileHeader: React.FC<{

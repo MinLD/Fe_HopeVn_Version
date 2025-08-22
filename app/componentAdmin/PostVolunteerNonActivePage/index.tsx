@@ -5,7 +5,7 @@ import EmptyState from "@/app/components/Empty State";
 import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
 import Spanning from "@/app/components/Spanning";
 import { GetAllPostVolunteer_non_Active } from "@/app/service/admin";
-import { Leaf, User } from "lucide-react";
+import { Leaf } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -15,7 +15,6 @@ type Props = {
 function PostVolunteerNonActivepage({ token }: Props) {
   const [data, setData] = useState<Ty_PostVolunteer[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingActive, setIsLoadingActive] = useState(false);
 
   const handleGetAllCompanyNonActive = async () => {
     setIsLoading(true);
@@ -35,6 +34,7 @@ function PostVolunteerNonActivepage({ token }: Props) {
 
   useEffect(() => {
     handleGetAllCompanyNonActive();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

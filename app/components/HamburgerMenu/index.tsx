@@ -25,7 +25,9 @@ function HamburgerMenu() {
       document.body.style.overflow = "";
     };
   }, [IsOpenMenu]);
-  const handleReturnComponent = async (id: number) => {};
+  const handleReturnComponent = async (id: number) => {
+    console.log(id);
+  };
 
   return (
     <>

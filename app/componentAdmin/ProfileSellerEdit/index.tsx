@@ -17,15 +17,12 @@ type Props = {
 };
 
 function ProfileSellerEdit({
-  type,
   phone,
   setClose,
-  id,
   image,
   name,
   description,
   taxCode,
-  email,
 }: Props) {
   const inputs = [
     {
@@ -79,7 +76,8 @@ function ProfileSellerEdit({
       phone: phone || "",
     });
     console.log("FormData updated:", formData);
-  }, [name, description, taxCode, image, phone]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, description, taxCode, image, phone, setFormData]);
 
   const handleChange = (name: string, value: string) => {
     setFormData((prev) => ({

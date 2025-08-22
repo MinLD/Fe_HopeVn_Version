@@ -2,14 +2,7 @@
 import { useState } from "react";
 import MyLayout from "../../../Layout/MyLayOut";
 import logo from "../../../../public/logo/logoanhiu1.png";
-import {
-  Briefcase,
-  FileText,
-  Heart,
-  Lock,
-  LogOut,
-  Signpost,
-} from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { AiOutlineMenu } from "react-icons/ai";
@@ -26,21 +19,22 @@ function HeaderMenuBottom() {
     { id: 4, name: "Cửa hàng" },
     { name: "Huân chương", id: 5 },
   ];
-  const menuChild: { name: string; id: number }[] = [
-    { id: 4, name: "Bài đăng sẻ chia" },
-    { name: "Bài đăng hoàn vốn", id: 5 },
-  ];
-  const MenuUser: { name: string; id: number; icon: any }[] = [
-    { id: 1, name: "CV của tôi", icon: <FileText /> },
-    { id: 2, name: "Nạp tiền vào hệ thống", icon: <FileText /> },
-    { id: 3, name: "Việc làm đã lưu", icon: <Heart /> },
-    { id: 4, name: "Bài đăng hoàn vốn", icon: <Signpost /> },
-    { id: 5, name: "Việc làm đã ứng tuyển", icon: <Briefcase /> },
-    { id: 13, name: "Đổi mật khẩu", icon: <Lock /> },
-    { id: 14, name: "Đăng xuất", icon: <LogOut /> },
-  ];
+  // const menuChild: { name: string; id: number }[] = [
+  //   { id: 4, name: "Bài đăng sẻ chia" },
+  //   { name: "Bài đăng hoàn vốn", id: 5 },
+  // ];
+  // const MenuUser: { name: string; id: number; icon: any }[] = [
+  //   { id: 1, name: "CV của tôi", icon: <FileText /> },
+  //   { id: 2, name: "Nạp tiền vào hệ thống", icon: <FileText /> },
+  //   { id: 3, name: "Việc làm đã lưu", icon: <Heart /> },
+  //   { id: 4, name: "Bài đăng hoàn vốn", icon: <Signpost /> },
+  //   { id: 5, name: "Việc làm đã ứng tuyển", icon: <Briefcase /> },
+  //   { id: 13, name: "Đổi mật khẩu", icon: <Lock /> },
+  //   { id: 14, name: "Đăng xuất", icon: <LogOut /> },
+  // ];
   const storeProvider = useStateStore();
-  const { IsOpenMenu, setIsOpenMenu } = storeProvider;
+  const { setIsOpenMenu } = storeProvider;
+
   const [isShowMenuChild, setShowMenuChild] = useState<boolean>(false);
 
   const [hover, setHover] = useState<any>(false);
@@ -88,7 +82,7 @@ function HeaderMenuBottom() {
               className="md:flex hidden gap-10"
               onMouseLeave={() => setHover("")}
             >
-              {data.map((item,k) => (
+              {data.map((item, k) => (
                 <div
                   key={item.id}
                   onClick={() => handleReturnComponent(k)}
@@ -98,8 +92,9 @@ function HeaderMenuBottom() {
                   <h1
                     className="text-[16px] font-medium line-clamp-1 max-w-[100px] "
                     onClick={() => {
-                      item.name === "Giúp đỡ" &&
+                      if (item.name === "Giúp đỡ") {
                         setShowMenuChild(!isShowMenuChild);
+                      }
                     }}
                   >
                     {item.name}

@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { jwtDecode } from "jwt-decode";
+import { DecodedToken } from "@/app/types/UserList";
 export async function GET() {
   try {
     const token = (await cookies()).get("authToken")?.value;

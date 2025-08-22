@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import MyButton from "@/app/components/Button";
 import * as React from "react";
 
-import { Bell,  Search } from "lucide-react";
+import { Bell, Search } from "lucide-react";
 
 import { IoSearchSharp } from "react-icons/io5";
 import { useProfileStore } from "@/app/zustand/userStore";
@@ -23,9 +23,10 @@ function HeaderMenuTop({ token = "" }: Props) {
   const { setOpenMenuHeaderTop, isOpenMenuHeaderTop } = useNav();
   // const displayProfile = await initialProfile;
   // const { profileUser, isLoading } = useAutoFetchProfile();
-  const { fetchProfile, profileUser, isLoading } = useProfileStore();
+  const { fetchProfile, profileUser } = useProfileStore();
   useEffect(() => {
     fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const icons: { name: ComponentType<SVGProps<SVGSVGElement>>; id: number }[] =

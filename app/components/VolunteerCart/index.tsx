@@ -9,12 +9,12 @@ import Badge from "@/app/ui/Badge";
 
 import ImageCarousel from "@/app/componentsPostHelp/ImageCarousel";
 import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
-import { ActivePostVolunteer } from "@/app/service/admin";
 import { toast } from "sonner";
 import Button from "@/app/ui/Button";
 import DonateCart from "@/app/components/DonateCart";
 import { patchLikePostVolunteer } from "@/app/service/User";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface PostCardProps {
   post: Ty_PostVolunteer;
@@ -26,26 +26,26 @@ const VolunteerCard: React.FC<PostCardProps> = ({ post, token, onClick }) => {
   const router = useRouter();
   const [isDonated, setDonated] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
   // const [reactions, setReactions] = useState(post.reactions);
-  const [isFund, setFund] = useState<string>("");
+
   // State để lưu trữ chuỗi thời gian đã định dạng
   const [timeAgo, setTimeAgo] = useState("");
 
-  const handleActive = async () => {
-    setIsLoading(true);
-    await ActivePostVolunteer(token, post.id, Number(isFund))
-      .then(() => {
-        toast.success("Phê duyệt bài viết thành công!");
-        setIsLoading(false);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-        toast.error(err.response.data.message);
-        setIsLoading(false);
-      });
-  };
+  // const handleActive = async () => {
+  //   setIsLoading(true);
+  //   await ActivePostVolunteer(token, post.id, Number(isFund))
+  //     .then(() => {
+  //       toast.success("Phê duyệt bài viết thành công!");
+  //       setIsLoading(false);
+  //       window.location.reload();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       toast.error(err.response.data.message);
+  //       setIsLoading(false);
+  //     });
+  // };
   useEffect(() => {
     const date = new Date(post.createAt);
 
@@ -109,7 +109,9 @@ const VolunteerCard: React.FC<PostCardProps> = ({ post, token, onClick }) => {
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-start space-x-3">
-          <img
+          <Image
+            width={40}
+            height={40}
             src={
               post.userPic ||
               "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"

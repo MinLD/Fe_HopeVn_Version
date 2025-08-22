@@ -1,7 +1,6 @@
 "use client";
 import React, { ComponentType, SVGProps, useState } from "react";
 import { Mail, Lock, User } from "lucide-react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Logo from "../../../public/logo/logoanhiu1.png";
 import Image from "next/image";
@@ -30,7 +29,6 @@ type Form = {
 };
 
 export default function Login() {
-  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const { setAuth } = useAuth();
