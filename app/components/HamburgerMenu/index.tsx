@@ -72,7 +72,7 @@ function HamburgerMenu() {
           <div className="w-full h-[1px] bg-[#f1f1f1] mt-5" />
 
           <div className="px-3">
-            <div className="w-full h-[50px] bg-[#f5f5f5] mt-5 rounded-3xl">
+            {/* <div className="w-full h-[50px] bg-[#f5f5f5] mt-5 rounded-3xl">
               <div className="w-full h-full flex items-center justify-center gap-2">
                 <div className="flex  gap-2 items-center">
                   <div>
@@ -91,8 +91,8 @@ function HamburgerMenu() {
               <div className="absolute top-1/2 left-3 transform translate-y-[-50%] text-[#000000]">
                 <Search size={20} strokeWidth={2.25} />
               </div>
-            </div>
-            <div className="w-full h-[1px] bg-[#f1f1f1] mt-5" />
+            </div> */}
+            {/* <div className="w-full h-[1px] bg-[#f1f1f1] mt-5" /> */}
             <h2 className="text-lg font-bold mt-2 text-[#272727]">Danh mục</h2>
 
             {DataCategory.map((item) => (

@@ -46,7 +46,7 @@ const register_Api = async (
 };
 
 const GetRoles_Api = async (token: string) => {
-  return fetch(`http://localhost:3000/api/get-roles`, {
+  return fetch(`https://fe-hope-vn-version.vercel.app/api/get-roles`, {
     method: "GET",
     headers: {
       Cookie: `authToken=${token}`,

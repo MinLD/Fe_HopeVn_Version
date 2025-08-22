@@ -15,12 +15,15 @@ async function getInitialProfile(
   //   return profileCache.get(cacheKey) as Ty_User | null;
   // }
   try {
-    const response = await fetch("http://localhost:3000/api/user/profile", {
-      headers: {
-        Cookie: `authToken=${token}`,
-      },
-      cache: "no-store",
-    });
+    const response = await fetch(
+      "https://fe-hope-vn-version.vercel.app/api/user/profile",
+      {
+        headers: {
+          Cookie: `authToken=${token}`,
+        },
+        cache: "no-store",
+      }
+    );
     console.log("Response status từ API profile:", response.status);
     const data = await response.json();
     console.log("Data mới từ API profile:", JSON.stringify(data)); // Log dữ liệu để kiểm tra

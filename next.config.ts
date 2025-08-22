@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: "http://localhost:3000", // Thay bằng domain thực tế khi triển khai
+            value: "https://fe-hope-vn-version.vercel.app/", // Thay bằng domain thực tế khi triển khai
           },
           {
             key: "Access-Control-Allow-Methods",
@@ -79,7 +79,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/backend/:path*",
-        destination: "http://localhost:8080/api/:path*",
+        destination: "https://ourhope.io.vn/api/:path*",
       },
     ];
   },

@@ -11,7 +11,7 @@ export async function POST() {
 
     // Gọi backend refresh token
     const response = await axios.post(
-      "http://localhost:3000/api/auth/refresh",
+      "https://fe-hope-vn-version.vercel.app//api/auth/refresh",
       {
         refreshToken,
       }

@@ -16,7 +16,6 @@ function HeaderMenuBottom() {
     { id: 1, name: "Giới Thiệu" },
     { name: "Tuyển dụng", id: 2 },
     { name: "Giúp đỡ", id: 3 },
-    { id: 4, name: "Cửa hàng" },
     { name: "Huân chương", id: 5 },
   ];
   // const menuChild: { name: string; id: number }[] = [
@@ -49,9 +48,7 @@ function HeaderMenuBottom() {
     if (id === 2) {
       navigate.push("/help");
     }
-    if (id === 3) {
-      navigate.push("/cuahang");
-    }
+
     window.scrollTo(0, 0);
   };
 
