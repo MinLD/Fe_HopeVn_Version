@@ -11,7 +11,7 @@ import CVBuilder from "@/app/components/BuilderCV";
 import { Ty_Cv, Ty_User } from "@/app/types/UserList";
 
 type ProfilePageProps = {
-  initialCv: Ty_Cv | null;
+  initialCv?: Ty_Cv | null;
   initialUser: Ty_User | null;
   token: string | null;
 };
