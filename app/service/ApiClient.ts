@@ -1,6 +1,8 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+const baseUrl = "https://ourhope.io.vn/api";
+export const FeUrl = "http://localhost:3000/";
 
 export const axiosClient = axios.create({
   baseURL: baseUrl,

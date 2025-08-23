@@ -1,5 +1,5 @@
-import axiosClient from "@/app/service/ApiClient";
-const baseURL = process.env.NEXT_PUBLIC_FONTEND_URL;
+import axiosClient, { FeUrl } from "@/app/service/ApiClient";
+const baseURL = FeUrl;
 const exchangeCodeForToken = async (
   authCode: string
 ): Promise<string | null | any> => {

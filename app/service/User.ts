@@ -1,6 +1,6 @@
-import axiosClient from "@/app/service/ApiClient";
+import axiosClient, { FeUrl } from "@/app/service/ApiClient";
 import { Ty_Cv, Ty_profile_User, Ty_User } from "@/app/types/UserList";
-const baseURL = process.env.NEXT_PUBLIC_FONTEND_URL;
+const baseURL = FeUrl;
 // Cache để tránh gọi lại liên tục
 export const profileCache = new Map<string, Ty_profile_User | null>();
 
