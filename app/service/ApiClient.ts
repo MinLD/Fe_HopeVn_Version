@@ -1,14 +1,14 @@
 import axios from "axios";
 import Cookies from "js-cookie";
+const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const axiosClient = axios.create({
-  baseURL: "https://ourhope.io.vn/api",
+  baseURL: baseUrl,
   timeout: 30000,
   headers: {
     "Content-Type": "application/json",
   },
 });
-export const fetchClient = "http://localhost:8080/api/";
 
 // Interceptor cho request
 axiosClient.interceptors.request.use(

@@ -4,6 +4,7 @@ import JobCard from "@/app/components/jobCart/JobCard";
 import SearchFilter from "@/app/components/SearchFilter";
 import MyLayout from "@/app/Layout/MyLayOut";
 import { GetAllJobs } from "@/app/service/employer";
+import { Sprout } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type prop = {
@@ -105,6 +106,24 @@ const RecruitmentPage = ({}: prop) => {
                   {data.map((job) => (
                     <JobCard key={job.companyId} job={job} />
                   ))}
+                  {data.length === 0 && !isLoading && (
+                    <div className="col-span-3">
+                      <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
+                        <Sprout
+                          size={80}
+                          color="#10B981"
+                          strokeWidth={1.5}
+                          className="mb-4 text-emerald-500"
+                        />
+                        <h2 className="text-2xl font-semibold text-gray-700">
+                          Chưa có bài tuyển dụng nào
+                        </h2>
+                        <p className="text-gray-500 mt-2">
+                          Hãy là người đầu tiên chia sẻ điều gì đó ý nghĩa!
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

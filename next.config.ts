@@ -1,5 +1,5 @@
 import type { NextConfig } from "next";
-
+const baseURL = process.env.NEXT_PUBLIC_FONTEND_URL;
 const nextConfig: NextConfig = {
   output: "standalone",
   // Cấu hình headers cho API route
@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
           { key: "Access-Control-Allow-Credentials", value: "true" },
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://fe-hope-vn-version.vercel.app/", // Thay bằng domain thực tế khi triển khai
+            value: `${baseURL}`, // Thay bằng domain thực tế khi triển khai
           },
           {
             key: "Access-Control-Allow-Methods",

@@ -1,6 +1,6 @@
 import axiosClient from "@/app/service/ApiClient";
 import { Ty_Cv, Ty_profile_User, Ty_User } from "@/app/types/UserList";
-
+const baseURL = process.env.NEXT_PUBLIC_FONTEND_URL;
 // Cache để tránh gọi lại liên tục
 export const profileCache = new Map<string, Ty_profile_User | null>();
 
@@ -15,15 +15,12 @@ async function getInitialProfile(
   //   return profileCache.get(cacheKey) as Ty_User | null;
   // }
   try {
-    const response = await fetch(
-      "https://fe-hope-vn-version.vercel.app/api/user/profile",
-      {
-        headers: {
-          Cookie: `authToken=${token}`,
-        },
-        cache: "no-store",
-      }
-    );
+    const response = await fetch(`${baseURL}/api/user/profile`, {
+      headers: {
+        Cookie: `authToken=${token}`,
+      },
+      cache: "no-store",
+    });
     console.log("Response status từ API profile:", response.status);
     const data = await response.json();
     console.log("Data mới từ API profile:", JSON.stringify(data)); // Log dữ liệu để kiểm tra

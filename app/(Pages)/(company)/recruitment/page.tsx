@@ -1,11 +1,12 @@
-import RecruitmentPage from "@/app/components/recruitmentPage";
+import StompChat from "@/app/components/StompChat";
 import { cookies } from "next/headers";
 
 async function page() {
   const token = (await cookies()).get("authToken")?.value;
   return (
     <>
-      <RecruitmentPage token={token || ""} />
+      {/* <RecruitmentPage token={token || ""} /> */}
+      <StompChat token={token || ""} />
     </>
   );
 }

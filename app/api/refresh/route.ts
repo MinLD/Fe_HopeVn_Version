@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import axios from "axios"; // Hoặc dùng fetch
-
+const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 export async function POST() {
   try {
     const refreshToken = (await cookies()).get("refreshToken")?.value;
@@ -10,12 +10,9 @@ export async function POST() {
     }
 
     // Gọi backend refresh token
-    const response = await axios.post(
-      "https://fe-hope-vn-version.vercel.app//api/auth/refresh",
-      {
-        refreshToken,
-      }
-    );
+    const response = await axios.post(`${baseURL}/auth/refresh`, {
+      refreshToken,
+    });
 
     if (response.status !== 200) {
       return NextResponse.json(

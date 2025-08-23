@@ -1,5 +1,5 @@
 import axiosClient from "@/app/service/ApiClient";
-
+const baseURL = process.env.NEXT_PUBLIC_FONTEND_URL;
 const exchangeCodeForToken = async (
   authCode: string
 ): Promise<string | null | any> => {
@@ -46,7 +46,7 @@ const register_Api = async (
 };
 
 const GetRoles_Api = async (token: string) => {
-  return fetch(`https://fe-hope-vn-version.vercel.app/api/get-roles`, {
+  return fetch(`${baseURL}/api/get-roles`, {
     method: "GET",
     headers: {
       Cookie: `authToken=${token}`,
