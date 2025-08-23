@@ -1,47 +1,29 @@
 import type { NextConfig } from "next";
-const baseURL = process.env.NEXT_PUBLIC_FONTEND_URL;
+
 const nextConfig: NextConfig = {
   output: "standalone",
-  // Cấu hình headers cho API route
-  async headers() {
+
+  // Cấu hình rewrite để proxy API
+  async rewrites() {
     return [
       {
+        // BẤT KỲ request nào đến /api/abc sẽ được chuyển tiếp
         source: "/api/:path*",
-        headers: [
-          { key: "Access-Control-Allow-Credentials", value: "true" },
-          {
-            key: "Access-Control-Allow-Origin",
-            value: `${baseURL}`, // Thay bằng domain thực tế khi triển khai
-          },
-          {
-            key: "Access-Control-Allow-Methods",
-            value: "GET,POST,PUT,DELETE,OPTIONS",
-          },
-          {
-            key: "Access-Control-Allow-Headers",
-            value: "Authorization, Content-Type",
-          },
-        ],
+        // đến địa chỉ backend tương ứng là ${process.env.BACKEND_URL}/abc
+        destination: `${
+          process.env.BACKEND_URL || "https://ourhope.io.vn/api"
+        }/:path*`,
       },
     ];
   },
 
-  // Cấu hình images (loại bỏ Cloudinary nếu không cần)
+  // Giữ nguyên cấu hình images của bạn
   images: {
     domains: ["res.cloudinary.com"],
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "i.ibb.co", // Giữ các domain khác nếu cần
-      },
-      {
-        protocol: "https",
-        hostname: "thecrafthouse.vn",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.shopify.com",
-      },
+      { protocol: "https", hostname: "i.ibb.co" },
+      { protocol: "https", hostname: "thecrafthouse.vn" },
+      { protocol: "https", hostname: "cdn.shopify.com" },
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
@@ -73,16 +55,6 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
-  },
-
-  // Cấu hình rewrite
-  async rewrites() {
-    return [
-      {
-        source: "/backend/:path*",
-        destination: "https://ourhope.io.vn/api/:path*",
-      },
-    ];
   },
 };
 

@@ -7,20 +7,20 @@ const page = async () => {
   const token = (await cookies()).get("authToken")?.value;
   let initialUser: Ty_User | null = null;
   let initialCv: Ty_Cv | null = null;
-  try {
-    const [user, cv] = await Promise.all([
-      getInitialProfile(token),
-      getDataCv(token || ""),
-    ]);
+  // try {
+  //   const [user, cv] = await Promise.all([
+  //     getInitialProfile(token),
+  //     getDataCv(token || ""),
+  //   ]);
 
-    initialUser = (await user) || null;
-    initialCv = (await cv.data.result.data) || null;
-  } catch (error) {
-    console.log(error);
-  }
+  //   initialUser = (await user) || null;
+  //   initialCv = (await cv.data.result.data) || null;
+  // } catch (error) {
+  //   console.log(error);
+  // }
 
-  // const profileUser: Ty_User | null = await getInitialProfile(token);
-  // initialUser = (await profileUser) || null;
+  const profileUser: Ty_User | null = await getInitialProfile(token);
+  initialUser = (await profileUser) || null;
 
   return (
     <>
