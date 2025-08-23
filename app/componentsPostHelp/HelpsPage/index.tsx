@@ -5,8 +5,8 @@ import VolunteerCard from "@/app/components/VolunteerCart";
 import CommentPostCart, {
   PostSkeleton,
 } from "@/app/componentsPostHelp/CommentPostCart";
-import CreatePost from "@/app/componentsPostHelp/CreatePost";
 import PostCard from "@/app/componentsPostHelp/posts/PostCard";
+import { useNav } from "@/app/hooks/useNav";
 import MyLayout from "@/app/Layout/MyLayOut";
 import { dataPost } from "@/app/types/post";
 import { Sprout } from "lucide-react";
@@ -42,9 +42,9 @@ function HelpPage({
   dataPostGive,
   isLoading,
 }: prop) {
+  const { setOpenCreatePost, isOpenCreatePost } = useNav();
   const [isComment, setIsComment] = useState<number>(-1);
   const navigate = useRouter();
-  const [isClose, setClose] = useState<boolean>(false);
   // const getProfileUser = async (id: string) => {
   //   await getUserId(id).then((res) => {
   //     console.log(res);
@@ -59,7 +59,7 @@ function HelpPage({
     salaryMax: "",
     urgent: false,
   });
-  console.log(filters)
+  console.log(filters);
   const [selectedType, setSelectedType] = useState<
     "all" | "help-request" | "free" | "giveaway" | "Hoàn vốn"
   >("all");
@@ -379,7 +379,7 @@ function HelpPage({
     <MyLayout>
       {" "}
       <div className="min-h-screen bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-1 sm:px-6 md:px-8 lg:px-15 py-8">
           {/* Header */}
           <div className="mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -399,16 +399,11 @@ function HelpPage({
                     toast.warning("Vui lòng đăng nhập để có thể đăng tin!");
                     return navigate.push("/authenticate/loggin");
                   }
-                  setClose(!isClose);
+                  setOpenCreatePost(!isOpenCreatePost);
                 }}
               >
                 Tạo bài viết
               </button>
-              {isClose && (
-                <>
-                  <CreatePost onClose={() => setClose(false)} token={token} />
-                </>
-              )}
             </div>
 
             {/* Type Filters */}
@@ -466,7 +461,7 @@ function HelpPage({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
             {/* Filters Sidebar */}
             <div className="lg:col-span-1">
               <div className="sticky top-30">

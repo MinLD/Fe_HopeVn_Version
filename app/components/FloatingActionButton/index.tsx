@@ -1,44 +1,46 @@
 "use client";
-import { Briefcase, DollarSign, Gift, Plus } from "lucide-react";
+import { useNav } from "@/app/hooks/useNav";
+import { Briefcase, Gift, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 function FloatingActionButton() {
+  const { isOpenCreatePost, setOpenCreatePost } = useNav();
+  const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
-  //   const [showModal, setShowModal] = useState(false);
-  //   const [modalType, setModalType] = useState<
-  //     "job" | "help-request" | "donation"
-  //   >("job");
 
-  const openModal = (type: "job" | "help-request" | "donation") => {
+  const openModal = (type: string) => {
     console.log(type);
-    // setModalType(type);
-    // setShowModal(true);
-    setShowMenu(false);
+    switch (type) {
+      case "post":
+        setShowMenu(false);
+        setOpenCreatePost(!isOpenCreatePost);
+        return;
+      case "partner":
+        setShowMenu(false);
+        router.push("register/partner");
+        return;
+    }
   };
 
   const menuItems = [
     {
-      type: "job" as const,
-      label: "Post Job",
-      icon: Briefcase,
+      type: "post" as const,
+      label: "Tạo bài viết",
+      icon: Gift,
       color: "bg-blue-500 hover:bg-blue-600",
       textColor: "text-blue-600",
     },
     {
-      type: "help-request" as const,
-      label: "Request Help",
-      icon: DollarSign,
+      type: "partner" as const,
+      label: "Đăng ký đối tác",
+      icon: Briefcase,
+
       color: "bg-red-500 hover:bg-red-600",
       textColor: "text-red-600",
     },
-    {
-      type: "donation" as const,
-      label: "Offer Donation",
-      icon: Gift,
-      color: "bg-emerald-500 hover:bg-emerald-600",
-      textColor: "text-emerald-600",
-    },
   ];
+
   return (
     <>
       <div className="fixed bottom-6 right-6 z-40">

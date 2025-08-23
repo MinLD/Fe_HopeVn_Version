@@ -53,7 +53,7 @@ function HeaderTopMenuDropdown() {
     <>
       <div
         ref={dropdownRef}
-        className="text-[14px] text-[#272727]  border-1 border-[#f5f5f5] absolute top-10 right-0 w-auto min-w-[250px] flex-1  bg-[#ffff] flex flex-col gap-2 rounded-lg h-auto"
+        className="z-50 text-[14px] text-[#272727]  border-1 border-[#f5f5f5] absolute top-10 right-0 w-auto min-w-[250px] flex-1  bg-[#ffff] flex flex-col gap-2 rounded-lg h-auto"
       >
         <div className="flex items-center gap-2 px-2 mt-4">
           <AvatarProfile

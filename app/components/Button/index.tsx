@@ -14,7 +14,7 @@ function MyButton({
 }: layoutProps): JSX.Element {
   return (
     <button
-      className={` flex h-auto max-w-full min-w-[100px] cursor-pointer items-center justify-center rounded-md border-none p-2 font-medium text-[#fff] transition hover:bg-[#79c776] active:scale-95
+      className={` flex h-auto max-w-full min-w-[80px] cursor-pointer items-center justify-center rounded-md border-none p-2 font-medium text-[#fff] transition hover:bg-[#79c776] active:scale-95
 
         ${isColor ? isColor : "bg-[#f38120]"}
         ${isWidth ? isWidth : "w-full"} `}

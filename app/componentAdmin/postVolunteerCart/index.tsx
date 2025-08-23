@@ -14,6 +14,7 @@ import { ActivePostVolunteer } from "@/app/service/admin";
 import { toast } from "sonner";
 import Spanning from "@/app/components/Spanning";
 import Image from "next/image";
+import AvatarProfile from "@/app/components/AvatarProfile";
 
 interface PostCardProps {
   post: Ty_PostVolunteer;
@@ -88,16 +89,17 @@ const PostVolunteerCard: React.FC<PostCardProps> = ({ post, token }) => {
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-start space-x-3">
-          <Image
-            width={40}
-            height={40}
-            src={
-              post.userPic ||
-              "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
-            }
-            alt={post.name}
-            className="w-10 h-10 rounded-full object-cover"
-          />
+          {post.userPic && (
+            <Image
+              priority
+              width={40}
+              height={40}
+              src={post.userPic || ""}
+              alt={post.name}
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          )}
+          <AvatarProfile name={post.name} url={post.userPic} />
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center  mb-1">

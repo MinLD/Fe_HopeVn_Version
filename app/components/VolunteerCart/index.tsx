@@ -15,6 +15,7 @@ import DonateCart from "@/app/components/DonateCart";
 import { patchLikePostVolunteer } from "@/app/service/User";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import AvatarProfile from "@/app/components/AvatarProfile";
 
 interface PostCardProps {
   post: Ty_PostVolunteer;
@@ -105,20 +106,27 @@ const VolunteerCard: React.FC<PostCardProps> = ({ post, token, onClick }) => {
   // };
 
   return (
-    <Card hover className="transition-all duration-200">
+    <Card
+      hover
+      className="transition-all duration-200 p-2 md:p-4"
+      padding="none"
+    >
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-start space-x-3">
-          <Image
-            width={40}
-            height={40}
-            src={
-              post.userPic ||
-              "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg"
-            }
-            alt={post.name}
-            className="w-10 h-10 rounded-full object-cover"
-          />
+          {post.userPic ? (
+            <Image
+              width={40}
+              height={40}
+              src={post.userPic || ""}
+              alt={post.name}
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          ) : (
+            <>
+              <AvatarProfile name={post.name} width="10" height="10" />
+            </>
+          )}
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center  mb-1">
@@ -144,14 +152,14 @@ const VolunteerCard: React.FC<PostCardProps> = ({ post, token, onClick }) => {
 
         {/* Title and Category */}
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          <h3 className="text-[16px] md:text-lg font-semibold text-gray-900 mb-2">
             {post.title}
           </h3>
         </div>
 
         {/* Description */}
         <div>
-          <p className="text-gray-600 leading-relaxed">
+          <p className="text-gray-600  leading-relaxed">
             {isExpanded
               ? post.content
               : `${post.content.slice(0, 150)}${
@@ -187,10 +195,10 @@ const VolunteerCard: React.FC<PostCardProps> = ({ post, token, onClick }) => {
               />
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">
+              {/* <span className="text-gray-600">
                 Đã quyên góp: {Number(post.totalAmount).toLocaleString() || 0}{" "}
                 VND
-              </span>
+              </span> */}
               <span className="text-gray-600 flex items-center">
                 <Target className="w-4 h-4 mr-1" />
                 Mục tiêu: {Number(post.fund).toLocaleString() || 0} VND
@@ -217,24 +225,7 @@ const VolunteerCard: React.FC<PostCardProps> = ({ post, token, onClick }) => {
         )}
 
         {/* Reactions and Actions */}
-        <div className="flex items-center justify-between pt-2 border-t border-gray-100">
-          <div className="flex items-center space-x-4">
-            <button
-              className="flex items-center text-gray-500 hover:text-red-500 transition-colors"
-              onClick={handleLike}
-            >
-              <Heart className="w-5 h-5 mr-1" />
-              <span className="text-sm">{post.like || 0}</span>
-            </button>
-            <button
-              className="flex items-center text-gray-500 hover:text-green-600 transition-colors"
-              onClick={onClick}
-            >
-              <MessageCircle className="w-5 h-5 mr-1" />
-              <span className="text-sm">100</span>
-            </button>
-          </div>
-
+        <div className="flex sm:items-center sm:justify-between pt-2 border-t border-gray-100 sm:flex-row flex-col gap-2">
           <div className="flex space-x-2">
             <Button
               variant="primary"
@@ -253,6 +244,22 @@ const VolunteerCard: React.FC<PostCardProps> = ({ post, token, onClick }) => {
             <Button variant="outline" size="sm">
               Xem chi tiết
             </Button>
+          </div>{" "}
+          <div className="flex items-center space-x-4">
+            <button
+              className="flex items-center text-gray-500 hover:text-red-500 transition-colors"
+              onClick={handleLike}
+            >
+              <Heart className="w-5 h-5 mr-1" />
+              <span className="text-sm">{post.like || 0}</span>
+            </button>
+            <button
+              className="flex items-center text-gray-500 hover:text-green-600 transition-colors"
+              onClick={onClick}
+            >
+              <MessageCircle className="w-5 h-5 mr-1" />
+              <span className="text-sm">100</span>
+            </button>
           </div>
         </div>
       </div>

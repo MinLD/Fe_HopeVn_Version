@@ -67,46 +67,58 @@ function CommentPostCard({
       });
   };
   const handleComment = async () => {
+    // Không gửi comment rỗng
+    if (!isComment.trim()) return;
+
     setIsLoading(true);
+    const commentToSend = isComment; // Lưu lại comment trước khi reset
+    setIsComment(""); // Xóa nội dung trong ô input ngay lập tức để có trải nghiệm tốt hơn
+
     if (type === "post") {
-      await CommentPost(token, id, isComment || "")
-        .then(async (res) => {
-          console.log(res);
-          await handleGetAllCommentsPost();
-          setIsLoading(false);
-          return;
+      await CommentPost(token, id, commentToSend)
+        .then(() => {
+          // Tải lại danh sách comment sau khi gửi thành công
+          handleGetAllCommentsPost();
         })
         .catch((err) => {
           console.log(err);
-          return;
+          setIsComment(commentToSend); // Nếu lỗi, trả lại nội dung comment cho người dùng sửa
+        })
+        .finally(() => {
+          setIsComment("");
+          setIsLoading(false); // Luôn tắt loading dù thành công hay thất bại
         });
       return;
     }
+
     await CommentPostVolunteer(token, id, isComment || "")
       .then(async (res) => {
+        setIsComment("");
         console.log(res);
         await handleGetAllCommentsPost();
         setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setIsComment("");
+        setIsLoading(false);
       });
   };
-  // Xử lý đóng modal khi nhấn phím Escape
-  // useEffect(() => {
-  //   const handleEsc = (event: KeyboardEvent) => {
-  //     if (event.key === "Escape") {
-  //       // handleComment;
-  //       // onClose();
-  //     }
-  //   };
-  //   window.addEventListener("keydown", handleEsc);
 
-  //   // Dọn dẹp event listener khi component bị hủy
-  //   return () => {
-  //     window.removeEventListener("keydown", handleEsc);
-  //   };
-  // }, [onClose]);
+  useEffect(() => {
+    const handleEsc = (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        handleComment();
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+
+    // Dọn dẹp event listener khi component bị hủy
+    return () => {
+      window.removeEventListener("keydown", handleEsc);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onClose]);
 
   useEffect(() => {
     handleGetAllCommentsPost();
@@ -119,7 +131,7 @@ function CommentPostCard({
       onClick={onClose} // Đóng modal khi nhấp vào lớp phủ
     >
       <div
-        className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col transform transition-all duration-300 scale-95 opacity-0 animate-fade-in-scale"
+        className="bg-white rounded-xl shadow-2xl w-full  max-h-[90vh] flex flex-col transform transition-all duration-300 scale-95 opacity-0 animate-fade-in-scale"
         onClick={(e) => e.stopPropagation()} // Ngăn việc đóng modal khi nhấp vào nội dung bên trong
       >
         {/* Header */}
@@ -136,7 +148,7 @@ function CommentPostCard({
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto p-6 flex-grow">
+        <div className="overflow-y-auto p-1 flex-grow">
           {children}
           <div className="mt-4 min-h-[100px] ">
             <p className="text-gray-600 text-md mb-3">
@@ -232,6 +244,14 @@ function CommentPostCard({
         <div className="p-4 border-t border-gray-200 bg-gray-50">
           <div className="flex items-center space-x-3">
             <input
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  // Ngăn hành vi mặc định của Enter (như xuống dòng trong form)
+                  e.preventDefault();
+                  handleComment();
+                }
+              }}
+              value={isComment}
               onChange={(e) => setIsComment(e.target.value || "")}
               type="text"
               placeholder="Viết bình luận của bạn..."

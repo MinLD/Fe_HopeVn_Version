@@ -10,7 +10,7 @@ import { AuthProvider } from "@/app/context/AuthContext";
 import { cookies } from "next/headers";
 import { NavProvider } from "@/app/context/NavigationContext";
 import { AppInitializer } from "@/app/components/AppInitializer";
-import { SocketProvider } from "@/app/context/SocketContext";
+import CreatePost from "@/app/componentsPostHelp/CreatePost";
 
 const roboto = Roboto({
   subsets: ["latin-ext"],
@@ -27,25 +27,27 @@ export default async function RootLayout({
     <>
       <html lang="vi" className={roboto.className}>
         <body className={roboto.className}>
-          <SocketProvider>
-            <NavProvider>
-              <AuthProvider>
-                <StoreProvider>
-                  <AppInitializer token={token || null}>
-                    {children}
-                  </AppInitializer>
-                  <Toaster
-                    richColors
-                    duration={1500}
-                    position="top-right"
-                    theme="dark"
-                    style={{ zIndex: 9999 }}
-                  />
-                  <HamburgerMenu />
-                </StoreProvider>
-              </AuthProvider>
-            </NavProvider>
-          </SocketProvider>
+          <NavProvider>
+            <AuthProvider>
+              <StoreProvider>
+                <AppInitializer token={token || null}>
+                  {children}
+                </AppInitializer>
+                <Toaster
+                  richColors
+                  duration={1500}
+                  position="top-right"
+                  theme="dark"
+                  style={{ zIndex: 9999 }}
+                />
+                <HamburgerMenu />
+
+                <>
+                  <CreatePost token={token || ""} />
+                </>
+              </StoreProvider>
+            </AuthProvider>
+          </NavProvider>
         </body>
       </html>
     </>

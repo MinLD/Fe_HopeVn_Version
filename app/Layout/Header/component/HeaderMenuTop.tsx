@@ -1,12 +1,11 @@
 "use client";
-import { ComponentType, SVGProps, useEffect, useState } from "react";
+import { ComponentType, SVGProps, useEffect } from "react";
 import MyLayout from "../../../Layout/MyLayOut";
-import { IoIosArrowDown } from "react-icons/io";
 import { useRouter } from "next/navigation";
 import MyButton from "@/app/components/Button";
 import * as React from "react";
 
-import { Bell, Search } from "lucide-react";
+import { Bell, MessagesSquare } from "lucide-react";
 
 import { IoSearchSharp } from "react-icons/io5";
 import { useProfileStore } from "@/app/zustand/userStore";
@@ -32,10 +31,8 @@ function HeaderMenuTop({ token = "" }: Props) {
   const icons: { name: ComponentType<SVGProps<SVGSVGElement>>; id: number }[] =
     [
       { id: 1, name: Bell },
-      { id: 2, name: Search },
+      { id: 2, name: MessagesSquare },
     ];
-
-  const [isShowMenuSub, setIsShowMenuSub] = useState<boolean>(false);
 
   const handleReturn = (id: number) => {
     if (id === 1) {
@@ -57,7 +54,7 @@ function HeaderMenuTop({ token = "" }: Props) {
   return (
     <div className="flex h-[50px] w-full items-center justify-center bg-[#013035]">
       <MyLayout>
-        <div className="flex items-center justify-between text-[#fff] sm:gap-0">
+        <div className="flex items-center justify-between text-[#fff] ">
           <div className="flex items-center gap-5 lg:gap-10 xl:gap-20 flex-1 w-full">
             {/* info */}
             <div className="flex  gap-2 md:items-center md:gap-1">
@@ -88,7 +85,7 @@ function HeaderMenuTop({ token = "" }: Props) {
             </div>
 
             {/* thanh search */}
-            <div className="hidden md:block relative  w-full flex-1 max-w-[300px] lg:max-w-[350px] xl:max-w-[400px] transition-all ease-in-out duration-300">
+            <div className="ml-5 mr-5 hidden sm:block relative  w-full flex-1 max-w-[300px] md:max-w-[500px]   transition-all ease-in-out duration-300">
               <input
                 placeholder="Tìm kiếm..."
                 type="text"
@@ -100,27 +97,14 @@ function HeaderMenuTop({ token = "" }: Props) {
             </div>
           </div>
 
-          <div className="flex items-center justify-between gap-1">
+          <div className="flex items-center justify-between gap-3 ">
             {/* Loggin -pc*/}
             <div className="flex items-center justify-center gap-3 md:gap-2 ">
-              <div className="md:flex hidden items-center gap-2">
+              <div className="md:flex  items-center gap-2">
                 {token ? (
-                  <>
-                    {icons.map((item) => {
-                      const IconComponent = item.name;
-                      return (
-                        <div key={item.id}>
-                          <IconComponent
-                            className={`w-[20px] h-[20px md:w-[25px] md:h-[25px] ${
-                              item.id === 2 && "md:hidden"
-                            }`}
-                          />
-                        </div>
-                      );
-                    })}
-                  </>
+                  <></>
                 ) : (
-                  <div className="flex items-center gap-2 text-[14px]">
+                  <div className="flex items-center gap-1 sm:gap-2 text-[12px]">
                     <div onClick={() => handleReturn(1)}>
                       <MyButton content={"Đăng nhập"} isColor="bg-[#00b14f]" />
                     </div>
@@ -132,6 +116,22 @@ function HeaderMenuTop({ token = "" }: Props) {
               </div>
             </div>
             {/* Loggin-mb */}
+            {token && (
+              <>
+                <div className="flex  items-center justify-center gap-4">
+                  {icons.map((item) => {
+                    const IconComponent = item.name;
+                    return (
+                      <div key={item.id}>
+                        <IconComponent
+                          className={`w-[25px] h-[25px md:w-[25px] md:h-[25px] `}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
 
             {token && token ? (
               <div className="relative">
@@ -141,17 +141,7 @@ function HeaderMenuTop({ token = "" }: Props) {
                       name={profileUser?.profile?.fullName || "?"}
                       url={profileUser?.profile?.profilePicture?.url}
                     />
-                    {/* {isLoading ? (
-                      <>
-                        {" "}
-                        <Skeleton animation="wave" height={52} width={48} />
-                      </>
-                    ) : (
-                      <>
-                        {" "}
-                        <span>{profileUser?.result.profile.fullName}</span>
-                      </>
-                    )} */}
+
                     <svg viewBox="0 0 24 24" width="1.2em" height="1.2em">
                       <path fill="currentColor" d="m12 16l-6-6h12z"></path>
                     </svg>
@@ -161,7 +151,7 @@ function HeaderMenuTop({ token = "" }: Props) {
               </div>
             ) : (
               <>
-                <div className="md:hidden flex items-center justify-center gap-2">
+                {/* <div className=" md:hidden  flex items-center justify-center gap-2">
                   <div className="relative">
                     <IoIosArrowDown
                       size={25}
@@ -169,7 +159,6 @@ function HeaderMenuTop({ token = "" }: Props) {
                       className="cursor-pointer"
                       onClick={() => setIsShowMenuSub(!isShowMenuSub)}
                     />
-
                     {isShowMenuSub && (
                       <div
                         className={`position } z-[] absolute top-10 right-1 flex h-auto w-auto scale-100 transform flex-col gap-2 rounded-lg bg-[#ffff] p-2 font-medium shadow-md transition-all duration-300 ease-in-out`}
@@ -195,16 +184,9 @@ function HeaderMenuTop({ token = "" }: Props) {
                       </div>
                     )}
                   </div>
-                </div>
+                </div> */}
               </>
             )}
-            {/* ShowMenu mobile */}
-            {/* <div
-              className="text-2xl sm:hidden hover:cursor-pointer"
-              onClick={() => setIsOpenMenu(true)}
-            >
-              <AiOutlineMenu />
-            </div> */}
           </div>
         </div>
       </MyLayout>

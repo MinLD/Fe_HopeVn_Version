@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useStateStore } from "@/app/context/StoreProvider";
 import { useEffect } from "react";
 import Image from "next/image";
-import { DataCategory, DataMenuHamburger } from "@/app/types/MenuList";
+import { DataCategory } from "@/app/types/MenuList";
 
 function HamburgerMenu() {
   const { IsOpenMenu, setIsOpenMenu } = useStateStore();
@@ -27,6 +27,20 @@ function HamburgerMenu() {
   }, [IsOpenMenu]);
   const handleReturnComponent = async (id: number) => {
     console.log(id);
+    switch (id) {
+      case 0:
+        router.push("/");
+        break;
+      case 1:
+        router.push("/recruitment");
+        break;
+      case 2:
+        router.push("/help");
+        break;
+      case 3:
+        router.push("/modals");
+    }
+    setIsOpenMenu(false);
   };
 
   return (
@@ -105,7 +119,7 @@ function HamburgerMenu() {
               </div>
             ))}
 
-            <div className="overflow-y-scroll  max-h-[400px] ">
+            {/* <div className="overflow-y-scroll  max-h-[400px] ">
               {DataMenuHamburger.map((item) => (
                 <div
                   key={item.id}
@@ -115,7 +129,7 @@ function HamburgerMenu() {
                   {item.name}
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* <div className="w-full h-[1px] bg-[#f1f1f1] mt-2" /> */}
             {/* <p className="text-center mt-2">

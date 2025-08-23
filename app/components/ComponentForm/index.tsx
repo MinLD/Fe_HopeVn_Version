@@ -122,9 +122,6 @@ type props = {
 };
 
 const CompanyForm = ({ token }: props) => {
-  const [mode, setMode] = useState<"seller" | "employer">("employer");
-  setMode("employer");
-
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const formik = useFormik<CompanyFormValues>({
@@ -226,150 +223,149 @@ const CompanyForm = ({ token }: props) => {
               </button>
             </div>
           </div> */}
-          {mode === "employer" && (
-            <>
-              <h1 className="text-2xl font-bold mb-6 text-center">
-                Thông tin công ty
-              </h1>
-              <form onSubmit={formik.handleSubmit} className="space-y-6">
-                {formFields.map(
-                  ({
-                    name,
-                    label,
-                    placeholder,
-                    type,
-                    icon: Icon,
-                    options,
-                    accept,
-                  }) => (
-                    <div key={name}>
-                      <label
-                        htmlFor={name}
-                        className="block text-sm font-medium text-gray-700"
-                      >
-                        {label}
-                      </label>
-                      <div className="relative mt-1">
-                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                          <Icon className="h-5 w-5 text-gray-400" />
-                        </div>
-                        {type === "textarea" ? (
-                          <textarea
-                            id={name}
-                            name={name}
-                            value={
-                              formik.values[
-                                name as keyof CompanyFormValues
-                              ] as string
-                            }
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className={`block w-full pl-10 pr-3 py-2 border ${
-                              formik.touched[name as keyof CompanyFormValues] &&
-                              formik.errors[name as keyof CompanyFormValues]
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            } rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500`}
-                            placeholder={placeholder}
-                            rows={4}
-                          />
-                        ) : type === "select" ? (
-                          <select
-                            id={name}
-                            name={name}
-                            value={
-                              formik.values[
-                                name as keyof CompanyFormValues
-                              ] as string
-                            }
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className={`block w-full pl-10 pr-3 py-2 border ${
-                              formik.touched[name as keyof CompanyFormValues] &&
-                              formik.errors[name as keyof CompanyFormValues]
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            } rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500`}
-                          >
-                            {options?.map((option) => (
-                              <option key={option.value} value={option.value}>
-                                {option.label}
-                              </option>
-                            ))}
-                          </select>
-                        ) : type === "file" ? (
-                          <input
-                            id={name}
-                            name={name}
-                            type={type}
-                            accept={accept}
-                            onChange={handleImageChange}
-                            onBlur={formik.handleBlur}
-                            className={`block w-full pl-10 pr-3 py-2 border ${
-                              formik.touched[name as keyof CompanyFormValues] &&
-                              formik.errors[name as keyof CompanyFormValues]
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            } rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500`}
-                          />
-                        ) : (
-                          <input
-                            id={name}
-                            name={name}
-                            type={type}
-                            value={
-                              formik.values[
-                                name as keyof CompanyFormValues
-                              ] as string
-                            }
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            className={`block w-full pl-10 pr-3 py-2 border ${
-                              formik.touched[name as keyof CompanyFormValues] &&
-                              formik.errors[name as keyof CompanyFormValues]
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            } rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500`}
-                            placeholder={placeholder}
-                          />
-                        )}
-                      </div>
-                      {formik.touched[name as keyof CompanyFormValues] &&
-                        formik.errors[name as keyof CompanyFormValues] && (
-                          <p className="mt-1 text-sm text-red-500">
-                            {formik.errors[name as keyof CompanyFormValues]}
-                          </p>
-                        )}
 
-                      {name === "companyImage" && previewImage && (
-                        <Image
-                          width={200}
-                          height={200}
-                          src={previewImage}
-                          alt="Xem trước hình ảnh công ty"
-                          className="mt-2 w-32 h-32 object-cover rounded-md"
+          <>
+            <h1 className="text-2xl font-bold mb-6 text-center">
+              Thông tin công ty
+            </h1>
+            <form onSubmit={formik.handleSubmit} className="space-y-6">
+              {formFields.map(
+                ({
+                  name,
+                  label,
+                  placeholder,
+                  type,
+                  icon: Icon,
+                  options,
+                  accept,
+                }) => (
+                  <div key={name}>
+                    <label
+                      htmlFor={name}
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      {label}
+                    </label>
+                    <div className="relative mt-1">
+                      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <Icon className="h-5 w-5 text-gray-400" />
+                      </div>
+                      {type === "textarea" ? (
+                        <textarea
+                          id={name}
+                          name={name}
+                          value={
+                            formik.values[
+                              name as keyof CompanyFormValues
+                            ] as string
+                          }
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          className={`block w-full pl-10 pr-3 py-2 border ${
+                            formik.touched[name as keyof CompanyFormValues] &&
+                            formik.errors[name as keyof CompanyFormValues]
+                              ? "border-red-500"
+                              : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500`}
+                          placeholder={placeholder}
+                          rows={4}
+                        />
+                      ) : type === "select" ? (
+                        <select
+                          id={name}
+                          name={name}
+                          value={
+                            formik.values[
+                              name as keyof CompanyFormValues
+                            ] as string
+                          }
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          className={`block w-full pl-10 pr-3 py-2 border ${
+                            formik.touched[name as keyof CompanyFormValues] &&
+                            formik.errors[name as keyof CompanyFormValues]
+                              ? "border-red-500"
+                              : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500`}
+                        >
+                          {options?.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      ) : type === "file" ? (
+                        <input
+                          id={name}
+                          name={name}
+                          type={type}
+                          accept={accept}
+                          onChange={handleImageChange}
+                          onBlur={formik.handleBlur}
+                          className={`block w-full pl-10 pr-3 py-2 border ${
+                            formik.touched[name as keyof CompanyFormValues] &&
+                            formik.errors[name as keyof CompanyFormValues]
+                              ? "border-red-500"
+                              : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500`}
+                        />
+                      ) : (
+                        <input
+                          id={name}
+                          name={name}
+                          type={type}
+                          value={
+                            formik.values[
+                              name as keyof CompanyFormValues
+                            ] as string
+                          }
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                          className={`block w-full pl-10 pr-3 py-2 border ${
+                            formik.touched[name as keyof CompanyFormValues] &&
+                            formik.errors[name as keyof CompanyFormValues]
+                              ? "border-red-500"
+                              : "border-gray-300"
+                          } rounded-md shadow-sm focus:outline-none focus:ring-emerald-500 focus:border-emerald-500`}
+                          placeholder={placeholder}
                         />
                       )}
                     </div>
-                  )
-                )}
-                <div>
-                  <button
-                    type="submit"
-                    className="w-full px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-                  >
-                    {isLoading ? (
-                      <div className="flex items-center justify-center">
-                        <Spanning />
-                      </div>
-                    ) : (
-                      "Gửi"
+                    {formik.touched[name as keyof CompanyFormValues] &&
+                      formik.errors[name as keyof CompanyFormValues] && (
+                        <p className="mt-1 text-sm text-red-500">
+                          {formik.errors[name as keyof CompanyFormValues]}
+                        </p>
+                      )}
+
+                    {name === "companyImage" && previewImage && (
+                      <Image
+                        width={200}
+                        height={200}
+                        src={previewImage}
+                        alt="Xem trước hình ảnh công ty"
+                        className="mt-2 w-32 h-32 object-cover rounded-md"
+                      />
                     )}
-                  </button>
-                </div>
-              </form>
-            </>
-          )}
+                  </div>
+                )
+              )}
+              <div>
+                <button
+                  type="submit"
+                  className="w-full px-4 py-2 bg-emerald-600 text-white rounded-md hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+                >
+                  {isLoading ? (
+                    <div className="flex items-center justify-center">
+                      <Spanning />
+                    </div>
+                  ) : (
+                    "Gửi"
+                  )}
+                </button>
+              </div>
+            </form>
+          </>
         </div>
       </div>
     </>
