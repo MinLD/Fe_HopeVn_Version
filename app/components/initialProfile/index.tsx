@@ -51,7 +51,7 @@ export default function ProfileClient({ initialProfile, token }: Props) {
       </h2>
       <p>Email: {displayProfile.result.email}</p>
       <p>ID: {displayProfile.result.id}</p>
-      <form action="/api/logout" method="POST">
+      <form action="/apiFe/logout" method="POST">
         <button
           type="submit"
           className="mt-4 px-4 py-2 bg-red-500 text-white rounded"

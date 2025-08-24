@@ -71,7 +71,7 @@ function Sibar({ isSidebarOpen, data }: Props) {
         <div className="flex items-center w-full h-[50px] border-t-1 border-gray-600 px-7  ">
           {" "}
           <span className="text-xl font-bold  ml-auto">
-            <form action="/api/logout" method="POST">
+            <form action="/apiFe/logout" method="POST">
               <button type="submit" className="hover:cursor-pointer">
                 <LogOut size={25} />
               </button>

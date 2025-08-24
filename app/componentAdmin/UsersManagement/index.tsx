@@ -257,7 +257,7 @@ function UsersManagement({ token }: prop) {
                                   setClose={() => setIsEditProfile(-1)}
                                   email={item?.email || ""}
                                   fullName={item?.profile?.fullName || ""}
-                                  phone={item?.phone || ""}
+                                  phone={item?.profile?.phone || ""}
                                   dob={item?.profile?.dob || ""}
                                   gender={item?.profile?.gender || ""}
                                   type="admin"

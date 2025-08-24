@@ -101,7 +101,7 @@ export default function Login() {
       if (isLogin) {
         axios
           .post(
-            "/api/login",
+            "/apiFe/login",
             {
               email: values.email,
               password: values.password,

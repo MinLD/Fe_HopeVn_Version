@@ -8,11 +8,8 @@ const nextConfig: NextConfig = {
     return [
       {
         // BẤT KỲ request nào đến /api/abc sẽ được chuyển tiếp
-        source: "/api/:path*",
-        // đến địa chỉ backend tương ứng là ${process.env.BACKEND_URL}/abc
-        destination: `${
-          process.env.BACKEND_URL || "https://ourhope.io.vn/api"
-        }/:path*`,
+        source: "/apiFe/:path*",
+        destination: `${process.env.BACKEND_URL}/:path*`,
       },
     ];
   },

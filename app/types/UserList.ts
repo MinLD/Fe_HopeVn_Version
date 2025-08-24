@@ -2,8 +2,6 @@ export interface Ty_User {
   id: string;
   email: string;
   fund: number;
-  phone: string;
-
   profile: Ty_profile_User;
   roles: {
     name: string;
@@ -28,7 +26,6 @@ export interface Ty_Cv {
 export interface Ty_profile_User {
   country: string;
   address: string;
-
   email: string;
   bio: string;
   city: string;

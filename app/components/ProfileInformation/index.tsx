@@ -41,6 +41,7 @@ export const ProfileInformation: React.FC<{
       label: "Khác",
     },
   ];
+  console.log("formData", formData);
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-6">
       <h2 className="text-xl font-semibold text-gray-900 mb-6">
@@ -155,80 +156,60 @@ export const ProfileInformation: React.FC<{
       ) : (
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {formData.fullName && (
-              <div className="flex items-center space-x-3">
-                <User className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-600">Họ và tên đầy đủ</p>
-                  <p className="font-medium text-gray-900">
-                    {formData.fullName}
-                  </p>
-                </div>
+            <div className="flex items-center space-x-3">
+              <User className="h-5 w-5 text-gray-400" />
+              <div>
+                <p className="text-sm text-gray-600">Họ và tên đầy đủ</p>
+                <p className="font-medium text-gray-900">{formData.fullName}</p>
               </div>
-            )}
-            {formData.email && (
-              <div className="flex items-center space-x-3">
-                <Mail className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-600">E-mail</p>
-                  <p className="font-medium text-gray-900">{formData.email}</p>
-                </div>
-              </div>
-            )}
-            {formData.phone && (
-              <div className="flex items-center space-x-3">
-                <Calendar className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-600">Điện thoại</p>
-                  <p className="font-medium text-gray-900">{formData.phone}</p>
-                </div>
-              </div>
-            )}
-            {formData.gender && (
-              <div className="flex items-center space-x-3">
-                <Transgender className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-600">Giới tính</p>
-                  <p className="font-medium text-gray-900">{formData.gender}</p>
-                </div>
-              </div>
-            )}
-            {formData.dob && (
-              <div className="flex items-center space-x-3">
-                <Cake className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-600">Ngày sinh</p>
-                  <p className="font-medium text-gray-900">{formData.dob}</p>
-                </div>
-              </div>
-            )}
-            {formData.address && (
-              <div className="flex items-center space-x-3">
-                <MapPinHouse className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-600">Địa chỉ</p>
-                  <p className="font-medium text-gray-900">
-                    {formData.address}
-                  </p>
-                </div>
-              </div>
-            )}
-            {formData.city && (
-              <div className="flex items-center space-x-3">
-                <Building2 className="h-5 w-5 text-gray-400" />
-                <div>
-                  <p className="text-sm text-gray-600">Thành phố</p>
-                  <p className="font-medium text-gray-900">{formData.city}</p>
-                </div>
-              </div>
-            )}
-          </div>
-          {formData.bio && (
-            <div className="pt-4 border-t border-gray-200">
-              <p className="text-sm text-gray-600 mb-2">Mô tả</p>
-              <p className="text-gray-900">{formData.bio}</p>
             </div>
-          )}
+            <div className="flex items-center space-x-3">
+              <Mail className="h-5 w-5 text-gray-400" />
+              <div>
+                <p className="text-sm text-gray-600">E-mail</p>
+                <p className="font-medium text-gray-900">{formData.email}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Calendar className="h-5 w-5 text-gray-400" />
+              <div>
+                <p className="text-sm text-gray-600">Điện thoại</p>
+                <p className="font-medium text-gray-900">{formData.phone}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Transgender className="h-5 w-5 text-gray-400" />
+              <div>
+                <p className="text-sm text-gray-600">Giới tính</p>
+                <p className="font-medium text-gray-900">{formData.gender}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Cake className="h-5 w-5 text-gray-400" />
+              <div>
+                <p className="text-sm text-gray-600">Ngày sinh</p>
+                <p className="font-medium text-gray-900">{formData.dob}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <MapPinHouse className="h-5 w-5 text-gray-400" />
+              <div>
+                <p className="text-sm text-gray-600">Địa chỉ</p>
+                <p className="font-medium text-gray-900">{formData.address}</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Building2 className="h-5 w-5 text-gray-400" />
+              <div>
+                <p className="text-sm text-gray-600">Thành phố</p>
+                <p className="font-medium text-gray-900">{formData.city}</p>
+              </div>
+            </div>
+          </div>
+          <div className="pt-4 border-t border-gray-200">
+            <p className="text-sm text-gray-600 mb-2">Mô tả</p>
+            <p className="text-gray-900">{formData.bio}</p>
+          </div>
         </div>
       )}
     </div>

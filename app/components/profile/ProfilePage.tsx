@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProfileHeader } from "@/app/components/ProfileHeader";
 import { ProfileInformation } from "@/app/components/ProfileInformation";
 import { QuickActions } from "@/app/components/QuickActions";
@@ -9,21 +9,22 @@ import { useRouter } from "next/navigation";
 import { updateProfile } from "@/app/actions/updateProfile";
 import CVBuilder from "@/app/components/BuilderCV";
 import { Ty_Cv, Ty_User } from "@/app/types/UserList";
+import { useProfileStore } from "@/app/zustand/userStore";
 
 type ProfilePageProps = {
   initialCv?: Ty_Cv | null;
-  initialUser: Ty_User | null;
+  initialUser?: Ty_User | null;
   token: string | null;
 };
 // Main Profile Page Component
-const ProfilePage = ({ initialUser, initialCv }: ProfilePageProps) => {
+const ProfilePage = ({}: ProfilePageProps) => {
   const [isTypeShowPage, setIsTypeShowPage] = useState<"profile" | "cv">(
     "profile"
   );
+  const { profileUser } = useProfileStore();
+  const initialUser = profileUser;
   const [isLoadingUpdateProfile, setIsLoadingUpdateProfile] = useState(false);
   // const [isLoadingUpdateCv, setIsLoadingUpdateCv] = useState(false);
-  console.log("Initial User:", initialUser);
-  console.log("Initial Cv:", initialCv);
   const [isEditing, setIsEditing] = useState(false);
 
   // const [isEditingCv, setIsEditingCv] = useState(false);
@@ -35,7 +36,7 @@ const ProfilePage = ({ initialUser, initialCv }: ProfilePageProps) => {
   const [formData, setFormData] = useState({
     email: initialUser?.email || "",
     fullName: initialUser?.profile?.fullName || "",
-    phone: initialUser?.phone || "",
+    phone: initialUser?.profile?.phone || "",
     dob: initialUser?.profile?.dob || "",
     address: initialUser?.profile?.address || "",
     city: initialUser?.profile?.city || "",
@@ -56,9 +57,6 @@ const ProfilePage = ({ initialUser, initialCv }: ProfilePageProps) => {
   //   typeOfDisability: initialCv?.typeOfDisability || "",
   //   typeOfJob: initialCv?.typeOfJob || "",
   // });
-
-  // const userStats = mockUserStats; // Use fake stats
-  // const achievements = mockAchievements; // Use fake achievements
 
   const handleSave = async () => {
     const formDataUpdated = new FormData();
@@ -89,8 +87,6 @@ const ProfilePage = ({ initialUser, initialCv }: ProfilePageProps) => {
     setIsEditing(false);
     setIsLoadingUpdateProfile(false);
     router.refresh(); // Trigger refetch
-    console.log("Đã gọi router.refresh()");
-    window.location.reload();
 
     // await fetch("/api/user/update-profile", {
     //   method: "PUT",
@@ -147,7 +143,7 @@ const ProfilePage = ({ initialUser, initialCv }: ProfilePageProps) => {
     setFormData({
       email: initialUser?.email || "",
       fullName: initialUser?.profile?.fullName || "",
-      phone: initialUser?.phone || "",
+      phone: initialUser?.profile?.phone || "",
       dob: initialUser?.profile?.dob || "",
       address: initialUser?.profile?.address || "",
       city: initialUser?.profile?.city || "",
@@ -161,7 +157,24 @@ const ProfilePage = ({ initialUser, initialCv }: ProfilePageProps) => {
   if (isLoadingUpdateProfile) {
     console.log("Loading...");
   }
-
+  // SỬA LỖI BẰNG useEffect
+  useEffect(() => {
+    // Nếu initialUser có dữ liệu (sau khi fetch xong)
+    if (initialUser) {
+      // Cập nhật lại state của form cho khớp với dữ liệu mới
+      setFormData({
+        email: initialUser.email || "",
+        fullName: initialUser.profile?.fullName || "",
+        phone: initialUser.profile?.phone || "",
+        dob: initialUser.profile?.dob || "",
+        address: initialUser.profile?.address || "",
+        city: initialUser.profile?.city || "",
+        bio: initialUser.profile?.bio || "",
+        gender: initialUser.profile?.gender || "",
+        profilePicture: initialUser.profile?.profilePicture?.url || "",
+      });
+    }
+  }, [initialUser]);
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -189,21 +202,21 @@ const ProfilePage = ({ initialUser, initialCv }: ProfilePageProps) => {
             )}
             {isTypeShowPage === "cv" && <CVBuilder />}
             {/* <button
-              onClick={() => setIsEditingCv(!isEditingCv)}
-              className="mt-4 mb-5 sm:mt-0 flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
-            >
-              <Edit className="h-4 w-4" />
-              <span>Chỉnh sửa hồ sơ ứng viên</span>
-            </button> */}
+                onClick={() => setIsEditingCv(!isEditingCv)}
+                className="mt-4 mb-5 sm:mt-0 flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+              >
+                <Edit className="h-4 w-4" />
+                <span>Chỉnh sửa hồ sơ ứng viên</span>
+              </button> */}
 
             {/* <CvInformation
-              isLoadingUpdateProfile={isLoadingUpdateCv}
-              isEditing={isEditingCv}
-              formData={formDataCv}
-              setFormData={setFormDataCv as any}
-              handleSave={handleSaveCv}
-              handleCancel={handleCancelCv}
-            /> */}
+                isLoadingUpdateProfile={isLoadingUpdateCv}
+                isEditing={isEditingCv}
+                formData={formDataCv}
+                setFormData={setFormDataCv as any}
+                handleSave={handleSaveCv}
+                handleCancel={handleCancelCv}
+              /> */}
             {/* <Achievements achievements={achievements} /> */}
           </div>
 

@@ -1,11 +1,10 @@
 import ProfilePage from "@/app/components/profile/ProfilePage";
-import { getInitialProfile } from "@/app/service/User";
-import { Ty_User } from "@/app/types/UserList";
+
 import { cookies } from "next/headers";
 
 const page = async () => {
   const token = (await cookies()).get("authToken")?.value;
-  let initialUser: Ty_User | null = null;
+  // let initialUser: Ty_User | null = null;
   // try {
   //   const [user, cv] = await Promise.all([
   //     getInitialProfile(token),
@@ -18,16 +17,13 @@ const page = async () => {
   //   console.log(error);
   // }
 
-  const profileUser: Ty_User | null = await getInitialProfile(token);
-  initialUser = (await profileUser) || null;
+  // const profileUser: Ty_User | null = await getInitialProfile(token);
+  // initialUser = (await profileUser) || null;
+  // console.log("initialUser", initialUser);
 
   return (
     <>
-      <ProfilePage
-        initialUser={initialUser || null}
-        token={token || null}
-
-      />
+      <ProfilePage token={token || null} />
     </>
   );
 };

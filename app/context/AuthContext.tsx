@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const fetchToken = async () => {
       try {
         console.log("Fetching token..."); // Debug: Xác nhận fetch được gọi
-        const res = await fetch("/api/get-token", {
+        const res = await fetch("/apiFe/get-token", {
           // Thêm "/" để resolve đúng
           credentials: "include",
           method: "GET", // Cụ thể hóa method

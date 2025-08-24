@@ -78,7 +78,7 @@ function HeaderTopMenuDropdown() {
                 onClick={() => handleReturn(item.id)}
               >
                 {item.id === 5 ? (
-                  <form action="/api/logout" method="POST">
+                  <form action="/apiFe/logout" method="POST">
                     <button type="submit">
                       <div
                         key={k}

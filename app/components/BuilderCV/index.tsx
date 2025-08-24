@@ -203,14 +203,14 @@ const CVBuilder: React.FC = () => {
           </Link> */}
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                CV Management
-              </h1>
-              <p className="text-gray-600">Create, edit, and manage your CVs</p>
+              <h1 className="text-3xl font-bold text-gray-900">Quản lý CV</h1>
+              <p className="text-gray-600">
+                Tạo, chỉnh sửa và quản lý CV của bạn
+              </p>
             </div>
             {!isCreating && !editingId && !viewingId && (
               <Button onClick={handleCreate} icon={Plus}>
-                Create New CV
+                Tạo CV mới
               </Button>
             )}
           </div>
@@ -528,14 +528,14 @@ const CVBuilder: React.FC = () => {
               <div className="text-center py-12">
                 <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
-                  No CVs created yet
+                  Chưa có CV nào được tạo
                 </h3>
                 <p className="text-gray-500 mb-4">
-                  Create your first CV to start applying for jobs and
-                  opportunities.
+                  Tạo CV đầu tiên của bạn để bắt đầu ứng tuyển việc làm và cơ
+                  hội.
                 </p>
                 <Button onClick={handleCreate} icon={Plus}>
-                  Create Your First CV
+                  Tạo CV đầu tiên của bạn
                 </Button>
               </div>
             ) : (
