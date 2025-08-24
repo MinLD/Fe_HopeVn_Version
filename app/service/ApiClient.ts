@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const baseUrl = "https://ourhope.io.vn/api";
-export const FeUrl = "https://ourhope.io.vn";
+export const FeUrl = "https://ourhope.io.vn/";
 
 export const axiosClient = axios.create({
   baseURL: baseUrl,

@@ -46,7 +46,7 @@ const register_Api = async (
 };
 
 const GetRoles_Api = async (token: string) => {
-  return fetch(`${baseURL}/api/get-roles`, {
+  return fetch(`${baseURL}/apiFe/get-roles`, {
     method: "GET",
     headers: {
       Cookie: `authToken=${token}`,
