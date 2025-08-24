@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import axios from "axios"; // Hoặc dùng fetch
-const baseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+const baseURL = "https://ourhope.io.vn/api";
 export async function POST() {
   try {
     const refreshToken = (await cookies()).get("refreshToken")?.value;
