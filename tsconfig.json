@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     "app/context/StoreProvider.tx",
     "app/Service/Auth.tx",
-    "c:/Users/DDML/Downloads/project-bolt-sb1-wcj6axo6/project/src/components/help/HelpPostCard.tsx"
+    "c:/Users/DDML/Downloads/project-bolt-sb1-wcj6axo6/project/src/components/help/HelpPostCard.tsx",
+    ".next/types/app/(Pages)/(company)/recruitment/[id]/page.ts"
   ],
   "exclude": ["node_modules"]
 }

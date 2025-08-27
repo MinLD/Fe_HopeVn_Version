@@ -1,18 +1,37 @@
-type Props = {
-  params: { id: string };
-  searchParams?: { [key: string]: string | string[] | undefined };
-};
+import { JobPostingProps } from "@/app/componentEmployer/JobPosting";
+import RecruimentDetailPage from "@/app/components/RecruitmentDetailsPage";
+import { GetJobDetail } from "@/app/service/employer";
+import { cookies } from "next/headers";
 
-export default async function RecruitmentDetailPage({
-  params,
-  searchParams,
-}: Props) {
+interface Props {
+  params: { id: string };
+}
+
+async function page({ params }: Props) {
   const { id } = params;
-  const { token } = searchParams || {};
-  console.log(token);
+  let job: JobPostingProps = {} as JobPostingProps;
+  const token = (await cookies()).get("authToken")?.value;
+  if (!token) return;
+  const handleGetJobsDetail = async (token: string, id: string) => {
+    try {
+      const response: any = await GetJobDetail(token as string, id);
+      if (response.status !== 200) {
+        console.log(response.data.message);
+      }
+      console.log(response.data.result);
+      job = response.data.result;
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  await handleGetJobsDetail(token as string, id);
+
   return (
     <div>
-      <h1>Chi tiết tuyển dụng ID: {id}</h1>
+      <RecruimentDetailPage job={job} />
     </div>
   );
 }
+
+export default page;

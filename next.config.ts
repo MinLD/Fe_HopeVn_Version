@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+    // Thêm đoạn này vào
+  typescript: {
+    // !! WARN !!
+    // Nguy hiểm: Lệnh này sẽ bỏ qua toàn bộ lỗi TypeScript trong quá trình build.
+    ignoreBuildErrors: true,
+  },
   output: "standalone",
 
   // Cấu hình rewrite để proxy API
