@@ -15,10 +15,10 @@ type prop = {
 };
 function UsersManagement({ token }: prop) {
   const titleTable = [
-    {
-      id: 0,
-      name: "ID",
-    },
+    // {
+    //   id: 0,
+    //   name: "ID",
+    // },
     {
       id: 1,
       name: "Họ Tên",
@@ -51,6 +51,7 @@ function UsersManagement({ token }: prop) {
     await GetAllUsers(token)
       .then((res) => {
         setData(res?.data?.result);
+        console.log(res);
         setLoading(false);
       })
       .catch((err) => {
@@ -171,108 +172,111 @@ function UsersManagement({ token }: prop) {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {data.map((item, k) => (
-                  <tr key={item?.id}>
-                    <td className="px-6 py-4 whitespace-nowrap">{item?.id}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.profile?.fullName}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.email}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {item?.roles[0]?.name}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <select
-                        id="status"
-                        value={item?.accepted === false ? "false" : "true"}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          handleBanUser(item.id, value || "");
-                        }}
-                        disabled={item?.roles[0]?.name === "ADMIN"}
-                        className={`${
-                          item?.roles[0]?.name === "ADMIN"
-                            ? "cursor-not-allowed"
-                            : ""
-                        } h-[35px] pl-2 border border-[#8e8e8e] rounded-md w-full text-[#3c3c3c] text-[16px]`}
-                      >
-                        <option value="true">Hoạt động</option>
-                        <option value="false">Khóa tài khoản</option>
-                      </select>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        className="text-blue-500 hover:text-blue-700 mr-2 cursor-pointer"
-                        onClick={() => {
-                          setIsEditProfile(k);
-                        }}
-                      >
-                        Xem
-                      </button>
-                      <button
-                        className={`text-red-500 hover:text-red-700 cursor-pointer ${
-                          item?.roles[0]?.name === "ADMIN"
-                            ? "hover:cursor-not-allowed"
-                            : ""
-                        }`}
-                        onClick={() => setConfirmDelete(item?.id)}
-                        disabled={item?.roles[0]?.name === "ADMIN"}
-                      >
-                        Xóa
-                      </button>
-                      {ConfirmDelete === item?.id && (
-                        <ModalConfirm
-                          setClose={() => setConfirmDelete("")}
-                          handle={() => handleDeleteUser()}
-                        />
-                      )}
+                {data &&
+                  data.map((item, k) => (
+                    <tr key={item.id}>
+                      {/* <td className="px-6 py-4 whitespace-nowrap">
+                        {item?.id}
+                      </td> */}
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {item?.profile?.fullName}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {item?.email}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {item?.roles[0]?.name}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <select
+                          id="status"
+                          value={item?.accepted === false ? "false" : "true"}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            handleBanUser(item.id, value || "");
+                          }}
+                          disabled={item?.roles[0]?.name === "ADMIN"}
+                          className={`${
+                            item?.roles[0]?.name === "ADMIN"
+                              ? "cursor-not-allowed"
+                              : ""
+                          } h-[35px] pl-2 border border-[#8e8e8e] rounded-md w-full text-[#3c3c3c] text-[16px]`}
+                        >
+                          <option value="true">Hoạt động</option>
+                          <option value="false">Khóa tài khoản</option>
+                        </select>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <button
+                          className="text-blue-500 hover:text-blue-700 mr-2 cursor-pointer"
+                          onClick={() => {
+                            setIsEditProfile(k);
+                          }}
+                        >
+                          Xem
+                        </button>
+                        <button
+                          className={`text-red-500 hover:text-red-700 cursor-pointer ${
+                            item?.roles[0]?.name === "ADMIN"
+                              ? "hover:cursor-not-allowed"
+                              : ""
+                          }`}
+                          onClick={() => setConfirmDelete(item?.id)}
+                          disabled={item?.roles[0]?.name === "ADMIN"}
+                        >
+                          Xóa
+                        </button>
+                        {ConfirmDelete === item?.id && (
+                          <ModalConfirm
+                            setClose={() => setConfirmDelete("")}
+                            handle={() => handleDeleteUser()}
+                          />
+                        )}
 
-                      {isEditProfile === k && (
-                        <div>
-                          <div
-                            className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
-                            onClick={() => setIsEditProfile(-1)}
-                          ></div>
+                        {isEditProfile === k && (
+                          <div>
+                            <div
+                              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+                              onClick={() => setIsEditProfile(-1)}
+                            ></div>
 
-                          <div className="fixed inset-0 z-50 flex items-center justify-center">
-                            <div className="bg-white p-4 w-[800px] h-auto rounded-xl shadow-lg">
-                              {item?.roles[0]?.name === "SELLER" ? (
-                                <ProfileSellerEdit
-                                  id={item?.id || ""}
-                                  setClose={() => setIsEditProfile(-1)}
-                                  email={item?.email || ""}
-                                  name={item?.profile?.fullName || ""}
-                                  phone={item?.profile?.phone || ""}
-                                  type="admin"
-                                  description={"dsadad"}
-                                  image=""
-                                  taxCode=""
-                                />
-                              ) : (
-                                <ProfileEdit
-                                  token={token}
-                                  id={item?.profile?.id || ""}
-                                  setClose={() => setIsEditProfile(-1)}
-                                  email={item?.email || ""}
-                                  fullName={item?.profile?.fullName || ""}
-                                  phone={item?.profile?.phone || ""}
-                                  dob={item?.profile?.dob || ""}
-                                  gender={item?.profile?.gender || ""}
-                                  type="admin"
-                                  country={item?.profile?.country || ""}
-                                  city={item?.profile?.city || ""}
-                                  address={item?.profile?.address || ""}
-                                />
-                              )}
+                            <div className="fixed inset-0 z-50 flex items-center justify-center">
+                              <div className="bg-white p-4 w-[800px] h-auto rounded-xl shadow-lg">
+                                {item?.roles[0]?.name === "SELLER" ? (
+                                  <ProfileSellerEdit
+                                    id={item?.id || ""}
+                                    setClose={() => setIsEditProfile(-1)}
+                                    email={item?.email || ""}
+                                    name={item?.profile?.fullName || ""}
+                                    phone={item?.profile?.phone || ""}
+                                    type="admin"
+                                    description={"dsadad"}
+                                    image=""
+                                    taxCode=""
+                                  />
+                                ) : (
+                                  <ProfileEdit
+                                    token={token}
+                                    id={item?.profile?.id || ""}
+                                    setClose={() => setIsEditProfile(-1)}
+                                    email={item?.email || ""}
+                                    fullName={item?.profile?.fullName || ""}
+                                    phone={item?.profile?.phone || ""}
+                                    dob={item?.profile?.dob || ""}
+                                    gender={item?.profile?.gender || ""}
+                                    type="admin"
+                                    country={item?.profile?.country || ""}
+                                    city={item?.profile?.city || ""}
+                                    address={item?.profile?.address || ""}
+                                  />
+                                )}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                        )}
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

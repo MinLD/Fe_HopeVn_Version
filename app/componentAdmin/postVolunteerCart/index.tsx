@@ -89,7 +89,7 @@ const PostVolunteerCard: React.FC<PostCardProps> = ({ post, token }) => {
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-start space-x-3">
-          {post.userPic && (
+          {post.userPic && post.userPic ? (
             <Image
               priority
               width={40}
@@ -98,8 +98,9 @@ const PostVolunteerCard: React.FC<PostCardProps> = ({ post, token }) => {
               alt={post.name}
               className="w-10 h-10 rounded-full object-cover"
             />
+          ) : (
+            <AvatarProfile name={post.name} url={post.userPic} />
           )}
-          <AvatarProfile name={post.name} url={post.userPic} />
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center  mb-1">

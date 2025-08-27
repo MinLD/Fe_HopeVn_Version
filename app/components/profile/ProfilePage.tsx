@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ProfileHeader } from "@/app/components/ProfileHeader";
 import { ProfileInformation } from "@/app/components/ProfileInformation";
 import { QuickActions } from "@/app/components/QuickActions";
@@ -10,6 +10,7 @@ import { updateProfile } from "@/app/actions/updateProfile";
 import CVBuilder from "@/app/components/BuilderCV";
 import { Ty_Cv, Ty_User } from "@/app/types/UserList";
 import { useProfileStore } from "@/app/zustand/userStore";
+import { CreateCv, getAllCv } from "@/app/service/User";
 
 type ProfilePageProps = {
   initialCv?: Ty_Cv | null;
@@ -17,26 +18,21 @@ type ProfilePageProps = {
   token: string | null;
 };
 // Main Profile Page Component
-const ProfilePage = ({}: ProfilePageProps) => {
+const ProfilePage = ({ token }: ProfilePageProps) => {
   const [isTypeShowPage, setIsTypeShowPage] = useState<"profile" | "cv">(
     "profile"
   );
   const { profileUser } = useProfileStore();
   const initialUser = profileUser;
   const [isLoadingUpdateProfile, setIsLoadingUpdateProfile] = useState(false);
-  // const [isLoadingUpdateCv, setIsLoadingUpdateCv] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  // const [isEditingCv, setIsEditingCv] = useState(false);
-
-  // console.log("isEditingCv", isEditingCv);
 
   const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: initialUser?.email || "",
     fullName: initialUser?.profile?.fullName || "",
-    phone: initialUser?.profile?.phone || "",
+    phone: initialUser?.phone || "",
     dob: initialUser?.profile?.dob || "",
     address: initialUser?.profile?.address || "",
     city: initialUser?.profile?.city || "",
@@ -45,19 +41,10 @@ const ProfilePage = ({}: ProfilePageProps) => {
 
     profilePicture: initialUser?.profile?.profilePicture?.url || "",
   });
-  // const [formDataCv, setFormDataCv] = useState<Ty_Cv>({
-  //   name: initialCv?.name || "",
-  //   phone: initialCv?.phone || "",
-  //   email: initialCv?.email || "",
-  //   address: initialCv?.address || "",
-  //   dob: initialCv?.dob || "",
-  //   skill: initialCv?.skill || "",
-  //   exp: initialCv?.exp || "",
-  //   education: initialCv?.education || "",
-  //   typeOfDisability: initialCv?.typeOfDisability || "",
-  //   typeOfJob: initialCv?.typeOfJob || "",
-  // });
+  const [isLoadingCv, setIsLoadingCv] = useState(false);
 
+  // State để lưu danh sách CV từ API
+  const [cvList, setCvList] = useState<Ty_Cv[]>([]);
   const handleSave = async () => {
     const formDataUpdated = new FormData();
     formDataUpdated.append("fullName", formData.fullName);
@@ -103,47 +90,12 @@ const ProfilePage = ({}: ProfilePageProps) => {
     //     setIsLoadingUpdateProfile(false);
     //   });
   };
-  // const handleSaveCv = async () => {
-  //   console.log(formDataCv);
-  //   try {
-  //     setIsLoadingUpdateCv(true);
-  //     const response = await CreateCv(token || "", formDataCv);
-  //     if (response.status !== 200) {
-  //       toast.error(response.data.message);
-  //       setIsEditingCv(false);
-  //       setIsLoadingUpdateCv(false);
-  //       return;
-  //     }
-  //     toast.success(response.data.message);
-  //     setIsEditingCv(false);
-  //     setIsLoadingUpdateCv(false);
-  //     console.log(response);
-  //   } catch (error: any) {
-  //     console.log(error.response.data.message);
-  //   } finally {
-  //     setIsLoadingUpdateCv(false);
-  //   }
-  // };
-  // const handleCancelCv = () => {
-  //   setFormDataCv({
-  //     name: initialCv?.name || "",
-  //     phone: initialCv?.phone || "",
-  //     email: initialCv?.email || "",
-  //     address: initialCv?.address || "",
-  //     dob: initialCv?.dob || "",
-  //     skill: initialCv?.skill || "",
-  //     exp: initialCv?.exp || "",
-  //     education: initialCv?.education || "",
-  //     typeOfDisability: initialCv?.typeOfDisability || "",
-  //     typeOfJob: initialCv?.typeOfJob || "",
-  //   });
-  //   setIsEditingCv(false);
-  // };
+
   const handleCancel = () => {
     setFormData({
       email: initialUser?.email || "",
       fullName: initialUser?.profile?.fullName || "",
-      phone: initialUser?.profile?.phone || "",
+      phone: initialUser?.phone || "",
       dob: initialUser?.profile?.dob || "",
       address: initialUser?.profile?.address || "",
       city: initialUser?.profile?.city || "",
@@ -154,10 +106,47 @@ const ProfilePage = ({}: ProfilePageProps) => {
     });
     setIsEditing(false);
   };
-  if (isLoadingUpdateProfile) {
-    console.log("Loading...");
-  }
-  // SỬA LỖI BẰNG useEffect
+
+  // Hàm này sẽ được gọi từ CVBuilder để tạo mới CV
+  const handleCreateCv = async (
+    newCvData: Omit<Ty_Cv, "id" | "createdAt" | "updatedAt">
+  ) => {
+    try {
+      setIsLoadingCv(true);
+      const response = await CreateCv(token || "", newCvData as Ty_Cv); // Backend sẽ tự tạo ID và timestamp
+
+      if (response.status !== 201 && response.status !== 200) {
+        // Thường tạo mới trả về 201
+        toast.error(response.data.message || "Failed to create CV");
+        return;
+      }
+
+      toast.success(response.data.message || "CV created successfully!");
+
+      // Sau khi tạo thành công, gọi lại API để lấy danh sách CV mới nhất
+      await handleGetAllCv();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "An error occurred");
+    } finally {
+      setIsLoadingCv(false);
+    }
+  };
+  // 2. Bọc hàm handleGetAllCv trong useCallback
+  //    Hàm này sẽ chỉ được tạo lại khi `token` thay đổi.
+  const handleGetAllCv = useCallback(async () => {
+    if (!token) return; // Thêm kiểm tra token cho an toàn
+    try {
+      const response = await getAllCv(token);
+      if (response.status !== 200) {
+        toast.error(response.data.message);
+        return;
+      }
+      // Giả sử bạn có state setFormDataCv để lưu CV
+      setCvList(response.data.result.data || []);
+    } catch (error: any) {
+      console.log(error.response.data.message);
+    }
+  }, [token]); // Phụ thuộc vào token
   useEffect(() => {
     // Nếu initialUser có dữ liệu (sau khi fetch xong)
     if (initialUser) {
@@ -165,7 +154,7 @@ const ProfilePage = ({}: ProfilePageProps) => {
       setFormData({
         email: initialUser.email || "",
         fullName: initialUser.profile?.fullName || "",
-        phone: initialUser.profile?.phone || "",
+        phone: initialUser?.phone || "",
         dob: initialUser.profile?.dob || "",
         address: initialUser.profile?.address || "",
         city: initialUser.profile?.city || "",
@@ -175,6 +164,10 @@ const ProfilePage = ({}: ProfilePageProps) => {
       });
     }
   }, [initialUser]);
+  useEffect(() => {
+    handleGetAllCv();
+  }, [handleGetAllCv]);
+  console.log(isLoadingCv);
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -200,7 +193,13 @@ const ProfilePage = ({}: ProfilePageProps) => {
                 handleCancel={handleCancel}
               />
             )}
-            {isTypeShowPage === "cv" && <CVBuilder />}
+            {isTypeShowPage === "cv" && (
+              <CVBuilder
+                // Truyền danh sách CV đã fetch được và hàm xử lý xuống
+                cvList={cvList || []}
+                onCreateCv={handleCreateCv}
+              />
+            )}
             {/* <button
                 onClick={() => setIsEditingCv(!isEditingCv)}
                 className="mt-4 mb-5 sm:mt-0 flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
@@ -211,7 +210,7 @@ const ProfilePage = ({}: ProfilePageProps) => {
 
             {/* <CvInformation
                 isLoadingUpdateProfile={isLoadingUpdateCv}
-                isEditing={isEditingCv}
+                isEditing={isEditingCv} 
                 formData={formDataCv}
                 setFormData={setFormDataCv as any}
                 handleSave={handleSaveCv}

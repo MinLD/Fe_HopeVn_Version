@@ -21,6 +21,7 @@ function PostVolunteerNonActivepage({ token }: Props) {
     try {
       const response = await GetAllPostVolunteer_non_Active(token);
       if (response.status === 200) {
+        console.log(response);
         console.log(response?.data.result?.data);
         setData(response?.data?.result?.data);
         setIsLoading(false);

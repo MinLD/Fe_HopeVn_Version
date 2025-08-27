@@ -20,7 +20,6 @@ export const ProfileHeader: React.FC<{
   handleSave,
   handleCancel,
 }) => {
-  console.log("formData", formData);
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
       <div className="bg-gradient-to-r from-green-500 to-green-600 h-32"></div>

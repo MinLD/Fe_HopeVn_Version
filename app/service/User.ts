@@ -183,7 +183,7 @@ const getAllCommentsPostVolunteer = async (token: string, postId: number) => {
 };
 
 //CV
-const getDataCv = async (token: string) => {
+const getAllCv = async (token: string) => {
   return await axiosClient.get("/cv/all", {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -213,6 +213,6 @@ export {
   CommentPostVolunteer,
   getAllCommentsPost,
   getAllCommentsPostVolunteer,
-  getDataCv,
+  getAllCv,
   CreateCv,
 };

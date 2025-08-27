@@ -1,5 +1,4 @@
 import axios from "axios";
-import Cookies from "js-cookie";
 
 const baseUrl = "https://ourhope.io.vn/api";
 export const FeUrl = "https://ourhope.io.vn/";
@@ -13,16 +12,16 @@ export const axiosClient = axios.create({
 });
 
 // Interceptor cho request
-axiosClient.interceptors.request.use(
-  async (config) => {
-    const sessionToken = await Cookies.get("authToken");
-    if (sessionToken) {
-      config.headers.Authorization = `Bearer ${sessionToken}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+// axiosClient.interceptors.request.use(
+//   async (config) => {
+//     const sessionToken = await Cookies.get("authToken");
+//     if (sessionToken) {
+//       config.headers.Authorization = `Bearer ${sessionToken}`;
+//     }
+//     return config;
+//   },
+//   (error) => Promise.reject(error)
+// );
 
 // Interceptor cho response
 
