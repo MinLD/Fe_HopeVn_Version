@@ -126,6 +126,7 @@ function HelpPage({
                             token={token}
                           >
                             <PostCard
+                              type="comment"
                               token={token}
                               key={k}
                               post={i}

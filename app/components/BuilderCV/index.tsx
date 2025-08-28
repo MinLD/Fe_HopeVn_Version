@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Plus,
   Edit,
@@ -15,11 +15,16 @@ import {
   GraduationCap,
   Award,
   Heart,
+  FileUser,
 } from "lucide-react";
 import Button from "@/app/ui/Button";
 import Card from "@/app/ui/Card";
 import Badge from "@/app/ui/Badge";
 import { Ty_Cv } from "@/app/types/UserList";
+import { CreateCv, getAllCv } from "@/app/service/User";
+import { toast } from "sonner";
+import { ApplyCompany } from "@/app/service/employer";
+import Spanning from "@/app/components/Spanning";
 // --- MẢNG CẤU HÌNH CHO FORM ---
 const formFields = [
   {
@@ -96,15 +101,18 @@ const formFields = [
 
 type CVBuilderProps = {
   // Giữ nguyên props của bạn nếu cần
-  cvList: Ty_Cv[];
-  onCreateCv: (cv: Ty_Cv) => void;
+  idCompany?: number | null;
+  token: string | null;
 };
 
-const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
+const CVBuilder = ({ token, idCompany = null }: CVBuilderProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [viewingId, setViewingId] = useState<string | null>(null);
-
+  const [cvList, setCvList] = useState<Ty_Cv[]>([]);
+  const [isLoadingCv, setIsLoadingCv] = useState(false);
+  console.log(isLoadingCv)
+  const [isLoadingApply, setIsLoadingApply] = useState(false);
   const initialFormState: Ty_Cv = {
     id: "",
     name: "",
@@ -120,6 +128,47 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
   };
 
   const [formData, setFormData] = useState<Ty_Cv>(initialFormState);
+
+  // Hàm này sẽ được gọi từ CVBuilder để tạo mới CV
+  const handleCreateCv = async (
+    newCvData: Omit<Ty_Cv, "id" | "createdAt" | "updatedAt">
+  ) => {
+    try {
+      setIsLoadingCv(true);
+      const response = await CreateCv(token || "", newCvData as Ty_Cv); // Backend sẽ tự tạo ID và timestamp
+
+      if (response.status !== 201 && response.status !== 200) {
+        // Thường tạo mới trả về 201
+        toast.error(response.data.message || "Failed to create CV");
+        return;
+      }
+
+      toast.success(response.data.message || "CV created successfully!");
+
+      // Sau khi tạo thành công, gọi lại API để lấy danh sách CV mới nhất
+      await handleGetAllCv();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "An error occurred");
+    } finally {
+      setIsLoadingCv(false);
+    }
+  };
+  // 2. Bọc hàm handleGetAllCv trong useCallback
+  //    Hàm này sẽ chỉ được tạo lại khi `token` thay đổi.
+  const handleGetAllCv = useCallback(async () => {
+    if (!token) return; // Thêm kiểm tra token cho an toàn
+    try {
+      const response = await getAllCv(token);
+      if (response.status !== 200) {
+        toast.error(response.data.message);
+        return;
+      }
+      // Giả sử bạn có state setFormDataCv để lưu CV
+      setCvList(response.data.result.data || []);
+    } catch (error: any) {
+      console.log(error.response.data.message);
+    }
+  }, [token]); // Phụ thuộc vào token
 
   const handleInputChange = (field: keyof Ty_Cv, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -138,7 +187,7 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
   const handleSave = () => {
     // Logic lưu của bạn (ví dụ: gọi API) sẽ ở đây
     console.log("Saving CV:", formData);
-    onCreateCv(formData);
+    handleCreateCv(formData);
     setIsCreating(false);
     setEditingId(null);
   };
@@ -179,6 +228,27 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
       typeOfJob: cv.typeOfJob,
     });
   };
+  const handleApply = async (idJob: number) => {
+    setIsLoadingApply(true);
+    try {
+      const response = await ApplyCompany(
+        token || "",
+        idCompany || 0,
+        idJob || 0
+      );
+      if (response.status !== 200) {
+        console.log(response.data.message);
+        toast.error(response.data.message);
+      }
+      toast.success("Apply successfully!");
+      console.log(response.data);
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    } finally {
+      setIsLoadingApply(false);
+    }
+  };
 
   const handleView = (cv: Ty_Cv) => {
     setViewingId(cv.id || "");
@@ -187,12 +257,15 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
 
     setEditingId(null);
   };
+  useEffect(() => {
+    handleGetAllCv();
+  }, [handleGetAllCv]);
   console.log(cvList);
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-full mx-auto py-8">
+    <div className="min-h-auto bg-gray-50">
+      <div className="max-w-full mx-auto py-2">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex   mb-2 flex-col gap-2 ">
           <div>
             <h1 className="text-3xl font-bold text-gray-900">Quản lý CV</h1>
             <p className="text-gray-600">
@@ -200,9 +273,11 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
             </p>
           </div>
           {!isCreating && !editingId && !viewingId && (
-            <Button onClick={handleCreate} icon={Plus}>
-              Tạo CV mới
-            </Button>
+            <div className="max-w-md">
+              <Button onClick={handleCreate} icon={Plus}>
+                Tạo CV mới
+              </Button>
+            </div>
           )}
         </div>
         {/* --- FORM TẠO/SỬA (ĐÃ LÀM GỌN) --- */}
@@ -399,7 +474,7 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
               Danh sách CV của bạn ({cvList.length})
             </h2>
             {!cvList[0] ? (
-              <div className="text-center py-12">
+              <div className="text-center py-2">
                 <User className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-medium">Chưa có CV nào được tạo</h3>
                 <Button onClick={handleCreate} icon={Plus} className="mt-4">
@@ -407,7 +482,7 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
                 </Button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 gap-6 overflow-y-auto max-h-[400px]">
+              <div className="grid grid-cols-1 gap-6 overflow-y-auto max-h-[320px] ">
                 {cvList &&
                   cvList?.map((cv) => (
                     <Card
@@ -431,8 +506,18 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
                         </p>
                       </div>
                       <div className="flex space-x-2 pt-4 mt-auto">
-                         {" "}
-                        <div className="flex space-x-2 pt-2">
+                        <div className="flex  pt-2 flex-col gap-2 sm:flex-row">
+                          {idCompany && (
+                            <Button
+                              onClick={() => handleApply(Number(cv.id) || 0)}
+                              variant="primary"
+                              size="sm"
+                              icon={FileUser}
+                              className="flex-1"
+                            >
+                              {isLoadingApply ? <Spanning /> : "Chọn"}
+                            </Button>
+                          )}
                           <Button
                             onClick={() => handleView(cv)}
                             variant="primary"
@@ -440,7 +525,7 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
                             icon={Eye}
                             className="flex-1"
                           >
-                            View
+                            Xem
                           </Button>
 
                           <Button
@@ -449,7 +534,7 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
                             size="sm"
                             icon={Edit}
                           >
-                            Edit
+                            Sửa
                           </Button>
 
                           <Button
@@ -458,7 +543,7 @@ const CVBuilder = ({ cvList, onCreateCv }: CVBuilderProps) => {
                             size="sm"
                             icon={Trash2}
                           >
-                            Delete
+                            Xóa
                           </Button>
                         </div>
                       </div>

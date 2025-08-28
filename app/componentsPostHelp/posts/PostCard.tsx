@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi } from "date-fns/locale";
-import { Calendar, Heart, MessageCircle, Share, User } from "lucide-react";
-import Card from "@/app/ui/Card";
+import { Calendar, Heart, MessageCircle, User } from "lucide-react";
 import Link from "next/link";
 import Button from "@/app/ui/Button";
 import Badge from "@/app/ui/Badge";
@@ -30,6 +29,7 @@ const PostCard: React.FC<PostCardProps> = ({
   token,
   admin = false,
   handleGetAllPost,
+  type,
 }) => {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -124,7 +124,13 @@ const PostCard: React.FC<PostCardProps> = ({
   const typeInfo = getPostTypeInfo();
 
   return (
-    <Card hover className="transition-all duration-200">
+    <div
+      className={`${
+        type !== "comment"
+          ? "duration-200 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+          : ""
+      } p-4 `}
+    >
       <div className="space-y-4">
         {/* Header */}
         <div className="flex items-start space-x-3">
@@ -249,7 +255,7 @@ const PostCard: React.FC<PostCardProps> = ({
 
         {/* Reactions and Actions */}
         {!admin && (
-          <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+          <div className="flex items-center justify-between pt-2 ">
             <div className="flex items-center space-x-4">
               <button
                 className="flex items-center text-gray-500 hover:text-red-500 transition-colors"
@@ -264,10 +270,6 @@ const PostCard: React.FC<PostCardProps> = ({
               >
                 <MessageCircle className="w-5 h-5 mr-1" />
                 <span className="text-sm">100</span>
-              </button>
-              <button className="flex items-center text-gray-500 hover:text-green-600 transition-colors">
-                <Share className="w-5 h-5 mr-1" />
-                <span className="text-sm">Share</span>
               </button>
             </div>
 
@@ -314,7 +316,7 @@ const PostCard: React.FC<PostCardProps> = ({
           </>
         )}
       </div>
-    </Card>
+    </div>
   );
 };
 

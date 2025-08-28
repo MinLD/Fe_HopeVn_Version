@@ -1,17 +1,21 @@
 "use client";
 import { JobPostingProps } from "@/app/componentEmployer/JobPosting";
+import CVBuilder from "@/app/components/BuilderCV";
+import { Ty_Company } from "@/app/components/PendingCompanyCard";
+import Portal from "@/app/components/Portal";
 import MyLayout from "@/app/Layout/MyLayOut";
 import {
   ArrowLeft,
-  Bookmark,
   Building,
   Calendar,
   CheckCircle,
   DollarSign,
+  Mails,
   MapPin,
-  Send,
-  Share2,
+  MessageSquareMore,
+  Phone,
   Users,
+  X,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,23 +23,13 @@ import { useState } from "react";
 
 type Props = {
   job: JobPostingProps;
+  company: Ty_Company;
+  token: string | null;
 };
-function RecruimentDetailPage({ job }: Props) {
+function RecruimentDetailPage({ job, company, token }: Props) {
   console.log(job);
   const [isApplying, setIsApplying] = useState(false);
-  const [applicationData, setApplicationData] = useState({
-    coverLetter: "",
-    resume: null as File | null,
-    phone: "",
-    expectedSalary: "",
-  });
-  const handleApplicationSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle application submission
-    console.log("Application submitted:", applicationData);
-    alert("Application submitted successfully!");
-    setIsApplying(false);
-  };
+
   return (
     <>
       <MyLayout>
@@ -55,7 +49,7 @@ function RecruimentDetailPage({ job }: Props) {
               {/* Main Content */}
               <div className="lg:col-span-2 space-y-6">
                 {/* Job Header */}
-                <div className="border border-gray-200 rounded-lg p-6">
+                <div className="border border-gray-200 rounded-lg p-3">
                   <div className="flex justify-between mb-6">
                     <div className="flex-1">
                       <div className="flex items-center space-x-3 mb-3">
@@ -81,10 +75,6 @@ function RecruimentDetailPage({ job }: Props) {
                         />
                       </div>
                     </div>
-                    <div className="flex space-x-2">
-                      <ActionButton icon={Bookmark} text="Lưu" />
-                      <ActionButton icon={Share2} text="Chia sẻ" />
-                    </div>
                   </div>
                   <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-sm inline-block">
                     {job.jobCategory.name}
@@ -92,7 +82,7 @@ function RecruimentDetailPage({ job }: Props) {
                 </div>
 
                 {/* Job Description */}
-                <div className="border border-gray-200 rounded-lg p-6">
+                <div className="border border-gray-200 rounded-lg p-3">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">
                     Mô tả công việc
                   </h2>
@@ -108,7 +98,7 @@ function RecruimentDetailPage({ job }: Props) {
                 </div>
 
                 {/* Requirements */}
-                <div className="border border-gray-200 rounded-lg p-6">
+                <div className="border border-gray-200 rounded-lg p-3">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">
                     Yêu cầu
                   </h2>
@@ -118,7 +108,7 @@ function RecruimentDetailPage({ job }: Props) {
                 </div>
 
                 {/* Benefits */}
-                <div className="border border-gray-200 rounded-lg p-6">
+                <div className="border border-gray-200 rounded-lg p-3">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">
                     Quyền lợi và đặc quyền
                   </h2>
@@ -131,7 +121,7 @@ function RecruimentDetailPage({ job }: Props) {
                 </div>
 
                 {/* Company Information */}
-                <div className="border border-gray-200 rounded-lg p-6">
+                <div className="border border-gray-200 rounded-lg p-3">
                   <h2 className="text-xl font-semibold text-gray-900 mb-4">
                     Giới thiệu về {job?.companyName}
                   </h2>
@@ -148,7 +138,7 @@ function RecruimentDetailPage({ job }: Props) {
                     </div>
                     <div>
                       <p className="text-gray-600 leading-relaxed mb-4">
-                        {/* {job?.companyDescription || ""} */}
+                        {company?.description}
                       </p>
                     </div>
                   </div>
@@ -156,160 +146,106 @@ function RecruimentDetailPage({ job }: Props) {
               </div>
               {/* Sidebar */}
               <div className="lg:col-span-1">
-                <div className="sticky top-8 space-y-6">
+                <div className="sticky top-[120px] space-y-6">
                   {/* Apply Section */}
-                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+                  <div className="border border-gray-200 rounded-lg p-3 bg-white shadow-sm">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
                       Ứng tuyển cho công việc này
                     </h3>
                     {!isApplying ? (
                       <div className="space-y-4">
                         <ActionButton
-                          text="Apply Now"
+                          text="Nộp đơn ngay"
                           onClick={() => setIsApplying(true)}
                         />
-                        <div className="text-center">
-                          <InfoItem
-                            icon={Users}
-                            text={`${"12"} people have applied`}
-                          />
-                        </div>
                       </div>
                     ) : (
-                      <form
-                        onSubmit={handleApplicationSubmit}
-                        className="space-y-4"
-                      >
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Phone Number
-                          </label>
-                          <input
-                            type="tel"
-                            required
-                            value={applicationData.phone}
-                            onChange={(e) =>
-                              setApplicationData({
-                                ...applicationData,
-                                phone: e.target.value,
-                              })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                            placeholder="Your phone number"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Expected Salary
-                          </label>
-                          <input
-                            type="text"
-                            value={applicationData.expectedSalary}
-                            onChange={(e) =>
-                              setApplicationData({
-                                ...applicationData,
-                                expectedSalary: e.target.value,
-                              })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                            placeholder="e.g., 15-20 million VND"
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Cover Letter
-                          </label>
-                          <textarea
-                            rows={4}
-                            required
-                            value={applicationData.coverLetter}
-                            onChange={(e) =>
-                              setApplicationData({
-                                ...applicationData,
-                                coverLetter: e.target.value,
-                              })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                            placeholder="Tell us why you're perfect for this role..."
-                          />
-                        </div>
-
-                        <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Resume/CV
-                          </label>
-                          <input
-                            type="file"
-                            accept=".pdf,.doc,.docx"
-                            onChange={(e) =>
-                              setApplicationData({
-                                ...applicationData,
-                                resume: e.target.files?.[0] || null,
-                              })
-                            }
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                          />
-                          <p className="text-xs text-gray-500 mt-1">
-                            PDF, DOC, or DOCX format
-                          </p>
-                        </div>
-
-                        <div className="flex space-x-2">
-                          <ActionButton icon={Send} text="Submit Application" />
-                          <ActionButton
-                            text="Cancel"
+                      <Portal>
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+                          {/* Lớp nền mờ */}
+                          <div
+                            className="fixed inset-0 bg-black/30 backdrop-blur-sm"
                             onClick={() => setIsApplying(false)}
-                          />
+                            aria-hidden="true"
+                          ></div>
+
+                          {/* Nội dung Modal */}
+                          <div className="relative flex flex-col w-full max-w-4xl h-full max-h-[90vh] bg-white rounded-xl shadow-lg overflow-hidden">
+                            {/* Header của Modal */}
+                            <div className="flex items-center justify-between p-4  flex-shrink-0">
+                              <span></span>
+                              <button
+                                onClick={() => setIsApplying(false)}
+                                className="p-1 text-gray-500 rounded-full hover:bg-gray-200 hover:text-gray-800 transition-colors"
+                                aria-label="Đóng"
+                              >
+                                <X className="h-6 w-6" />
+                              </button>
+                            </div>
+
+                            {/* Vùng nội dung có thể cuộn */}
+                            <div className="flex-grow p-4  overflow-y-auto ">
+                              <CVBuilder token={token} idCompany={job?.id} />
+                            </div>
+                          </div>
                         </div>
-                      </form>
+                      </Portal>
                     )}
                   </div>
 
                   {/* Job Summary */}
-                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+                  <div className="border border-gray-200 rounded-lg p-3 bg-white shadow-sm">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
                       Tóm tắt công việc
                     </h3>
                     <div className="space-y-3">
-                      <div className="flex justify-between">
-                        <InfoItem icon={Building} text="Industry" />
+                      <div className="flex flex-col gap-1">
+                        <InfoItem icon={Building} text="Ngành công nghiệp" />
                         <span className="font-medium">
                           {job.jobCategory.name}
                         </span>
                       </div>
-                      <div className="flex justify-between">
-                        <InfoItem icon={MapPin} text="Location" />
+                      <div className="flex flex-col gap-1">
+                        <InfoItem icon={MapPin} text="Địa chỉ" />
                         <span className="font-medium">{job.location}</span>
                       </div>
                       <div className="flex justify-between">
-                        <InfoItem icon={DollarSign} text="Salary" />
+                        <InfoItem icon={DollarSign} text="Lương" />
                         <span className="font-medium">
                           {job.salaryMax.toLocaleString("vi-VN")}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <InfoItem icon={Calendar} text="Posted" />
+                        <InfoItem icon={Calendar} text="Đã đăng" />
                         <span className="font-medium">
                           {job.applicationDeadline}
                         </span>
                       </div>
                       <div className="flex justify-between">
-                        <InfoItem icon={Users} text="Applicants" />
+                        <InfoItem icon={Users} text="Người nộp đơn" />
                         <span className="font-medium">{"12"}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Contact Employer */}
-                  <div className="border border-gray-200 rounded-lg p-6 bg-white shadow-sm">
+                  <div className="border border-gray-200 rounded-lg p-3 bg-white shadow-sm">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Contact Employer
+                      Liên hệ với nhà tuyển dụng
                     </h3>
                     <div className="space-y-3">
-                      <ActionButton text="Send Message" />
-                      <ActionButton text="View Company Profile" />
+                      <span className="flex items-center gap-2">
+                        <MessageSquareMore className="w-5 h-5" />
+                        <ActionButton text="Gửi tin nhắn" />
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <Mails className="w-5 h-5" />
+                        {company?.email}
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <Phone className="w-5 h-5" />
+                        {company?.phoneNumber}
+                      </span>
                     </div>
                   </div>
                 </div>

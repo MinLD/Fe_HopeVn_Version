@@ -8,7 +8,7 @@ type Props = {
 };
 function AvatarProfile({ name, url, width = "10", height = "10" }: Props) {
   const generateAvatar = (name: string) => {
-    return name.charAt(0).toUpperCase();
+    return name?.charAt(0).toUpperCase() || "";
   };
   return (
     <div

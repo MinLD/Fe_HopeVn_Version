@@ -1,5 +1,12 @@
 import axiosClient from "@/app/service/ApiClient";
 
+const GetDetailsCompany = async (token: string, id: string) => {
+  return await axiosClient.get(`/company/${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 const CreateCompany = async (token: string, formData: FormData) => {
   return await axiosClient.post("/company", formData, {
     headers: {
@@ -43,7 +50,7 @@ const GetAllJobs = async () => {
 
 const GetJobDetail = async (token: string, id: string) => {
   if (!token || !id) return;
-  return await axiosClient.get(`/job/detail?jobId=${id}`, {
+  return await axiosClient?.get(`/job/detail?jobId=${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -56,8 +63,26 @@ const GetAllJobByCompany = async (token: string) => {
     },
   });
 };
-
+const ApplyCompany = async (token: string, jobId: number, cvId: number) => {
+  return await axiosClient.post(
+    `/application?jobId=${jobId}&cvId=${cvId}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+const GetAllAppliedJob = async (token: string, jobId: number) => {
+  return await axiosClient.get(`/application/getAll?jobId=${jobId}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 export {
+  GetAllAppliedJob,
   GetJobDetail,
   CreateCompany,
   PostJobCategory,
@@ -66,4 +91,6 @@ export {
   CreatePostJob,
   GetAllJobs,
   GetAllJobByCompany,
+  GetDetailsCompany,
+  ApplyCompany,
 };

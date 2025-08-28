@@ -7,6 +7,7 @@ const privatePaths = [
   "/account/profile",
   "/register/partner",
   "/recruitment/:id",
+  "/wallet",
 ];
 
 const publicPaths = ["/"];

@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProfileHeader } from "@/app/components/ProfileHeader";
 import { ProfileInformation } from "@/app/components/ProfileInformation";
 import { QuickActions } from "@/app/components/QuickActions";
@@ -10,7 +10,6 @@ import { updateProfile } from "@/app/actions/updateProfile";
 import CVBuilder from "@/app/components/BuilderCV";
 import { Ty_Cv, Ty_User } from "@/app/types/UserList";
 import { useProfileStore } from "@/app/zustand/userStore";
-import { CreateCv, getAllCv } from "@/app/service/User";
 
 type ProfilePageProps = {
   initialCv?: Ty_Cv | null;
@@ -41,10 +40,9 @@ const ProfilePage = ({ token }: ProfilePageProps) => {
 
     profilePicture: initialUser?.profile?.profilePicture?.url || "",
   });
-  const [isLoadingCv, setIsLoadingCv] = useState(false);
 
   // State để lưu danh sách CV từ API
-  const [cvList, setCvList] = useState<Ty_Cv[]>([]);
+  // const [cvList, setCvList] = useState<Ty_Cv[]>([]);
   const handleSave = async () => {
     const formDataUpdated = new FormData();
     formDataUpdated.append("fullName", formData.fullName);
@@ -108,45 +106,45 @@ const ProfilePage = ({ token }: ProfilePageProps) => {
   };
 
   // Hàm này sẽ được gọi từ CVBuilder để tạo mới CV
-  const handleCreateCv = async (
-    newCvData: Omit<Ty_Cv, "id" | "createdAt" | "updatedAt">
-  ) => {
-    try {
-      setIsLoadingCv(true);
-      const response = await CreateCv(token || "", newCvData as Ty_Cv); // Backend sẽ tự tạo ID và timestamp
+  // const handleCreateCv = async (
+  //   newCvData: Omit<Ty_Cv, "id" | "createdAt" | "updatedAt">
+  // ) => {
+  //   try {
+  //     setIsLoadingCv(true);
+  //     const response = await CreateCv(token || "", newCvData as Ty_Cv); // Backend sẽ tự tạo ID và timestamp
 
-      if (response.status !== 201 && response.status !== 200) {
-        // Thường tạo mới trả về 201
-        toast.error(response.data.message || "Failed to create CV");
-        return;
-      }
+  //     if (response.status !== 201 && response.status !== 200) {
+  //       // Thường tạo mới trả về 201
+  //       toast.error(response.data.message || "Failed to create CV");
+  //       return;
+  //     }
 
-      toast.success(response.data.message || "CV created successfully!");
+  //     toast.success(response.data.message || "CV created successfully!");
 
-      // Sau khi tạo thành công, gọi lại API để lấy danh sách CV mới nhất
-      await handleGetAllCv();
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "An error occurred");
-    } finally {
-      setIsLoadingCv(false);
-    }
-  };
+  //     // Sau khi tạo thành công, gọi lại API để lấy danh sách CV mới nhất
+  //     await handleGetAllCv();
+  //   } catch (error: any) {
+  //     toast.error(error.response?.data?.message || "An error occurred");
+  //   } finally {
+  //     setIsLoadingCv(false);
+  //   }
+  // };
   // 2. Bọc hàm handleGetAllCv trong useCallback
   //    Hàm này sẽ chỉ được tạo lại khi `token` thay đổi.
-  const handleGetAllCv = useCallback(async () => {
-    if (!token) return; // Thêm kiểm tra token cho an toàn
-    try {
-      const response = await getAllCv(token);
-      if (response.status !== 200) {
-        toast.error(response.data.message);
-        return;
-      }
-      // Giả sử bạn có state setFormDataCv để lưu CV
-      setCvList(response.data.result.data || []);
-    } catch (error: any) {
-      console.log(error.response.data.message);
-    }
-  }, [token]); // Phụ thuộc vào token
+  // const handleGetAllCv = useCallback(async () => {
+  //   if (!token) return; // Thêm kiểm tra token cho an toàn
+  //   try {
+  //     const response = await getAllCv(token);
+  //     if (response.status !== 200) {
+  //       toast.error(response.data.message);
+  //       return;
+  //     }
+  //     // Giả sử bạn có state setFormDataCv để lưu CV
+  //     setCvList(response.data.result.data || []);
+  //   } catch (error: any) {
+  //     console.log(error.response.data.message);
+  //   }
+  // }, [token]); // Phụ thuộc vào token
   useEffect(() => {
     // Nếu initialUser có dữ liệu (sau khi fetch xong)
     if (initialUser) {
@@ -164,10 +162,7 @@ const ProfilePage = ({ token }: ProfilePageProps) => {
       });
     }
   }, [initialUser]);
-  useEffect(() => {
-    handleGetAllCv();
-  }, [handleGetAllCv]);
-  console.log(isLoadingCv);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -193,13 +188,7 @@ const ProfilePage = ({ token }: ProfilePageProps) => {
                 handleCancel={handleCancel}
               />
             )}
-            {isTypeShowPage === "cv" && (
-              <CVBuilder
-                // Truyền danh sách CV đã fetch được và hàm xử lý xuống
-                cvList={cvList || []}
-                onCreateCv={handleCreateCv}
-              />
-            )}
+            {isTypeShowPage === "cv" && <CVBuilder token={token || ""} />}
             {/* <button
                 onClick={() => setIsEditingCv(!isEditingCv)}
                 className="mt-4 mb-5 sm:mt-0 flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"

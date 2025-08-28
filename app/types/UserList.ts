@@ -22,7 +22,21 @@ export interface Ty_Cv {
   typeOfDisability: string;
   typeOfJob: string;
 }
-
+export interface Ty_CvApplied {
+  userName: string;
+  createdAt?: string;
+  id?: string;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  dob: string;
+  skill: string;
+  exp: string;
+  education: string;
+  typeOfDisability: string;
+  typeOfJob: string;
+}
 export interface Ty_profile_User {
   country: string;
   address: string;

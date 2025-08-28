@@ -45,9 +45,13 @@ function HeaderTopMenuDropdown() {
     if (id === 4) {
       navigate.push("/account/profile");
     }
+    if (id === 3) {
+      navigate.push("/wallet");
+    }
     if (id === 5) {
       navigate.push("/");
     }
+    window.navigator.vibrate(100);
   };
   return (
     <>

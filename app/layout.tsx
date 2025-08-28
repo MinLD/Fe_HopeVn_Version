@@ -32,6 +32,8 @@ export default async function RootLayout({
               <StoreProvider>
                 <AppInitializer token={token || null}>
                   {children}
+                  {/* Điểm neo cho tất cả các modal sẽ được render ở đây */}
+                  <div id="modal-root"></div>
                 </AppInitializer>
                 <Toaster
                   richColors

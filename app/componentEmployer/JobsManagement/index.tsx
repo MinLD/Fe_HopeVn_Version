@@ -124,7 +124,7 @@ function JobsManagement({ token }: Props) {
                 <>
                   {data?.map((item) => (
                     <div key={item.companyId}>
-                      <JobPosting {...item} />
+                      <JobPosting {...item} token={token} />
                     </div>
                   ))}
                 </>

@@ -131,7 +131,7 @@ function CommentPostCard({
       onClick={onClose} // Đóng modal khi nhấp vào lớp phủ
     >
       <div
-        className="bg-white rounded-xl shadow-2xl w-full  max-h-[90vh] flex flex-col transform transition-all duration-300 scale-95 opacity-0 animate-fade-in-scale"
+        className={`bg-white rounded-xl shadow-2xl max-w-2xl  max-h-[90vh] flex flex-col transform transition-all duration-300 scale-95 opacity-0 animate-fade-in-scale`}
         onClick={(e) => e.stopPropagation()} // Ngăn việc đóng modal khi nhấp vào nội dung bên trong
       >
         {/* Header */}
@@ -148,11 +148,11 @@ function CommentPostCard({
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto p-1 flex-grow">
+        <div className="overflow-y-auto p-1 md:p-4 flex-grow">
           {children}
           <div className="mt-4 min-h-[100px] ">
             <p className="text-gray-600 text-md mb-3">
-              bình luận ({dataComments.length || 0})
+              Bình luận ({dataComments.length || 0})
             </p>
             {dataComments.length > 0 ? (
               <>

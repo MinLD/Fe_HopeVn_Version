@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Building, Calendar, Heart, MapPin, Share2 } from "lucide-react";
+import { Building, Calendar, MapPin } from "lucide-react";
 import { JobPostingProps } from "@/app/componentEmployer/JobPosting";
 import Link from "next/link";
 
@@ -10,22 +10,15 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   return (
-    <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
+    <div className="bg-white p-2 md:p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-200">
       <div className="space-y-4">
         {/* Header */}
-        <div className="flex justify-between items-start">
+        <div className="flex md:justify-between md:items-start flex-col">
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-2">
               <h3 className="text-lg font-semibold text-gray-900 hover:text-green-600 transition-colors">
                 {job.title}
               </h3>
-              {/* {job.urgent && (
-                <>
-                  {" "}
-                  <Clock className="w-3 h-3 mr-1" />
-                  Urgent
-                </>
-              )} */}
             </div>
             <div className="flex items-center text-gray-600 mb-2">
               <Building className="w-4 h-4 mr-2" />
@@ -73,15 +66,12 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         {/* Actions */}
         <div className="flex space-x-3 pt-2 items-center">
           <span className="flex-1 w-full">
-            <Link href={`/recruitment/${job.companyId}`}>
+            <Link href={`/recruitment/${job.id}`}>
               <button className="bg-green-600 hover:cursor-pointer text-white px-4 py-2 rounded-lg  hover:bg-green-700 transition-colors">
                 Xem chi tiết
               </button>
             </Link>
           </span>
-          <Heart />
-
-          <Share2 />
         </div>
       </div>
     </div>
