@@ -13,7 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { id } = params;
   let job: JobPostingProps = {} as JobPostingProps;
-  let company: Ty_Company = {} as Ty_Company;
+
   const token = (await cookies()).get("authToken")?.value;
   const handleGetJobsDetail = async (token: string, id: string) => {
     try {
@@ -27,20 +27,8 @@ export async function generateMetadata({
       console.error("Error fetching categories:", error);
     }
   };
-  const handleGetCompanyDetail = async (token: string, id: string) => {
-    try {
-      const response: any = await GetDetailsCompany(token as string, id);
-      if (response.status !== 200) {
-        console.log(response.data.message);
-      }
-      console.log(response.data.result);
-      company = response.data.result;
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
+
   await handleGetJobsDetail(token as string, id);
-  await handleGetCompanyDetail(token as string, job.companyId as any);
 
   if (!job) {
     return {

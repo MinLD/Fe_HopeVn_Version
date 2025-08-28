@@ -1,37 +1,45 @@
+import { GetAllJobs } from "@/app/service/employer";
+import { getAllPost } from "@/app/service/User";
 import { MetadataRoute } from "next";
-
-// Giả sử bạn có các hàm lấy dữ liệu từ API
-async function getAllJobs() {
-  const res = await fetch("https://your-api.com/jobs");
-  return res.json();
-}
-async function getAllArticles() {
-  const res = await fetch("https://your-api.com/articles");
-  return res.json();
-}
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://ourhope.io.vn/";
 
-  // Lấy các URL động
-  const jobs = await getAllJobs();
-  const articles = await getAllArticles();
+  let jobUrls: MetadataRoute.Sitemap = [];
+  let articleUrls: MetadataRoute.Sitemap = [];
 
-  const jobUrls = jobs.map((job: any) => ({
-    url: `${baseUrl}/tuyen-dung/${job.slug}`,
-    lastModified: new Date(job.updatedAt),
-  }));
+  try {
+    const jobsResponse = await GetAllJobs();
+    if (Array.isArray(jobsResponse?.data?.result?.data)) {
+      jobUrls = jobsResponse.data.result.data.map((job: any) => ({
+        url: `${baseUrl}/recruitment/${job.id}`,
+        // SỬA LỖI: Kiểm tra job.updatedAt trước khi sử dụng
+        lastModified: job.updatedAt ? new Date(job.updatedAt) : new Date(),
+      }));
+    }
+  } catch (error) {
+    console.error("Failed to fetch jobs for sitemap:", error);
+  }
 
-  const articleUrls = articles.map((article: any) => ({
-    url: `${baseUrl}/ho-tro/${article.slug}`,
-    lastModified: new Date(article.updatedAt),
-  }));
+  try {
+    const articlesResponse = await getAllPost();
+    if (Array.isArray(articlesResponse?.data?.result?.data)) {
+      articleUrls = articlesResponse.data.result.data.map((article: any) => ({
+        url: `${baseUrl}/help/${article.id}`,
+        // SỬA LỖI: Kiểm tra article.updatedAt trước khi sử dụng
+        lastModified: article.updatedAt
+          ? new Date(article.updatedAt)
+          : new Date(),
+      }));
+    }
+  } catch (error) {
+    console.error("Failed to fetch articles for sitemap:", error);
+  }
 
-  // Trả về mảng các URL, bao gồm cả các trang tĩnh
   return [
     { url: baseUrl, lastModified: new Date() },
-    { url: `${baseUrl}/tuyen-dung`, lastModified: new Date() },
-    { url: `${baseUrl}/ho-tro`, lastModified: new Date() },
+    { url: `${baseUrl}/recruitment`, lastModified: new Date() },
+    { url: `${baseUrl}/help`, lastModified: new Date() },
     ...jobUrls,
     ...articleUrls,
   ];
