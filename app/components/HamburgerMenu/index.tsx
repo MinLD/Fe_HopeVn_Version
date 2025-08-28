@@ -38,7 +38,7 @@ function HamburgerMenu() {
         router.push("/help");
         break;
       case 3:
-        router.push("/modals");
+        router.push("/modal");
     }
     setIsOpenMenu(false);
   };

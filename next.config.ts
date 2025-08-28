@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-    // Thêm đoạn này vào
+  // Thêm đoạn này vào
   typescript: {
     // !! WARN !!
     // Nguy hiểm: Lệnh này sẽ bỏ qua toàn bộ lỗi TypeScript trong quá trình build.
@@ -27,6 +27,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "i.ibb.co" },
       { protocol: "https", hostname: "thecrafthouse.vn" },
       { protocol: "https", hostname: "cdn.shopify.com" },
+      { protocol: "https", hostname: "images.pexels.com" },
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",

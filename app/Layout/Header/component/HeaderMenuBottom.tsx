@@ -49,6 +49,9 @@ function HeaderMenuBottom() {
     if (id === 2) {
       navigate.push("/help");
     }
+    if (id === 3) {
+      navigate.push("/modal");
+    }
 
     window.scrollTo(0, 0);
   };
