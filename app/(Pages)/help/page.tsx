@@ -3,9 +3,12 @@ import PostsLoadingSkeleton from "@/app/components/PostsLoadingSkeleton";
 import HelpPage from "@/app/componentsPostHelp/HelpsPage";
 import { getAllPost, GetAllPostVolunteer } from "@/app/service/User";
 import { dataPost as DataPostType } from "@/app/types/post"; // Đổi tên để tránh xung đột
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Suspense } from "react";
-
+export const metadata: Metadata = {
+  title: "Giúp đỡ",
+};
 async function page() {
   const token = (await cookies()).get("authToken")?.value;
   let isLoading = true;

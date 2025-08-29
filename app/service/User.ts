@@ -46,6 +46,17 @@ const GetProfileUser = async (token: string) => {
   });
 };
 
+const ForgotPassword = async (email: string) => {
+  return await axiosClient.post("users/send-otp", { email });
+};
+const ResetPassword = async (email: string, otp: string, password: string) => {
+  console.log(email, otp, password);
+  return await axiosClient.post("users/reset-password", {
+    email,
+    otp,
+    password,
+  });
+};
 const UpdateProfileUser = async (formData: FormData, token: string) => {
   return await axiosClient.put(
     "/profile",
@@ -198,6 +209,8 @@ const CreateCv = async (token: string, data: Ty_Cv) => {
   });
 };
 export {
+  ResetPassword,
+  ForgotPassword,
   GetProfileUser,
   getInitialProfile,
   UpdateProfileUser,

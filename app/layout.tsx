@@ -1,4 +1,4 @@
-import { Roboto } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 
 import { Toaster } from "sonner";
@@ -13,8 +13,18 @@ import { AppInitializer } from "@/app/components/AppInitializer";
 import CreatePost from "@/app/componentsPostHelp/CreatePost";
 import { Metadata } from "next";
 
-const roboto = Roboto({
-  subsets: ["latin-ext"],
+// 2. Cấu hình font
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter", // Tạo biến CSS cho font Inter
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["600", "700"],
+  display: "swap",
+  variable: "--font-poppins", // Tạo biến CSS cho font Poppins
 });
 export const metadata: Metadata = {
   title: {
@@ -51,8 +61,8 @@ export default async function RootLayout({
 
   return (
     <>
-      <html lang="vi" className={roboto.className}>
-        <body className={roboto.className}>
+      <html lang="vi" className={`${inter.variable} ${poppins.variable}`}>
+        <body>
           <NavProvider>
             <AuthProvider>
               <StoreProvider>

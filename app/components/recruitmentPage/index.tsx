@@ -3,39 +3,13 @@ import { JobPostingProps } from "@/app/componentEmployer/JobPosting";
 import JobCard from "@/app/components/jobCart/JobCard";
 import SearchFilter from "@/app/components/SearchFilter";
 import MyLayout from "@/app/Layout/MyLayOut";
-import { GetAllJobs } from "@/app/service/employer";
 import { Sprout } from "lucide-react";
-import { useEffect, useState } from "react";
 
 type prop = {
   token: string;
+  jobsData: JobPostingProps[];
 };
-const RecruitmentPage = ({}: prop) => {
-  const [data, setData] = useState<JobPostingProps[]>([]);
-
-  const [isLoading, setLoading] = useState<boolean>(true);
-  console.log(isLoading);
-
-  const handleGetAllJobs = async () => {
-    try {
-      setLoading(true);
-      const response = await GetAllJobs();
-      if (response.status === 200) {
-        console.log(response.data.result);
-        setData(response?.data?.result?.data);
-        setLoading(false);
-      } else {
-        console.log(response.data.message);
-      }
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
-
-  useEffect(() => {
-    handleGetAllJobs();
-  }, []);
-
+const RecruitmentPage = ({ jobsData }: prop) => {
   //   const filteredJobs = useMemo(() => {
   //     return mockJobs.filter((job: Job) => {
   //       // Search filter
@@ -93,20 +67,17 @@ const RecruitmentPage = ({}: prop) => {
               {/* Filters Sidebar */}
               <div className="lg:col-span-1">
                 <div className="sticky top-30">
-                  <SearchFilter
-                    onFilterChange={() => handleGetAllJobs()}
-                    type="jobs"
-                  />
+                  <SearchFilter type="jobs" />
                 </div>
               </div>
 
               {/* Job Listings */}
               <div className="lg:col-span-3">
                 <div className="space-y-6">
-                  {data.map((job) => (
+                  {jobsData.map((job) => (
                     <JobCard key={job.companyId} job={job} />
                   ))}
-                  {data.length === 0 && !isLoading && (
+                  {jobsData.length === 0 && (
                     <div className="col-span-3">
                       <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
                         <Sprout

@@ -103,7 +103,7 @@ const GettingStarted = () => {
                     width={100}
                     height={100}
                     src={i.src}
-                    alt=""
+                    alt={i.title + ""}
                     className="h-auto w-1/2 object-cover"
                   />
                 </div>

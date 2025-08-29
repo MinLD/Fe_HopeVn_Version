@@ -6,7 +6,7 @@ const authPaths = ["/authenticate/loggin", "/authenticate"];
 const privatePaths = [
   "/account/profile",
   "/register/partner",
-  "/recruitment/:id",
+  // "/recruitment/:id",
   "/wallet",
 ];
 
@@ -111,10 +111,10 @@ export async function middleware(request: NextRequest) {
   if (
     privatePaths.some((path) => {
       if (path === "/recruitment") return pathname === "/recruitment";
-      if (path === "/recruitment/:id") {
-        const regex = new RegExp(`^/recruitment/[^/]+$`);
-        return regex.test(pathname);
-      }
+      // if (path === "/recruitment/:id") {
+      //   const regex = new RegExp(`^/recruitment/[^/]+$`);
+      //   return regex.test(pathname);
+      // }
       return false;
     }) &&
     !sessionToken

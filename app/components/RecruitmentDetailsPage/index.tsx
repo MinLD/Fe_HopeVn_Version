@@ -19,7 +19,9 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type Props = {
   job: JobPostingProps;
@@ -27,8 +29,17 @@ type Props = {
   token: string | null;
 };
 function RecruimentDetailPage({ job, company, token }: Props) {
+  const router = useRouter();
   console.log(job);
   const [isApplying, setIsApplying] = useState(false);
+  const handleApply = () => {
+    if (token) {
+      setIsApplying(true);
+      return;
+    }
+    router.push("/authenticate/loggin");
+    toast.warning("Vui lòng đăng nhập");
+  };
 
   return (
     <>
@@ -138,7 +149,7 @@ function RecruimentDetailPage({ job, company, token }: Props) {
                     </div>
                     <div>
                       <p className="text-gray-600 leading-relaxed mb-4">
-                        {company?.description}
+                        {company?.description || "Chưa câp nhật!"}
                       </p>
                     </div>
                   </div>
@@ -156,7 +167,7 @@ function RecruimentDetailPage({ job, company, token }: Props) {
                       <div className="space-y-4">
                         <ActionButton
                           text="Nộp đơn ngay"
-                          onClick={() => setIsApplying(true)}
+                          onClick={handleApply}
                         />
                       </div>
                     ) : (
@@ -240,11 +251,11 @@ function RecruimentDetailPage({ job, company, token }: Props) {
                       </span>
                       <span className="flex items-center gap-2">
                         <Mails className="w-5 h-5" />
-                        {company?.email}
+                        {company?.email || "Chưa câp nhật!"}
                       </span>
                       <span className="flex items-center gap-2">
                         <Phone className="w-5 h-5" />
-                        {company?.phoneNumber}
+                        {company?.phoneNumber || "Chưa câp nhật!"}
                       </span>
                     </div>
                   </div>

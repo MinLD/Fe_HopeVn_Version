@@ -95,21 +95,21 @@ function MyFooter() {
                   width={100}
                   height={100}
                   src="https://han01.vstorage.vngcloud.vn/v1/AUTH_6831ce3c90cd4f47a8ca18d6545cddf9/public/Default/Media/Images/bced50fb-21fc-47ec-963b-229a05bd29f4/default_image_bced50fb-21fc-47ec-963b-229a05bd29f4_facebook_1679298790084.png"
-                  alt=""
+                  alt="face icon"
                   className="h-[32px] w-[32px]"
                 />
                 <Image
                   width={100}
                   height={100}
                   src="https://han01.vstorage.vngcloud.vn/v1/AUTH_6831ce3c90cd4f47a8ca18d6545cddf9/public/Default/Media/Images/7cc6c6fe-4abb-47f7-9813-78c9f8f61f73/default_image_7cc6c6fe-4abb-47f7-9813-78c9f8f61f73_youtube_1679298790118.png"
-                  alt=""
+                  alt="you icon"
                   className="h-[32px] w-[32px]"
                 />
                 <Image
                   width={100}
                   height={100}
                   src="https://han01.vstorage.vngcloud.vn/v1/AUTH_6831ce3c90cd4f47a8ca18d6545cddf9/public/Default/Media/Images/8d051b76-a3bb-40f1-bc95-e24ca1737421/default_image_8d051b76-a3bb-40f1-bc95-e24ca1737421_zalo_1678414322877.png"
-                  alt=""
+                  alt="zalo icon"
                   className="h-[32px] w-[32px]"
                 />
               </div>
@@ -178,7 +178,7 @@ function MyFooter() {
                     width={126}
                     height={60}
                     src="https://elearning.iigvietnam.com/_next/image?url=%2Fimages%2Fimage_f.png&w=128&q=75"
-                    alt=""
+                    alt="iig"
                     className="h-[50px] w-[126px] lg:h-[60px] lg:w-[150px]"
                   />
                 </div>

@@ -27,6 +27,7 @@ export const useProfileStore = create<ProfileState | any>((set) => {
       }
     },
     fetchProfile: async () => {
+      
       set({ isLoading: true, error: null });
       try {
         const response = await axios.get("/apiFe/user/profile", {

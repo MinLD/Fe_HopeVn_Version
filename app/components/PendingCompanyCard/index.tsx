@@ -55,7 +55,6 @@ const PendingCompanyCard = ({
   size,
   companyImage,
   taxCode,
-  registrationDate,
   handeActive,
 }: Ty_Company) => {
   const handleApprove = () => {
@@ -66,7 +65,7 @@ const PendingCompanyCard = ({
     <div className="max-w-3xl mx-auto p-4 bg-white shadow-md rounded-lg sm:p-6">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between ">
         <h2 className="text-lg font-bold text-gray-900 sm:text-xl">{name}</h2>
-        <span className="px-2 py-2 bg-red-100 text-red-600 text-xs font-medium rounded-full mb-2 text-center">
+        <span className="px-2 py-2  text-red-600 text-xs font-medium rounded-full mb-2 text-center">
           Đang chờ xét duyệt
         </span>
       </div>
@@ -109,9 +108,8 @@ const PendingCompanyCard = ({
         </div>
       </div>
       <div className="mt-4 text-sm text-gray-500 flex flex-col sm:flex-row sm:items-center sm:space-x-4">
-        <span>📍 {address.split(", ").pop() || "Hà Nội"}</span>
-        <span className="sm:mx-2">🗓 {registrationDate}</span>
-        {/* <span>📝 0 hồ sơ chờ duyệt khác</span> */}
+        <span>📍 {address.split(", ").pop() || ""}</span>
+        {/* <span className="sm:mx-2">🗓 {createAt}</span> */}
       </div>
       <div className="mt-4">
         <p className="text-sm font-medium text-gray-700">Yêu cầu xét duyệt:</p>

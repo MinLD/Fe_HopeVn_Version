@@ -1,7 +1,10 @@
 import ProfilePage from "@/app/components/profile/ProfilePage";
+import { Metadata } from "next";
 
 import { cookies } from "next/headers";
-
+export const metadata: Metadata = {
+  title: "Tài khoản",
+};
 const page = async () => {
   const token = (await cookies()).get("authToken")?.value;
   // let initialUser: Ty_User | null = null;
