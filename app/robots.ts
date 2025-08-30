@@ -16,6 +16,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: `${process.env.SITE_URL}/sitemap.xml`,
+    sitemap: `https://ourhope.io.vn/sitemap.xml`,
   };
 }

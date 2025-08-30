@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const baseUrl = process.env.BACKEND_URL;
-export const FeUrl = process.env.SITE_URL;
+export const baseUrl = "https://ourhope.io.vn/api";
+export const FeUrl = "https://ourhope.io.vn";
 
 export const axiosClient = axios.create({
   baseURL: baseUrl,
