@@ -3,8 +3,9 @@ import { useNav } from "@/app/hooks/useNav";
 import { Briefcase, Gift, Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
-function FloatingActionButton() {
+function FloatingActionButton({ token }: { token: string }) {
   const { isOpenCreatePost, setOpenCreatePost } = useNav();
   const router = useRouter();
   const [showMenu, setShowMenu] = useState(false);
@@ -13,12 +14,17 @@ function FloatingActionButton() {
     console.log(type);
     switch (type) {
       case "post":
+        if (!token) {
+          toast.warning("Vui lòng đăng nhập để được đăng bài viết!");
+          router.push("/authenticate/loggin");
+          return;
+        }
         setShowMenu(false);
         setOpenCreatePost(!isOpenCreatePost);
         return;
       case "partner":
         setShowMenu(false);
-        router.push("register/partner");
+        router.push("/register/partner");
         return;
     }
   };

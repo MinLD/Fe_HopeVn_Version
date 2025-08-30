@@ -111,7 +111,7 @@ const CVBuilder = ({ token, idCompany = null }: CVBuilderProps) => {
   const [viewingId, setViewingId] = useState<string | null>(null);
   const [cvList, setCvList] = useState<Ty_Cv[]>([]);
   const [isLoadingCv, setIsLoadingCv] = useState(false);
-  console.log(isLoadingCv)
+  console.log(isLoadingCv);
   const [isLoadingApply, setIsLoadingApply] = useState(false);
   const initialFormState: Ty_Cv = {
     id: "",
@@ -469,7 +469,7 @@ const CVBuilder = ({ token, idCompany = null }: CVBuilderProps) => {
         )}
         {/* --- DANH SÁCH CV (ĐÃ LÀM GỌN BẰNG DỮ LIỆU MẪU) --- */}
         {!isCreating && !editingId && !viewingId && (
-          <Card>
+          <Card padding="none" className="p-2 sm:p-4">
             <h2 className="text-xl font-semibold text-gray-900 mb-6">
               Danh sách CV của bạn ({cvList.length})
             </h2>

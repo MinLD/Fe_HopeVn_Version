@@ -84,6 +84,11 @@ const PostCard: React.FC<PostCardProps> = ({
     return null;
   }
   const handleLike = async () => {
+    if (!token) {
+      toast.warning("Vui lòng đăng nhập để được like bài viết!");
+      router.push("/authenticate/loggin");
+      return;
+    }
     await patchLikePost(token || "", post.id)
       .then((res) => {
         console.log(res);
@@ -269,7 +274,7 @@ const PostCard: React.FC<PostCardProps> = ({
                 onClick={onClick}
               >
                 <MessageCircle className="w-5 h-5 mr-1" />
-                <span className="text-sm">100</span>
+                <span className="text-sm">10</span>
               </button>
             </div>
 

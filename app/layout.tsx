@@ -12,6 +12,7 @@ import { NavProvider } from "@/app/context/NavigationContext";
 import { AppInitializer } from "@/app/components/AppInitializer";
 import CreatePost from "@/app/componentsPostHelp/CreatePost";
 import { Metadata } from "next";
+import FloatingActionButton from "@/app/components/FloatingActionButton";
 
 // 2. Cấu hình font
 const inter = Inter({
@@ -70,6 +71,7 @@ export default async function RootLayout({
                   {children}
                   {/* Điểm neo cho tất cả các modal sẽ được render ở đây */}
                   <div id="modal-root"></div>
+                  <FloatingActionButton token={token || ""} />
                 </AppInitializer>
                 <Toaster
                   richColors

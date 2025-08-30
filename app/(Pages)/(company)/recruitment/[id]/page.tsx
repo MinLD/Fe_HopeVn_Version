@@ -8,9 +8,10 @@ import {
   GetAllJobs,
 } from "@/app/service/employer";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { cache } from "react";
 import { cookies } from "next/headers";
+import Link from "next/link";
+import { SearchX } from "lucide-react";
 
 /**
  * BƯỚC 1: Lấy danh sách ID của TẤT CẢ các công việc tại thời điểm build.
@@ -20,17 +21,28 @@ import { cookies } from "next/headers";
  */
 export async function generateStaticParams() {
   try {
-    // API này cần trả về một mảng các object chứa id, ví dụ: [{id: 1}, {id: 2}]
     const response: any = await GetAllJobs();
-    return response.data.result.map((job: { id: string | number }) => ({
-      id: job.id.toString(),
-    }));
+
+    // THÊM DÒNG NÀY ĐỂ DEBUG
+    console.log(
+      "API RESPONSE DATA:",
+      JSON.stringify(response.data.result.data, null, 2)
+    );
+
+    // Kiểm tra xem response.data.result có phải là mảng không
+    if (Array.isArray(response.data.result.data)) {
+      return response.data.result.data.map((job: { id: string | number }) => ({
+        id: job.id.toString(),
+      }));
+    } else {
+      console.error("Dữ liệu trả về không phải là một mảng!");
+      return []; // Trả về mảng rỗng để build không bị lỗi
+    }
   } catch (error) {
     console.error("Failed to generate static params:", error);
-    return []; // Trả về mảng rỗng nếu có lỗi
+    return [];
   }
 }
-
 /**
  * BƯỚC 2: Tạo hàm lấy dữ liệu và bọc trong 'cache'.
  * 'cache' giúp `generateMetadata` và `page` có thể dùng chung kết quả API mà không cần gọi lại.
@@ -63,7 +75,8 @@ export async function generateMetadata({
 }: {
   params: { id: string };
 }): Promise<Metadata> {
-  const data = await getJobData(params.id);
+  const { id } = await params;
+  const data = await getJobData(id);
 
   if (!data?.job) {
     return {
@@ -84,7 +97,7 @@ export async function generateMetadata({
     openGraph: {
       title: `${job.title} - ${job.companyName}`,
       description: `Ứng tuyển ngay vị trí ${job.title} tại ${job.companyName}.`,
-      url: `https://ourhope.io.vn/recruitment/${params.id}`,
+      url: `https://ourhope.io.vn/recruitment/${id}`,
       images: [
         {
           url: job.companyPicture,
@@ -107,8 +120,7 @@ interface Props {
  * Việc lấy token sẽ được thực hiện để truyền xuống một Client Component riêng biệt.
  */
 async function page({ params }: Props) {
-  const { id } = params;
-
+  const { id } = await params;
   // Lấy dữ liệu tĩnh để render nội dung chính
   const data = await getJobData(id);
 
@@ -117,7 +129,28 @@ async function page({ params }: Props) {
 
   // Nếu không có dữ liệu tại thời điểm build, Next.js sẽ hiển thị trang 404
   if (!data?.job || !data?.company) {
-    notFound();
+    return (
+      <div className="flex min-h-[calc(100vh-200px)] flex-col items-center justify-center text-center">
+        <div className="rounded-full bg-green-100 p-6">
+          <SearchX className="h-16 w-16 text-green-600" />
+        </div>
+        <h1 className="mt-8 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          404
+        </h1>
+        <h2 className="mt-4 text-2xl font-semibold text-gray-800">
+          Không tìm thấy trang
+        </h2>
+        <p className="mt-4 max-w-md text-base text-gray-600">
+          Rất tiếc, trang bạn đang tìm kiếm có thể đã bị di chuyển, xóa bỏ hoặc
+          không tồn tại. Vui lòng kiểm tra lại đường dẫn.
+        </p>
+        <Link href="/">
+          <button className="mt-8 inline-flex items-center justify-center rounded-lg bg-green-600 px-6 py-3 text-base font-medium text-white shadow-sm transition-colors hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+            Quay về Trang chủ
+          </button>
+        </Link>
+      </div>
+    );
   }
 
   const { job, company } = data;

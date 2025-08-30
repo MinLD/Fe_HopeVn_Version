@@ -114,7 +114,9 @@ function RecruimentDetailPage({ job, company, token }: Props) {
                     Yêu cầu
                   </h2>
                   {job.requirements.split(/,|\n/).map((requirement, index) => (
-                    <ListItem key={index} text={requirement.trim()} />
+                    <span key={requirement + ""}>
+                      <ListItem key={index} text={requirement.trim()} />
+                    </span>
                   ))}
                 </div>
 
@@ -181,10 +183,9 @@ function RecruimentDetailPage({ job, company, token }: Props) {
                           ></div>
 
                           {/* Nội dung Modal */}
-                          <div className="relative flex flex-col w-full max-w-4xl h-full max-h-[90vh] bg-white rounded-xl shadow-lg overflow-hidden">
+                          <div className="relative flex flex-col w-full max-w-4xl h-auto max-h-[90vh] bg-white rounded-xl shadow-lg overflow-hidden">
                             {/* Header của Modal */}
-                            <div className="flex items-center justify-between p-4  flex-shrink-0">
-                              <span></span>
+                            <div className="absolute top-4 right-4">
                               <button
                                 onClick={() => setIsApplying(false)}
                                 className="p-1 text-gray-500 rounded-full hover:bg-gray-200 hover:text-gray-800 transition-colors"

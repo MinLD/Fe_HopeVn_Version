@@ -75,7 +75,9 @@ const RecruitmentPage = ({ jobsData }: prop) => {
               <div className="lg:col-span-3">
                 <div className="space-y-6">
                   {jobsData.map((job) => (
-                    <JobCard key={job.companyId} job={job} />
+                    <div key={job.id}>
+                      <JobCard job={job} />
+                    </div>
                   ))}
                   {jobsData.length === 0 && (
                     <div className="col-span-3">

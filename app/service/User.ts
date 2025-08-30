@@ -81,7 +81,7 @@ const Post = async (token: string, formData: FormData) => {
 };
 
 const getAllPost = async () => {
-  return axiosClient.get("/post/getAll");
+  return axiosClient.get("/post/getAll?page=1&size=1000");
 };
 
 const patchLikePost = async (token: string, postId: number) => {
@@ -98,7 +98,7 @@ const patchLikePost = async (token: string, postId: number) => {
 
 // đăng bài viết hoàn vốn
 const PostVolunteer = async (token: string, formData: FormData) => {
-  return await axiosClient.post("/postVolunteer", formData, {
+  return await axiosClient.post("/postVolunteer?page=1&size=1000", formData, {
     headers: {
       "Content-Type": "multipart/form-data",
       Authorization: `Bearer ${token} `,
@@ -165,25 +165,16 @@ const CommentPostVolunteer = async (
   postVolunteerId?: number | null,
   content?: string | null
 ) => {
-  return await axiosClient.post(
-    `/comments`,
-    {
-      postVolunteerId: postVolunteerId || null,
-      content: content,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  return await axiosClient.post(`/comments`, {
+    postVolunteerId: postVolunteerId || null,
+    content: content,
+  });
 };
 const getAllCommentsPost = async (token: string, postId: number) => {
-  return await axiosClient.get(`/comments/post/${postId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+  return await axiosClient.get(`/comments/post/${postId}`);
+};
+const getCountCommentPost = async (postId: number) => {
+  return await axiosClient.get(`/post/${postId}/count`);
 };
 const getAllCommentsPostVolunteer = async (token: string, postId: number) => {
   return await axiosClient.get(`/comments/post-volunteer/${postId}`, {
@@ -228,4 +219,5 @@ export {
   getAllCommentsPostVolunteer,
   getAllCv,
   CreateCv,
+  getCountCommentPost,
 };

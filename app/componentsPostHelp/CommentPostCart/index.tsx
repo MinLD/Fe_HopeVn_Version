@@ -9,7 +9,9 @@ import {
 } from "@/app/service/User";
 import { Ty_dataCommentPost } from "@/app/types/post";
 import { X, Send } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { toast } from "sonner";
 
 type CommentPostCardProps = {
   children: React.ReactNode;
@@ -29,6 +31,7 @@ function CommentPostCard({
   type = "post",
 }: CommentPostCardProps) {
   const [isComment, setIsComment] = React.useState<string>("");
+  const Router = useRouter();
   // const [page, setPage] = useState(1);
   // const [loading, setLoading] = useState(false);
   // const [hasNextPage, setHasNextPage] = useState(true);
@@ -67,6 +70,11 @@ function CommentPostCard({
       });
   };
   const handleComment = async () => {
+    if (!token) {
+      toast.warning("Vui lòng đăng nhập để được comment bài viết!");
+      Router.push("/authenticate/loggin");
+      return;
+    }
     // Không gửi comment rỗng
     if (!isComment.trim()) return;
 
