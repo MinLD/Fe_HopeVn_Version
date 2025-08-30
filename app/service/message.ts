@@ -2,7 +2,7 @@
 
 import { GetMessageRequest, MessageResponse } from "@/app/types/message";
 
-const API_URL = "https://ourhope.io.vn/api";
+const API_URL = process.env.BACKEND_URL;
 
 export async function getMessageHistory(
   token: string,

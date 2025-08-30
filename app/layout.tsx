@@ -32,8 +32,12 @@ export const metadata: Metadata = {
     default: "Hope - Nền tảng Kết nối & Hỗ trợ Cộng đồng", // Title mặc định
     template: "%s | Hope", // Template cho các trang con (ví dụ: "Việc làm IT | Hope")
   },
+
   description:
     "Hope là nền tảng kết nối người khó khăn với cơ hội việc làm và các nhà hảo tâm. Cùng nhau xây dựng một cộng đồng tương trợ, minh bạch và bền vững.",
+  verification: {
+    google: "r1zzYyWTHGRbLp0I2G5mJbAsmuzi5PJTcABSnv7_zs0",
+  },
   keywords: [
     "tìm việc làm",
     "giúp đỡ người khó khăn",
