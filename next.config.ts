@@ -15,7 +15,7 @@ const nextConfig: NextConfig = {
       {
         // BẤT KỲ request nào đến /api/abc sẽ được chuyển tiếp
         source: "/apiFe/:path*",
-        destination: `${process.env.BACKEND_URL}/:path*`,
+        destination: `https://ourhope.io.vn/api/:path*`,
       },
     ];
   },
