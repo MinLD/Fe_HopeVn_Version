@@ -36,7 +36,7 @@ export const metadata: Metadata = {
   description:
     "Hope là nền tảng kết nối người khó khăn với cơ hội việc làm và các nhà hảo tâm. Cùng nhau xây dựng một cộng đồng tương trợ, minh bạch và bền vững.",
   verification: {
-    google: "r1zzYyWTHGRbLp0I2G5mJbAsmuzi5PJTcABSnv7_zs0",
+    google: "GvUzpFixvQo4LEjeh8SD6batmjrQnld5mmSASknBWCM",
   },
   keywords: [
     "tìm việc làm",
