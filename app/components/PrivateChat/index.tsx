@@ -1,178 +1,229 @@
 "use client";
 
-import { useStompClient } from "@/app/hooks/useStompClient";
-import { getMessageHistory } from "@/app/service/message";
-import { MessageResponse, SendMessageRequest } from "@/app/types/message";
+import {
+  Message,
+  SendMessagePayload,
+  useStompChat,
+} from "@/app/hooks/useStompChat";
 import { useProfileStore } from "@/app/zustand/userStore";
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import { ArrowDown } from "lucide-react";
+import Image from "next/image";
 
-interface ChatProps {
+interface ChatBoxProps {
   token: string;
 }
 
-export default function Chat({ token }: ChatProps) {
+export default function ChatBox({ token }: ChatBoxProps) {
+  // State để quản lý input và người đang chat
+  const [recipientInput, setRecipientInput] = useState("");
+  const [activeChatRecipient, setActiveChatRecipient] = useState("");
+
+  // Lấy thông tin người dùng hiện tại từ Zustand store
   const { profileUser } = useProfileStore();
-  const [receiverEmail, setReceiverEmail] = useState("");
-  const [messages, setMessages] = useState<MessageResponse[]>([]);
-  const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const { stompClient, isConnected } = useStompClient(token);
+  const currentUserEmail = profileUser?.email;
+  const currentUserId = profileUser?.id; // Lấy ID để truyền vào hook
 
-  const subscriptionRef = useRef<any>(null);
+  const [newMessage, setNewMessage] = useState("");
 
-  // Tải lịch sử chat khi receiverEmail thay đổi
-  useEffect(() => {
-    if (!receiverEmail) return;
+  // Sử dụng custom hook để quản lý logic chat
+  const { messages, sendMessage, isConnected, fetchHistory, setMessages } =
+    useStompChat(currentUserEmail, currentUserId, token);
 
-    const loadHistory = async () => {
-      setIsLoading(true);
-      const history = await getMessageHistory(token, {
-        user1Email: profileUser?.email,
-        user2Email: receiverEmail,
-      });
-      setMessages(history);
-      setIsLoading(false);
-    };
+  const [showScrollToBottom, setShowScrollToBottom] = useState(false);
+  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
-    loadHistory();
-  }, [receiverEmail, profileUser?.email, token]);
-
-  // Lắng nghe tin nhắn real-time
-  useEffect(() => {
-    // Chỉ thực hiện khi đã có kết nối STOMP
-    if (!isConnected || !stompClient) return;
-
-    // Dò đúng "tần số" radio mà backend quy định cho tin nhắn riêng tư
-    // Backend của bạn sẽ tự động đẩy tin nhắn cho user này vào kênh này
-    subscriptionRef.current = stompClient.subscribe(
-      "/user/queue/private", // Đây là kênh cá nhân của bạn
-
-      // Đây là HÀM sẽ tự động chạy mỗi khi có tin nhắn mới trên kênh
-      (message) => {
-        // 1. Dữ liệu tin nhắn nằm trong message.body dưới dạng chuỗi JSON
-        const receivedMessage: MessageResponse = JSON.parse(message.body);
-
-        console.log("✅ Tin nhắn mới nhận được!", receivedMessage);
-
-        // 2. Cập nhật state 'messages' để hiển thị tin nhắn mới lên giao diện
-        // Chỉ thêm vào cuộc trò chuyện nếu tin nhắn đó liên quan
-        // (Trong ví dụ này, ta thêm mọi tin nhắn nhận được vào state chung)
-        setMessages((prevMessages) => [...prevMessages, receivedMessage]);
-      }
-    );
-
-    // Hàm dọn dẹp: sẽ chạy khi component bị hủy
-    return () => {
-      // Ngừng dò kênh để không nhận tin nhắn nữa
-      if (subscriptionRef.current) {
-        subscriptionRef.current.unsubscribe();
-        console.log("Đã hủy subscribe kênh private.");
-      }
-    };
-    // useEffect này sẽ chạy lại nếu trạng thái kết nối thay đổi
-  }, [isConnected, stompClient]);
-
-  // Gửi tin nhắn
-  const handleSendMessage = () => {
-    console.log("1. Nút gửi đã được bấm."); // Kiểm tra xem hàm có được gọi không
-
-    if (stompClient?.connected && input.trim() && receiverEmail) {
-      const payload: SendMessageRequest = {
-        senderEmail: profileUser?.email,
-        receiverEmail: receiverEmail,
-        content: input,
-      };
-
-      console.log("2. Chuẩn bị gửi payload:", payload); // Kiểm tra dữ liệu có đúng không
-      console.log("3. Trạng thái kết nối:", stompClient.connected); // Kiểm tra kết nối
-
-      try {
-        stompClient.publish({
-          destination: "/app/message.private",
-          body: JSON.stringify(payload),
-        });
-
-        console.log("4. Lệnh publish đã được thực thi THÀNH CÔNG."); // Báo hiệu đã gửi
-
-        // ... (code cập nhật UI)
-      } catch (error) {
-        console.error("5. Lệnh publish đã THẤT BẠI:", error); // Báo hiệu lỗi
-      }
-    } else {
-      console.warn("Không thể gửi tin nhắn. Điều kiện không thỏa mãn:", {
-        connected: stompClient?.connected,
-        input: input.trim(),
-        receiver: receiverEmail,
-      });
+  // Bắt đầu cuộc trò chuyện mới
+  const handleStartChat = () => {
+    if (recipientInput.trim() && recipientInput.includes("@")) {
+      setActiveChatRecipient(recipientInput);
     }
   };
+
+  // useEffect để lấy lịch sử chat khi người dùng bắt đầu một cuộc trò chuyện mới
+  useEffect(() => {
+    if (activeChatRecipient) {
+      setMessages([]); // Xóa tin nhắn cũ
+      fetchHistory(activeChatRecipient);
+    }
+  }, [activeChatRecipient, fetchHistory, setMessages]);
+
+  // Hàm gửi tin nhắn
+  const handleSend = () => {
+    if (newMessage.trim() && currentUserEmail && activeChatRecipient) {
+      // Dữ liệu gửi lên server
+      const payload: SendMessagePayload = {
+        senderEmail: currentUserEmail,
+        receiverEmail: activeChatRecipient,
+        content: newMessage,
+      };
+
+      // Áp dụng Optimistic UI: Tạo tin nhắn tạm thời để hiển thị ngay
+      const optimisticMessage: Message = {
+        id: Date.now().toString(),
+        sender: { email: currentUserEmail },
+        receiver: { email: activeChatRecipient },
+        content: newMessage,
+        sentAt: new Date().toISOString(),
+      };
+
+      // Cập nhật giao diện ngay lập tức
+      setMessages((prevMessages) => [...prevMessages, optimisticMessage]);
+
+      // Gửi tin nhắn thực sự đến server
+      sendMessage(payload);
+
+      // Xóa nội dung ô input
+      setNewMessage("");
+    }
+  };
+
+  // Hàm xử lý sự kiện cuộn
+  const handleScroll = () => {
+    const container = messagesContainerRef.current;
+    if (container) {
+      const isScrolledUp = container.scrollTop < -200;
+      setShowScrollToBottom(isScrolledUp);
+    }
+  };
+
+  // Hàm để cuộn xuống dưới cùng
+  const scrollToBottom = () => {
+    messagesContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
-    <div className="max-w-2xl mx-auto p-6 border rounded-lg shadow-lg bg-white">
-      {/* Input để chọn người chat */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Chat với (nhập email):
-        </label>
+    <div className="space-y-6 p-4">
+      {/* Khung nhập email để bắt đầu chat */}
+      <div className="flex flex-col sm:flex-row gap-2 p-4 border rounded-lg bg-white shadow-sm">
         <input
           type="email"
-          className="w-full p-2 border rounded-md"
-          onBlur={(e) => setReceiverEmail(e.target.value)}
-          placeholder="friend@example.com"
+          className="border-2 p-2 flex-grow rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          placeholder="Nhập email người bạn muốn trò chuyện..."
+          value={recipientInput}
+          onChange={(e) => setRecipientInput(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleStartChat();
+          }}
         />
+        <button
+          onClick={handleStartChat}
+          className="bg-green-600 text-white px-5 py-2 rounded-md font-semibold hover:bg-green-700 transition-colors"
+        >
+          Bắt đầu Trò chuyện
+        </button>
       </div>
 
-      {/* Khung chat */}
-      {receiverEmail && (
-        <div className="border-t pt-4">
-          <h2 className="text-xl font-bold mb-2">
-            Trò chuyện với: {receiverEmail}
-          </h2>
-          <p>Trạng thái: {isConnected ? "✅ Online" : "❌ Offline"}</p>
+      {/* Khung chat chính, chỉ hiện khi đã có người để chat */}
+      {activeChatRecipient ? (
+        <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto border rounded-lg shadow-lg bg-white">
+          <div className="p-4 border-b font-bold text-lg text-center">
+            Trò chuyện với {activeChatRecipient}
+            <span
+              className={`ml-2 text-sm ${
+                isConnected ? "text-green-500" : "text-red-500"
+              }`}
+            >
+              ● {isConnected ? "Online" : "Offline"}
+            </span>
+          </div>
 
-          <div className="h-96 overflow-y-auto border p-4 my-4 bg-gray-50 space-y-4">
-            {isLoading ? (
-              <p>Đang tải lịch sử...</p>
-            ) : (
-              messages.map((msg, index) => (
-                <div
-                  key={index}
-                  className={`flex ${
-                    msg.senderEmail === profileUser?.email
-                      ? "justify-end"
-                      : "justify-start"
-                  }`}
-                >
+          <div className="flex-1 bg-gray-50 relative">
+            <div
+              ref={messagesContainerRef}
+              onScroll={handleScroll}
+              className="absolute inset-0 p-4 overflow-y-auto flex flex-col-reverse"
+            >
+              {/* SỬA: Logic render tin nhắn để nhóm avatar */}
+              {[...messages].reverse().map((msg, index, array) => {
+                const isSender = msg.sender.email === currentUserEmail;
+
+                // Logic để quyết định có hiển thị avatar hay không
+                // Tin nhắn tiếp theo theo thứ tự thời gian là tin nhắn ở index - 1 trong mảng đã đảo ngược
+                const nextMsg = array[index - 1];
+                const showAvatar =
+                  !isSender &&
+                  (index === 0 || nextMsg?.sender.email !== msg.sender.email);
+
+                // Lấy avatar từ dữ liệu, nếu không có thì dùng ảnh đại diện mặc định
+                const senderAvatar = `https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg`;
+
+                return (
                   <div
-                    className={`px-4 py-2 rounded-lg ${
-                      msg.senderEmail === profileUser?.email
-                        ? "bg-blue-500 text-white"
-                        : "bg-gray-200"
+                    key={msg.id}
+                    className={`flex items-end gap-2 my-1 ${
+                      isSender ? "justify-end" : "justify-start"
                     }`}
                   >
-                    {msg.content}
+                    {/* Vùng chứa avatar để giữ khoảng trống cho tin nhắn thẳng hàng */}
+                    <div className="w-7 flex-shrink-0">
+                      {showAvatar && (
+                        <Image
+                          src={senderAvatar}
+                          alt={msg.sender.email}
+                          width={28}
+                          height={28}
+                          className="w-7 h-7 rounded-full object-cover"
+                        />
+                      )}
+                    </div>
+
+                    {/* Khối tin nhắn */}
+                    <div
+                      className={`max-w-xs md:max-w-md p-3 rounded-lg ${
+                        isSender
+                          ? "bg-green-500 text-white"
+                          : "bg-gray-200 text-black"
+                      }`}
+                    >
+                      <p className="break-words">{msg.content}</p>
+                      <span className="text-xs opacity-75 mt-1 block text-right">
+                        {new Date(msg.sentAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))
+                );
+              })}
+            </div>
+
+            {/* Nút cuộn xuống dưới */}
+            {showScrollToBottom && (
+              <button
+                onClick={scrollToBottom}
+                className="absolute bottom-6 right-6 z-10 bg-white text-gray-600 w-10 h-10 rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition animate-fade-in"
+                aria-label="Cuộn xuống dưới"
+              >
+                <ArrowDown className="w-6 h-6" />
+              </button>
             )}
           </div>
 
-          <div className="flex gap-2">
+          {/* Khung nhập tin nhắn */}
+          <div className="flex p-4 border-t bg-white">
             <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="flex-grow p-2 border rounded-md"
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Nhập tin nhắn..."
               disabled={!isConnected}
-              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
             />
             <button
-              onClick={handleSendMessage}
-              className="px-6 py-2 bg-blue-500 text-white font-semibold rounded-md disabled:bg-gray-400"
+              onClick={handleSend}
+              className="ml-4 bg-green-500 text-white px-6 py-2 rounded-full font-semibold hover:bg-green-600 disabled:bg-gray-400 transition-colors"
               disabled={!isConnected}
             >
               Gửi
             </button>
           </div>
+        </div>
+      ) : (
+        <div className="text-center text-gray-500 mt-10">
+          <p>Nhập email và nhấn Bắt đầu Trò chuyện để xem tin nhắn.</p>
         </div>
       )}
     </div>

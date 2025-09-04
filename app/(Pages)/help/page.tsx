@@ -62,6 +62,8 @@ async function page() {
   dataPostRequestHelp = categorizedPosts.requestHelp;
   dataPostGive = categorizedPosts.give;
 
+  console.log(dataPost);
+
   // Bây giờ, câu lệnh return sẽ chỉ chạy SAU KHI dữ liệu đã được lấy xong
   return (
     <>

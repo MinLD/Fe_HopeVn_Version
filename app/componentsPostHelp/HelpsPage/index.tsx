@@ -2,9 +2,10 @@
 import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
 import SearchFilter from "@/app/components/SearchFilter";
 import VolunteerCard from "@/app/components/VolunteerCart";
-import CommentPostCart, {
+import CommentPostCard, {
   PostSkeleton,
 } from "@/app/componentsPostHelp/CommentPostCart";
+
 import PostCard from "@/app/componentsPostHelp/posts/PostCard";
 import { useNav } from "@/app/hooks/useNav";
 import MyLayout from "@/app/Layout/MyLayOut";
@@ -119,7 +120,7 @@ function HelpPage({
                       />
                       {isComment === i.id && (
                         <>
-                          <CommentPostCart
+                          <CommentPostCard
                             authorName={i.name}
                             onClose={() => setIsComment(-1)}
                             id={i.id}
@@ -132,7 +133,7 @@ function HelpPage({
                               post={i}
                               onClick={() => setIsComment(i.id)}
                             />
-                          </CommentPostCart>
+                          </CommentPostCard>
                         </>
                       )}
                     </div>
@@ -176,7 +177,7 @@ function HelpPage({
                       />
                       {isComment === i.id && (
                         <>
-                          <CommentPostCart
+                          <CommentPostCard
                             authorName={i.name}
                             onClose={() => setIsComment(-1)}
                             id={i.id}
@@ -188,7 +189,7 @@ function HelpPage({
                               post={i}
                               onClick={() => setIsComment(i.id)}
                             />
-                          </CommentPostCart>
+                          </CommentPostCard>
                         </>
                       )}
                     </div>
@@ -233,7 +234,7 @@ function HelpPage({
                         />
                         {isComment === i.id && (
                           <>
-                            <CommentPostCart
+                            <CommentPostCard
                               authorName={i.name}
                               onClose={() => setIsComment(-1)}
                               id={i.id}
@@ -245,7 +246,7 @@ function HelpPage({
                                 post={i}
                                 onClick={() => setIsComment(i.id)}
                               />
-                            </CommentPostCart>
+                            </CommentPostCard>
                           </>
                         )}
                       </div>
@@ -290,7 +291,7 @@ function HelpPage({
                       />
                       {isComment === i.id && (
                         <>
-                          <CommentPostCart
+                          <CommentPostCard
                             authorName={i.name}
                             onClose={() => setIsComment(-1)}
                             id={i.id}
@@ -302,7 +303,7 @@ function HelpPage({
                               post={i}
                               onClick={() => setIsComment(i.id)}
                             />
-                          </CommentPostCart>
+                          </CommentPostCard>
                         </>
                       )}
                     </div>
@@ -342,15 +343,14 @@ function HelpPage({
                 />
                 {isComment === i.id && (
                   <>
-                    <CommentPostCart
+                    <CommentPostCard
                       authorName={i.name}
                       onClose={() => setIsComment(-1)}
                       id={i.id}
                       token={token}
-                      type="volunteer"
                     >
                       <VolunteerCard key={i.id} post={i} token={token} />
-                    </CommentPostCart>
+                    </CommentPostCard>
                   </>
                 )}
               </div>

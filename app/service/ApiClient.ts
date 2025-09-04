@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const baseUrl = "https://ourhope.io.vn/api";
 export const FeUrl = "https://ourhope.io.vn";
-
+export const WEBSOCKET_URL = "https://ourhope.io.vn/ws";
 export const axiosClient = axios.create({
   baseURL: baseUrl,
   timeout: 30000,

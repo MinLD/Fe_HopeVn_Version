@@ -30,8 +30,8 @@ function HeaderMenuTop({ token = "" }: Props) {
 
   const icons: { name: ComponentType<SVGProps<SVGSVGElement>>; id: number }[] =
     [
-      { id: 1, name: Bell },
-      { id: 2, name: MessagesSquare },
+      { id: 7, name: Bell },
+      { id: 6, name: MessagesSquare },
     ];
 
   const handleReturn = (id: number) => {
@@ -49,6 +49,12 @@ function HeaderMenuTop({ token = "" }: Props) {
     }
     if (id === 5) {
       navigate.push("/");
+    }
+    if (id === 6) {
+      navigate.push("/message");
+    }
+    if (id === 7) {
+      navigate.push("/notification");
     }
   };
   return (
@@ -122,7 +128,7 @@ function HeaderMenuTop({ token = "" }: Props) {
                   {icons.map((item) => {
                     const IconComponent = item.name;
                     return (
-                      <div key={item.id}>
+                      <div key={item.id} onClick={() => handleReturn(item.id)}>
                         <IconComponent
                           className={`w-[25px] h-[25px md:w-[25px] md:h-[25px] `}
                         />

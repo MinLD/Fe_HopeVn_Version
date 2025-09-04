@@ -1,10 +1,11 @@
 // File: services/messageService.ts
 
+import axiosClient, { baseUrl } from "@/app/service/ApiClient";
 import { GetMessageRequest, MessageResponse } from "@/app/types/message";
 
-const API_URL = "https://ourhope.io.vn/api";
+const API_URL = baseUrl;
 
-export async function getMessageHistory(
+async function getMessageHistory(
   token: string,
   requestData: GetMessageRequest
 ): Promise<MessageResponse[]> {
@@ -27,3 +28,20 @@ export async function getMessageHistory(
     return [];
   }
 }
+
+const AddMessageBox = async (token: string, receiverEmail: string) => {
+  return await axiosClient.get(`/message-boxes/with/${receiverEmail}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+const GetAllUsersIbed = async (token: string) => {
+  return await axiosClient.get("/message-boxes", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export { getMessageHistory, AddMessageBox, GetAllUsersIbed };

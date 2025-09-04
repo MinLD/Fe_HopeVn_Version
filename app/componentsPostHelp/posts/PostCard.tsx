@@ -2,7 +2,14 @@
 import React, { useEffect, useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi } from "date-fns/locale";
-import { Calendar, Heart, MessageCircle, User } from "lucide-react";
+import {
+  Calendar,
+  Contact,
+  Heart,
+  MessageCircle,
+  MessageCircleMore,
+  User,
+} from "lucide-react";
 import Link from "next/link";
 import Button from "@/app/ui/Button";
 import Badge from "@/app/ui/Badge";
@@ -14,6 +21,7 @@ import Image from "next/image";
 import Spanning from "@/app/components/Spanning";
 import { ActivePost } from "@/app/service/admin";
 import { toast } from "sonner";
+import { AddMessageBox } from "@/app/service/message";
 
 interface PostCardProps {
   post: dataPost;
@@ -34,6 +42,20 @@ const PostCard: React.FC<PostCardProps> = ({
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [hoverProfile, setHoverProfile] = useState(false);
+
+  // Một hàm đơn giản để tạo slug từ tên
+  const slugify = (name: string) => {
+    return name
+      .toLowerCase()
+      .replace(/\s+/g, "-") // Thay thế khoảng trắng bằng gạch ngang
+      .normalize("NFD") // Chuẩn hóa Unicode để loại bỏ dấu
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[đĐ]/g, "d")
+      .replace(/[^a-z0-9-]/g, ""); // Xóa các ký tự không hợp lệ
+  };
+  const profileSlug = `${slugify(post.name)}.${post.userId}`;
+
   // const [reactions, setReactions] = useState(post.reactions);
   const handleActive = async () => {
     // Kiểm tra xem prop có được truyền vào không
@@ -45,7 +67,7 @@ const PostCard: React.FC<PostCardProps> = ({
       toast.success("Phê duyệt bài viết thành công!");
 
       // Gọi lại hàm để tải lại danh sách
-      handleGetAllPost();
+      await handleGetAllPost();
     } catch (err: any) {
       console.log(err);
       toast.error(err.response?.data?.message || "Có lỗi xảy ra");
@@ -90,13 +112,34 @@ const PostCard: React.FC<PostCardProps> = ({
       return;
     }
     await patchLikePost(token || "", post.id)
-      .then((res) => {
+      .then(async (res) => {
         console.log(res);
         router.refresh();
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+  const handleAddMessagerBox = async () => {
+    if (!token) {
+      router.push("/authenticate/loggin");
+      toast.warning("Vui lòng đăng nhập");
+      return;
+    }
+    try {
+      const response = await AddMessageBox(token as string, post.userId);
+      console.log(response);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        router.push("/message");
+        return;
+      }
+      toast.error(response.data.message);
+      return;
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.response.data.message);
+    }
   };
 
   // const getProgressPercentage = () => {
@@ -132,37 +175,52 @@ const PostCard: React.FC<PostCardProps> = ({
     <div
       className={`${
         type !== "comment"
-          ? "duration-200 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+          ? "duration-200 bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
           : ""
       } p-4 `}
     >
       <div className="space-y-4">
         {/* Header */}
-        <div className="flex items-start space-x-3">
-          {post.userPic ? (
-            <>
-              <Image
-                width={40}
-                height={40}
-                src={post?.userPic}
-                alt={post.name}
-                className="w-10 h-10 rounded-full object-cover"
-              />
-            </>
-          ) : (
-            <>
-              {" "}
-              <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                <User />
-              </div>
-            </>
-          )}
+        <div
+          className="flex items-start space-x-3 relative"
+          onMouseLeave={() => setHoverProfile(false)}
+        >
+          <Link
+            href={`account/profile/${profileSlug}`}
+            className="cursor-pointer"
+            onMouseEnter={() => setHoverProfile(true)}
+          >
+            {" "}
+            {post.userPic ? (
+              <>
+                <Image
+                  width={40}
+                  height={40}
+                  src={post?.userPic}
+                  alt={post.name}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              </>
+            ) : (
+              <>
+                {" "}
+                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                  <User />
+                </div>
+              </>
+            )}
+          </Link>
 
           <div className="flex-1 min-w-0">
             <div className="flex items-center  mb-1">
-              <h4 className="font-medium text-gray-900 truncate">
-                {post.name}
-              </h4>{" "}
+              <Link
+                href={`account/profile/${profileSlug}`}
+                onMouseEnter={() => setHoverProfile(true)}
+              >
+                <h4 className="font-medium text-gray-900 truncate hover:underline">
+                  {post.name}
+                </h4>{" "}
+              </Link>
               <Badge
                 variant={typeInfo.color as any}
                 className="capitalize"
@@ -182,6 +240,57 @@ const PostCard: React.FC<PostCardProps> = ({
               </div> */}
             </div>
           </div>
+          {hoverProfile && (
+            <div
+              className="absolute bottom-12  left-0 bg-white w-auto min-w-60 h-auto p-2 rounded-lg shadow-md"
+              onMouseLeave={() => setHoverProfile(false)}
+            >
+              <div className="flex  gap-3">
+                {post.userPic ? (
+                  <>
+                    <Image
+                      width={40}
+                      height={40}
+                      src={post?.userPic}
+                      alt={post.name}
+                      className="w-15 h-15 rounded-full object-cover"
+                    />
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                      <User />
+                    </div>
+                  </>
+                )}
+                <div className="space-y-2 flex flex-col ">
+                  <h4 className="font-bold text-gray-900 text-xl truncate ">
+                    {post.name}
+                  </h4>{" "}
+                  <Link href={`account/profile/${profileSlug}`}>
+                    <Button
+                      icon={Contact}
+                      variant="primary"
+                      size="sm"
+                      className="cursor-pointer"
+                    >
+                      Xem trang cá nhân
+                    </Button>
+                  </Link>
+                  <Button
+                    icon={MessageCircleMore}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleAddMessagerBox()}
+                    className="cursor-pointer"
+                  >
+                    Nhắn tin
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Title and Category */}
@@ -203,7 +312,7 @@ const PostCard: React.FC<PostCardProps> = ({
           {post.content.length > 150 && (
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="text-green-600 hover:text-green-700 text-sm font-medium mt-1"
+              className="text-green-600 hover:text-green-700 text-sm font-medium mt-1 cursor-pointer"
             >
               {isExpanded ? "Thu lại" : "Đọc thêm"}
             </button>
@@ -263,14 +372,14 @@ const PostCard: React.FC<PostCardProps> = ({
           <div className="flex items-center justify-between pt-2 ">
             <div className="flex items-center space-x-4">
               <button
-                className="flex items-center text-gray-500 hover:text-red-500 transition-colors"
+                className="flex items-center text-gray-500 hover:text-red-500 transition-colors cursor-pointer "
                 onClick={handleLike}
               >
-                <Heart className="w-5 h-5 mr-1" />
+                <Heart className="w-5 h-5 mr-1 hover:scale-105" />
                 <span className="text-sm">{post.like || 0} </span>
               </button>
               <button
-                className="flex items-center text-gray-500 hover:text-green-600 transition-colors"
+                className="flex items-center text-gray-500 hover:text-green-600 transition-colors cursor-pointer"
                 onClick={onClick}
               >
                 <MessageCircle className="w-5 h-5 mr-1" />

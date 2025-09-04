@@ -5,7 +5,6 @@ import { ProfileInformation } from "@/app/components/ProfileInformation";
 import { QuickActions } from "@/app/components/QuickActions";
 
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import { updateProfile } from "@/app/actions/updateProfile";
 import CVBuilder from "@/app/components/BuilderCV";
 import { Ty_Cv, Ty_User } from "@/app/types/UserList";
@@ -21,12 +20,10 @@ const ProfilePage = ({ token }: ProfilePageProps) => {
   const [isTypeShowPage, setIsTypeShowPage] = useState<"profile" | "cv">(
     "profile"
   );
-  const { profileUser } = useProfileStore();
+  const { profileUser, fetchProfile } = useProfileStore();
   const initialUser = profileUser;
   const [isLoadingUpdateProfile, setIsLoadingUpdateProfile] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
-  const router = useRouter();
 
   const [formData, setFormData] = useState({
     email: initialUser?.email || "",
@@ -71,7 +68,7 @@ const ProfilePage = ({ token }: ProfilePageProps) => {
     toast.success(result.message);
     setIsEditing(false);
     setIsLoadingUpdateProfile(false);
-    router.refresh(); // Trigger refetch
+    await fetchProfile();
 
     // await fetch("/api/user/update-profile", {
     //   method: "PUT",

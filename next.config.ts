@@ -1,5 +1,6 @@
+import { baseUrl } from "@/app/service/ApiClient";
 import type { NextConfig } from "next";
-
+const URL = baseUrl;
 const nextConfig: NextConfig = {
   // Thêm đoạn này vào
   typescript: {
@@ -15,7 +16,7 @@ const nextConfig: NextConfig = {
       {
         // BẤT KỲ request nào đến /api/abc sẽ được chuyển tiếp
         source: "/apiFe/:path*",
-        destination: `https://ourhope.io.vn/api/:path*`,
+        destination: `${URL}/:path*`,
       },
     ];
   },

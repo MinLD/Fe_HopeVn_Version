@@ -1,25 +1,58 @@
 import AvatarUploader from "@/app/components/AvartarUploader";
 import AvatarProfile from "@/app/components/AvatarProfile";
+import { AddMessageBox } from "@/app/service/message";
 import { Ty_User } from "@/app/types/UserList";
-import { Camera, Edit } from "lucide-react";
+import Button from "@/app/ui/Button";
+import { Camera, Edit, MessageCircleMore } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export const ProfileHeader: React.FC<{
   currentUser: Ty_User | null;
-  isEditing: boolean;
+  isEditing?: boolean;
   formData: any;
   setFormData: (value: any) => void;
-  handleSave: (value: string) => void;
-  handleCancel: () => void;
-  setIsEditing: (value: boolean) => void;
+  handleSave?: (value: string) => void;
+  handleCancel?: () => void;
+  setIsEditing?: (value: boolean) => void;
+  type?: string;
+  token?: string;
 }> = ({
   currentUser,
-  isEditing,
-  setIsEditing,
-  formData,
-  setFormData,
-  handleSave,
-  handleCancel,
+  isEditing = false,
+  setIsEditing = () => {},
+  formData = {},
+  setFormData = () => {},
+  handleSave = () => {},
+  handleCancel = () => {},
+  type,
+  token = "",
 }) => {
+  const router = useRouter();
+  const handleAddMessagerBox = async () => {
+    if (!token) {
+      router.push("/authenticate/loggin");
+      toast.warning("Vui lòng đăng nhập");
+      return;
+    }
+    try {
+      const response = await AddMessageBox(
+        token as string,
+        currentUser?.email || ""
+      );
+      console.log(response);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        router.push("/message");
+        return;
+      }
+      toast.error(response.data.message);
+      return;
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.response.data.message);
+    }
+  };
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
       <div className="bg-gradient-to-r from-green-500 to-green-600 h-32"></div>
@@ -34,17 +67,18 @@ export const ProfileHeader: React.FC<{
                 height="full"
               />
             </div>
-
-            <div className=" hover:cursor-pointer absolute bottom-2 right-2 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors duration-200">
-              <AvatarUploader
-                formData={formData}
-                handleClose={handleCancel || undefined}
-                handleSave={() => handleSave || undefined}
-                setFormData={setFormData}
-              >
-                <Camera className="h-4 w-4" />
-              </AvatarUploader>
-            </div>
+            {type !== "profileUsers" && (
+              <div className=" hover:cursor-pointer absolute bottom-2 right-2 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center hover:bg-green-700 transition-colors duration-200">
+                <AvatarUploader
+                  formData={formData}
+                  handleClose={handleCancel || undefined}
+                  handleSave={() => handleSave || undefined}
+                  setFormData={setFormData}
+                >
+                  <Camera className="h-4 w-4" />
+                </AvatarUploader>
+              </div>
+            )}
           </div>
 
           <div className="flex-1">
@@ -74,13 +108,25 @@ export const ProfileHeader: React.FC<{
                 </div>
               </div>
 
-              <button
-                onClick={() => setIsEditing(!isEditing)}
-                className="mt-4 sm:mt-0 flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
-              >
-                <Edit className="h-4 w-4" />
-                <span>Chỉnh sửa hồ sơ</span>
-              </button>
+              {type !== "profileUsers" ? (
+                <button
+                  onClick={() => setIsEditing(!isEditing)}
+                  className="mt-4 sm:mt-0 flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200"
+                >
+                  <Edit className="h-4 w-4" />
+                  <span>Chỉnh sửa hồ sơ</span>
+                </button>
+              ) : (
+                <Button
+                  icon={MessageCircleMore}
+                  variant="outline"
+                  size="sm"
+                  className="mt-4 sm:mt-0 cursor-pointer"
+                  onClick={() => handleAddMessagerBox()}
+                >
+                  Nhắn tin
+                </Button>
+              )}
             </div>
           </div>
         </div>

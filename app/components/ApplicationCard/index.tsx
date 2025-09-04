@@ -39,7 +39,7 @@ function ApplicationCart({ image, cvForm }: Props) {
           >
             Xem CV
           </Button>
-          <Button variant="primary" size="sm">
+          <Button variant="primary" size="sm" className="cursor-pointer">
             Nhắn tin
           </Button>
         </div>

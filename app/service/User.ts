@@ -45,7 +45,9 @@ const GetProfileUser = async (token: string) => {
     },
   });
 };
-
+const GetProfileUsers = async (id: string) => {
+  return await axiosClient.get(`/profile/${id}`);
+};
 const ForgotPassword = async (email: string) => {
   return await axiosClient.post("users/send-otp", { email });
 };
@@ -170,16 +172,32 @@ const CommentPostVolunteer = async (
     content: content,
   });
 };
-const getAllCommentsPost = async (token: string, postId: number) => {
-  return await axiosClient.get(`/comments/post/${postId}`);
+const getAllCommentsPost = async (
+  token: string,
+  postId: number,
+  nextPage: number,
+  size: number
+) => {
+  return await axiosClient.get(`/comments/post/${postId}`, {
+    params: {
+      page: nextPage,
+      size: size,
+    },
+  });
 };
 const getCountCommentPost = async (postId: number) => {
   return await axiosClient.get(`/post/${postId}/count`);
 };
-const getAllCommentsPostVolunteer = async (token: string, postId: number) => {
+const getAllCommentsPostVolunteer = async (
+  token: string,
+  postId: number,
+  page: number,
+  size: number
+) => {
   return await axiosClient.get(`/comments/post-volunteer/${postId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+    params: {
+      page: page,
+      size: size,
     },
   });
 };
@@ -220,4 +238,5 @@ export {
   getAllCv,
   CreateCv,
   getCountCommentPost,
+  GetProfileUsers,
 };

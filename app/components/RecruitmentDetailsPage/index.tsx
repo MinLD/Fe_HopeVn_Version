@@ -4,6 +4,7 @@ import CVBuilder from "@/app/components/BuilderCV";
 import { Ty_Company } from "@/app/components/PendingCompanyCard";
 import Portal from "@/app/components/Portal";
 import MyLayout from "@/app/Layout/MyLayOut";
+import { AddMessageBox } from "@/app/service/message";
 import {
   ArrowLeft,
   Building,
@@ -39,6 +40,27 @@ function RecruimentDetailPage({ job, company, token }: Props) {
     }
     router.push("/authenticate/loggin");
     toast.warning("Vui lòng đăng nhập");
+  };
+  const handleAddMessagerBox = async () => {
+    if (!token) {
+      router.push("/authenticate/loggin");
+      toast.warning("Vui lòng đăng nhập");
+      return;
+    }
+    try {
+      const response = await AddMessageBox(token as string, company.email);
+      console.log(response);
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        router.push("/message");
+        return;
+      }
+      toast.error(response.data.message);
+      return;
+    } catch (err: any) {
+      console.log(err);
+      toast.error(err.response.data.message);
+    }
   };
 
   return (
@@ -246,7 +268,10 @@ function RecruimentDetailPage({ job, company, token }: Props) {
                       Liên hệ với nhà tuyển dụng
                     </h3>
                     <div className="space-y-3">
-                      <span className="flex items-center gap-2">
+                      <span
+                        className="flex items-center gap-2"
+                        onClick={handleAddMessagerBox}
+                      >
                         <MessageSquareMore className="w-5 h-5" />
                         <ActionButton text="Gửi tin nhắn" />
                       </span>

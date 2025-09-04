@@ -13,18 +13,19 @@ import {
 } from "lucide-react";
 
 export const ProfileInformation: React.FC<{
-  isLoadingUpdateProfile: boolean;
-  isEditing: boolean;
+  isLoadingUpdateProfile?: boolean;
+  isEditing?: boolean;
   formData: any;
-  setFormData: (value: any) => void;
-  handleSave: () => void;
-  handleCancel: () => void;
+  setFormData?: (value: any) => void;
+  handleSave?: () => void;
+  handleCancel?: () => void;
+  type?: string;
 }> = ({
-  isEditing,
+  isEditing = false,
   formData,
-  setFormData,
-  handleSave,
-  handleCancel,
+  setFormData = () => {},
+  handleSave = () => {},
+  handleCancel = () => {},
   isLoadingUpdateProfile,
 }) => {
   const dataGender = [
