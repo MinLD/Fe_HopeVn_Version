@@ -6,8 +6,18 @@ import { useEffect, useRef, useState } from "react";
 import { IoSearchSharp } from "react-icons/io5";
 type Props = {
   onSearch: (query: string) => void;
+  bgColor?: string;
+  textColor?: string;
+  block?: string;
+  show?: string;
 };
-function SearchInput({ onSearch }: Props) {
+function SearchInput({
+  onSearch,
+  bgColor = "#fff",
+  textColor = "#fff",
+  block = "sm:block",
+  show = "hidden",
+}: Props) {
   const [query, setQuery] = useState("");
   const [suggestions, setSuggestions] = useState<Ty_Search[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -72,7 +82,9 @@ function SearchInput({ onSearch }: Props) {
       <form
         onSubmit={handleSubmit}
         ref={searchContainerRef}
-        className=" ml-5 mr-5 hidden sm:block relative  w-full flex-1 max-w-[300px] md:max-w-[500px]   transition-all ease-in-out duration-300"
+        className={` ml-5 mr-5 ${show && show} ${
+          block && block
+        } relative  w-full flex-1 max-w-[300px] md:max-w-[500px]   transition-all ease-in-out duration-300`}
       >
         <input
           value={query}
@@ -80,7 +92,7 @@ function SearchInput({ onSearch }: Props) {
           type="text"
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleReturn(query)}
-          className="pl-3 p-1 pr-8  w-full flex-1 border rounded-[10px] border-[#fff] placeholder:text-[14px] text-[#fff] outline-none"
+          className={`pl-3 p-1 pr-8  w-full flex-1 border rounded-[10px] border-[${bgColor}] placeholder:text-[14px] text-[${textColor}] outline-none`}
         />
         <span
           className="absolute top-2 right-2"
@@ -96,7 +108,7 @@ function SearchInput({ onSearch }: Props) {
                 <li
                   key={suggestion.id + suggestion.title}
                   onClick={() => handleSuggestionClick(suggestion.title.trim())}
-                  className={`px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-lg`}
+                  className={`px-4 py-1 sm:py-2 hover:bg-gray-100 cursor-pointer rounded-lg line-clamp-1 sm:line-clamp-2`}
                 >
                   {suggestion.title}
                 </li>

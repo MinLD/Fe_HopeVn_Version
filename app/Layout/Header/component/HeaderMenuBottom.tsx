@@ -10,7 +10,7 @@ import { useStateStore } from "@/app/context/StoreProvider";
 
 import { IoIosArrowForward } from "react-icons/io";
 import Link from "next/link";
-import { IoSearchSharp } from "react-icons/io5";
+import SearchInput from "@/app/components/SearchInput";
 function HeaderMenuBottom() {
   const navigate = useRouter();
   const data: { name: string; id: number }[] = [
@@ -140,16 +140,14 @@ function HeaderMenuBottom() {
             </div>
           </div>
           {/* thanh search */}
-          <div className="ml-5 mr-5 sm:hidden relative  w-full flex-1 max-w-[300px]    transition-all ease-in-out duration-300">
-            <input
-              placeholder="Tìm kiếm..."
-              type="text"
-              className="pl-3 p-1  w-full flex-1 border rounded-[10px] border-[#272727] placeholder:text-[14px] text-[#272727] outline-none"
+          <span className="ml-5 mr-7 w-full flex-1 max-w-[300px] transition-all ease-in-out duration-300">
+            <SearchInput
+              onSearch={console.log}
+              bgColor="#272727"
+              textColor="#272727"
+              show="sm:hidden"
             />
-            <span className="absolute top-2 right-2">
-              <IoSearchSharp size={20} />
-            </span>
-          </div>
+          </span>
           {/* ShowMenu mobile */}
           <div
             className="text-3xl  hover:cursor-pointer md:hidden"
