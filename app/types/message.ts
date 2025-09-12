@@ -1,5 +1,7 @@
 // File: types/message.ts
 
+import { Ty_profile_User } from "@/app/types/UserList";
+
 // Yêu cầu tải lịch sử tin nhắn
 export interface GetMessageRequest {
   user1Email: string;
@@ -21,4 +23,14 @@ export interface MessageResponse {
   content: string;
   sentAt: string;
   isRead: boolean;
+}
+export interface Ty_MessageBox {
+  id: string;
+  receiver: {
+    id: string;
+    email: string;
+    profile: Ty_profile_User;
+  };
+  lastMessageTime: Date;
+  unreadCount: number;
 }

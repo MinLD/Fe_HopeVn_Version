@@ -5,6 +5,7 @@ import { Client, IMessage } from "@stomp/stompjs";
 import axios from "axios";
 import { createStompClient } from "@/app/lib/stompClient";
 import { baseUrl } from "@/app/service/ApiClient";
+import { Ty_profile_User } from "@/app/types/UserList";
 
 const URL = baseUrl;
 
@@ -13,9 +14,11 @@ export interface Message {
   id: string;
   sender: {
     email: string;
+    profile: Ty_profile_User | null;
   };
   receiver: {
     email: string;
+    profile: Ty_profile_User | null;
   };
   content: string;
   sentAt: string;

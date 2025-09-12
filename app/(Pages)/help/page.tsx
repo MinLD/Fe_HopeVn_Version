@@ -2,7 +2,7 @@ import { Ty_PostVolunteer } from "@/app/components/PendingCompanyCard";
 import PostsLoadingSkeleton from "@/app/components/PostsLoadingSkeleton";
 import HelpPage from "@/app/componentsPostHelp/HelpsPage";
 import { getAllPost, GetAllPostVolunteer } from "@/app/service/User";
-import { dataPost as DataPostType } from "@/app/types/post"; // Đổi tên để tránh xung đột
+import { dataPost as DataPostType } from "@/app/types/post";
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import { Suspense } from "react";
@@ -63,6 +63,8 @@ async function page() {
   dataPostGive = categorizedPosts.give;
 
   console.log(dataPost);
+
+  console.log(dataPostVolunteer);
 
   // Bây giờ, câu lệnh return sẽ chỉ chạy SAU KHI dữ liệu đã được lấy xong
   return (

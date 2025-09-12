@@ -71,7 +71,7 @@ const ActiveCompany = async (token: string, id: string) => {
 
 // post Volunteer
 const GetAllPostVolunteer_non_Active = async (token: string) => {
-  return await axiosClient.get("/postVolunteer/non-active", {
+  return await axiosClient.get("/postVolunteer/non-active?page=1&size=1000", {
     headers: {
       Authorization: `Bearer ${token}`,
     },

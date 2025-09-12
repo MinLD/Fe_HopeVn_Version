@@ -25,7 +25,7 @@ function AgencySection() {
           Trong cuộc sống, một bàn tay đưa ra có thể thay đổi cả một cuộc đời.
           Hãy cùng nhau trao đi yêu thương, sẻ chia những điều tốt đẹp và mang
           lại hy vọng cho những người đang cần giúp đỡ. Khi chúng ta chung tay,
-          ánh sáng của sự tử tế sẽ lan tỏa khắp mọi nơi.`
+          ánh sáng của sự tử tế sẽ lan tỏa khắp mọi nơi.
         </p>
 
         {/* Nút */}

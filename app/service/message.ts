@@ -43,5 +43,29 @@ const GetAllUsersIbed = async (token: string) => {
     },
   });
 };
+const MarkReadMessage = async (token: string, senderEmail: string) => {
+  return await axiosClient.put(
+    `/message-boxes/mark-read/${senderEmail}`,
+    null,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+};
+const GetTotalUnreadCount = async (token: string) => {
+  return await axiosClient.get("/message-boxes/unread-count", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
 
-export { getMessageHistory, AddMessageBox, GetAllUsersIbed };
+export {
+  getMessageHistory,
+  AddMessageBox,
+  GetAllUsersIbed,
+  MarkReadMessage,
+  GetTotalUnreadCount,
+};

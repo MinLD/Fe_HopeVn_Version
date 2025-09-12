@@ -5,14 +5,15 @@ import { useRouter } from "next/navigation";
 import MyButton from "@/app/components/Button";
 import * as React from "react";
 
-import { Bell, MessagesSquare } from "lucide-react";
+import { Bell, MessageCircleMore } from "lucide-react";
 
-import { IoSearchSharp } from "react-icons/io5";
 import { useProfileStore } from "@/app/zustand/userStore";
 import AvatarProfile from "@/app/components/AvatarProfile";
 
 import { useNav } from "@/app/hooks/useNav";
 import HeaderTopMenuDropdown from "@/app/components/HeaderTopMenuDropdown";
+import { GetTotalUnreadCount } from "@/app/service/message";
+import SearchInput from "@/app/components/SearchInput";
 
 type Props = {
   token?: string | null;
@@ -31,7 +32,7 @@ function HeaderMenuTop({ token = "" }: Props) {
   const icons: { name: ComponentType<SVGProps<SVGSVGElement>>; id: number }[] =
     [
       { id: 7, name: Bell },
-      { id: 6, name: MessagesSquare },
+      { id: 6, name: MessageCircleMore },
     ];
 
   const handleReturn = (id: number) => {
@@ -57,6 +58,18 @@ function HeaderMenuTop({ token = "" }: Props) {
       navigate.push("/notification");
     }
   };
+  const [countNotification, setCountnotification] = React.useState(0);
+  const handleGetCount = async () => {
+    if (!token) return;
+    const response = await GetTotalUnreadCount(token || "");
+    setCountnotification(response.data.result);
+    console.log(response.data.result);
+  };
+  useEffect(() => {
+    handleGetCount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="flex h-[50px] w-full items-center justify-center bg-[#013035]">
       <MyLayout>
@@ -91,16 +104,7 @@ function HeaderMenuTop({ token = "" }: Props) {
             </div>
 
             {/* thanh search */}
-            <div className="ml-5 mr-5 hidden sm:block relative  w-full flex-1 max-w-[300px] md:max-w-[500px]   transition-all ease-in-out duration-300">
-              <input
-                placeholder="Tìm kiếm..."
-                type="text"
-                className="pl-3 p-1  w-full flex-1 border rounded-[10px] border-[#fff] placeholder:text-[14px] text-[#fff] outline-none"
-              />
-              <span className="absolute top-2 right-2">
-                <IoSearchSharp size={20} />
-              </span>
-            </div>
+            <SearchInput onSearch={console.log} />
           </div>
 
           <div className="flex items-center justify-between gap-3 ">
@@ -128,10 +132,19 @@ function HeaderMenuTop({ token = "" }: Props) {
                   {icons.map((item) => {
                     const IconComponent = item.name;
                     return (
-                      <div key={item.id} onClick={() => handleReturn(item.id)}>
+                      <div
+                        key={item.id}
+                        onClick={() => handleReturn(item.id)}
+                        className="relative"
+                      >
                         <IconComponent
                           className={`w-[25px] h-[25px md:w-[25px] md:h-[25px] `}
                         />
+                        {item.id === 6 && countNotification > 0 && (
+                          <p className="absolute  top-4 bg-red-500 text-white right-0 w-4 h-4 text-2xl  rounded-full flex items-center justify-center text-[10px]">
+                            {countNotification}
+                          </p>
+                        )}
                       </div>
                     );
                   })}
