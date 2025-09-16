@@ -120,27 +120,27 @@ const PostCard: React.FC<PostCardProps> = ({
         console.log(err);
       });
   };
-  const handleAddMessagerBox = async () => {
-    if (!token) {
-      router.push("/authenticate/loggin");
-      toast.warning("Vui lòng đăng nhập");
-      return;
-    }
-    try {
-      const response = await AddMessageBox(token as string, post.userId);
-      console.log(response);
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        router.push("/message");
-        return;
-      }
-      toast.error(response.data.message);
-      return;
-    } catch (err: any) {
-      console.log(err);
-      toast.error(err.response.data.message);
-    }
-  };
+  // const handleAddMessagerBox = async () => {
+  //   if (!token) {
+  //     router.push("/authenticate/loggin");
+  //     toast.warning("Vui lòng đăng nhập");
+  //     return;
+  //   }
+  //   try {
+  //     const response = await AddMessageBox(token as string, post.userId);
+  //     console.log(response);
+  //     if (response.status === 200) {
+  //       toast.success(response.data.message);
+  //       router.push("/message");
+  //       return;
+  //     }
+  //     toast.error(response.data.message);
+  //     return;
+  //   } catch (err: any) {
+  //     console.log(err);
+  //     toast.error(err.response.data.message);
+  //   }
+  // };
 
   // const getProgressPercentage = () => {
   //   if (post.type === "help-request" && post.amount && post.target) {
@@ -278,7 +278,7 @@ const PostCard: React.FC<PostCardProps> = ({
                       Xem trang cá nhân
                     </Button>
                   </Link>
-                  <Button
+                  {/* < 
                     icon={MessageCircleMore}
                     variant="outline"
                     size="sm"
@@ -286,7 +286,7 @@ const PostCard: React.FC<PostCardProps> = ({
                     className="cursor-pointer"
                   >
                     Nhắn tin
-                  </Button>
+                  </> */}
                 </div>
               </div>
             </div>

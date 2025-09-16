@@ -46,12 +46,7 @@ function HelpPage({
   const { setOpenCreatePost, isOpenCreatePost } = useNav();
   const [isComment, setIsComment] = useState<number>(-1);
   const navigate = useRouter();
-  // const getProfileUser = async (id: string) => {
-  //   await getUserId(id).then((res) => {
-  //     console.log(res);
-  //     return res.data;
-  //   });
-  // };
+
   const [filters, setFilters] = useState<FilterState>({
     search: "",
     location: "",
@@ -64,39 +59,6 @@ function HelpPage({
   const [selectedType, setSelectedType] = useState<
     "all" | "help-request" | "free" | "giveaway" | "Hoàn vốn"
   >("all");
-
-  // const filteredPosts = useMemo(() => {
-  //   return mockPosts.filter((post: JobPost) => {
-  //     // Type filter
-  //     if (selectedType !== "all" && post.type !== selectedType) {
-  //       return false;
-  //     }
-
-  //     // Search filter
-  //     if (filters.search) {
-  //       const searchTerm = filters.search.toLowerCase();
-  //       if (
-  //         !post.title.toLowerCase().includes(searchTerm) &&
-  //         !post.description.toLowerCase().includes(searchTerm) &&
-  //         !post.author.name.toLowerCase().includes(searchTerm)
-  //       ) {
-  //         return false;
-  //       }
-  //     }
-
-  //     // Location filter
-  //     if (filters.location && post.location !== filters.location) {
-  //       return false;
-  //     }
-
-  //     // Urgent filter
-  //     if (filters.urgent && !post.urgent) {
-  //       return false;
-  //     }
-
-  //     return true;
-  //   });
-  // }, [filters, selectedType]);
 
   const getTypeCount = (
     type: "all" | "help-request" | "free" | "giveaway" | "Hoàn vốn"

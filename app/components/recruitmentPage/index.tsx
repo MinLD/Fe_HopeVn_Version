@@ -3,50 +3,61 @@ import { JobPostingProps } from "@/app/componentEmployer/JobPosting";
 import JobCard from "@/app/components/jobCart/JobCard";
 import SearchFilter from "@/app/components/SearchFilter";
 import MyLayout from "@/app/Layout/MyLayOut";
+import { GetAllJobs } from "@/app/service/employer";
 import { Sprout } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 
 type prop = {
   token: string;
   jobsData: JobPostingProps[];
+  totalPages: number;
 };
-const RecruitmentPage = ({ jobsData }: prop) => {
-  //   const filteredJobs = useMemo(() => {
-  //     return mockJobs.filter((job: Job) => {
-  //       // Search filter
-  //       if (filters.search) {
-  //         const searchTerm = filters.search.toLowerCase();
-  //         if (
-  //           !job.title.toLowerCase().includes(searchTerm) &&
-  //           !job.company.toLowerCase().includes(searchTerm) &&
-  //           !job.description.toLowerCase().includes(searchTerm)
-  //         ) {
-  //           return false;
-  //         }
-  //       }
+const RecruitmentPage = ({ jobsData, totalPages }: prop) => {
+  const [selectedJob, setSelectedJob] = useState<JobPostingProps[]>(jobsData);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const observer = useRef<IntersectionObserver | null>(null);
+  const loadMoreJobs = useCallback(async () => {
+    if (page >= totalPages || loading) return;
+    setLoading(true);
+    const nextPage = page + 1;
+    const minimumDisplayTime = new Promise((resolve) =>
+      setTimeout(resolve, 1000)
+    );
+    try {
+      const calApi = await GetAllJobs(nextPage, 5);
+      const [response] = await Promise.all([calApi, minimumDisplayTime]);
+      if (response.status === 200 && response.data.result?.data) {
+        setSelectedJob((prev) => [
+          ...(prev || []),
+          ...response.data.result.data,
+        ]);
+        setHasMore(page * 5 < response.data.result.totalElements);
+        setPage(nextPage);
+      }
+    } catch (error) {
+      console.error("Failed to fetch more jobs:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [page, totalPages, loading]);
 
-  //       // Location filter
-  //       if (filters.location && job.location !== filters.location) {
-  //         return false;
-  //       }
+  const lastJobRef = useCallback(
+    (node: HTMLDivElement) => {
+      if (loading) return;
+      if (observer.current) observer.current.disconnect();
 
-  //       // Industry filter
-  //       if (filters.industry && job.industry !== filters.industry) {
-  //         return false;
-  //       }
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          loadMoreJobs();
+        }
+      });
 
-  //       // Urgent filter
-  //       if (filters.urgent && !job.urgent) {
-  //         return false;
-  //       }
-
-  //       // Salary filter (simplified - in real app would parse salary ranges)
-  //       if (filters.salaryMin || filters.salaryMax) {
-  //         // For demo purposes, just skip this complex parsing
-  //       }
-
-  //       return true;
-  //     });
-  //   }, [filters]);
+      if (node) observer.current.observe(node);
+    },
+    [loading, loadMoreJobs]
+  );
 
   return (
     <>
@@ -74,11 +85,27 @@ const RecruitmentPage = ({ jobsData }: prop) => {
               {/* Job Listings */}
               <div className="lg:col-span-3">
                 <div className="space-y-6">
-                  {jobsData.map((job) => (
-                    <div key={job.id}>
+                  {selectedJob.map((job, index) => (
+                    <div
+                      key={job.id}
+                      ref={selectedJob.length === index + 1 ? lastJobRef : null}
+                    >
                       <JobCard job={job} />
                     </div>
                   ))}
+                  {/* Hiển thị skeleton khi đang tải thêm */}
+                  {loading && (
+                    <>
+                      <JobCardSkeleton />
+                      <JobCardSkeleton />
+                    </>
+                  )}
+                  {/* Hiển thị khi đã hết bình luận */}
+                  {!hasMore && selectedJob.length > 0 && (
+                    <p className="text-center text-gray-500 py-4">
+                      Đã xem hết công việc
+                    </p>
+                  )}
                   {jobsData.length === 0 && (
                     <div className="col-span-3">
                       <div className="flex flex-col justify-center items-center text-center p-10 bg-gray-50 rounded-lg">
@@ -106,5 +133,14 @@ const RecruitmentPage = ({ jobsData }: prop) => {
     </>
   );
 };
+// Component Skeleton để hiển thị khi đang tải thêm
+const JobCardSkeleton = () => (
+  <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 animate-pulse">
+    <div className="h-6 bg-gray-300 rounded w-3/4 mb-2"></div>
+    <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
+    <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+    <div className="h-4 bg-gray-200 rounded w-full"></div>
+  </div>
+);
 
 export default RecruitmentPage;

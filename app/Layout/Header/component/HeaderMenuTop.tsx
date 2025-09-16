@@ -18,16 +18,15 @@ import SearchInput from "@/app/components/SearchInput";
 type Props = {
   token?: string | null;
 };
+
 function HeaderMenuTop({ token = "" }: Props) {
   const navigate = useRouter();
   const { setOpenMenuHeaderTop, isOpenMenuHeaderTop } = useNav();
-  // const displayProfile = await initialProfile;
-  // const { profileUser, isLoading } = useAutoFetchProfile();
-  const { fetchProfile, profileUser } = useProfileStore();
-  useEffect(() => {
+
+  const { fetchProfile, profileUser, isLoading } = useProfileStore();
+  React.useEffect(() => {
     fetchProfile();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fetchProfile]);
 
   const icons: { name: ComponentType<SVGProps<SVGSVGElement>>; id: number }[] =
     [

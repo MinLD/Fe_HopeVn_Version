@@ -1,5 +1,6 @@
 import HeaderMenuBottom from "@/app/Layout/Header/component/HeaderMenuBottom";
 import HeaderMenuTop from "@/app/Layout/Header/component/HeaderMenuTop";
+import axios from "axios";
 
 type Props = {
   token?: string | null;

@@ -40,8 +40,13 @@ const CreatePostJob = async (token: string, data: any) => {
     },
   });
 };
-const GetAllJobs = async () => {
-  return await axiosClient.get("/job/getAll?page=1&size=1000");
+const GetAllJobs = async (page: number, size: number) => {
+  return await axiosClient.get(`/job/getAll`, {
+    params: {
+      page: page,
+      size: size,
+    },
+  });
 };
 
 const GetJobDetail = async (id: string) => {

@@ -10,12 +10,14 @@ export const metadata: Metadata = {
 async function page() {
   const token = (await cookies()).get("authToken")?.value;
   let dataJob: JobPostingProps[] = [] as JobPostingProps[];
+  let totalPages: number = 0;
   const handleGetAllJobs = async () => {
     try {
-      const response = await GetAllJobs();
+      const response = await GetAllJobs(1, 5);
       if (response.status === 200) {
         console.log(response.data.result);
         dataJob = response?.data?.result?.data;
+        totalPages = response?.data?.result?.totalPages;
       } else {
         console.log(response.data.message);
       }
@@ -28,7 +30,11 @@ async function page() {
 
   return (
     <>
-      <RecruitmentPage token={token || ""} jobsData={dataJob} />
+      <RecruitmentPage
+        token={token || ""}
+        jobsData={dataJob}
+        totalPages={totalPages || 0}
+      />
 
       {/* <PrivateChat token={token || ""} /> */}
     </>

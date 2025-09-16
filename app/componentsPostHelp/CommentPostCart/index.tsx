@@ -63,7 +63,7 @@ function CommentPostCard({
       // SỬA: Logic đảm bảo thời gian hiển thị tối thiểu
       const minimumDisplayTime = new Promise((resolve) =>
         setTimeout(resolve, 800)
-      ); // 0.5 giây
+      );
 
       try {
         const apiCall =
