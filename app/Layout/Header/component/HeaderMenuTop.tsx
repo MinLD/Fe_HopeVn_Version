@@ -23,7 +23,7 @@ function HeaderMenuTop({ token = "" }: Props) {
   const navigate = useRouter();
   const { setOpenMenuHeaderTop, isOpenMenuHeaderTop } = useNav();
 
-  const { fetchProfile, profileUser, isLoading } = useProfileStore();
+  const { fetchProfile, profileUser } = useProfileStore();
   React.useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, MapPin, Filter, X } from "lucide-react";
+import { MapPin, Filter, X } from "lucide-react";
 import { industries, vietnamProvinces } from "@/app/data";
 
 interface FilterState {

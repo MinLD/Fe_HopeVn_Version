@@ -2,14 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import { vi } from "date-fns/locale";
-import {
-  Calendar,
-  Contact,
-  Heart,
-  MessageCircle,
-  MessageCircleMore,
-  User,
-} from "lucide-react";
+import { Calendar, Contact, Heart, MessageCircle, User } from "lucide-react";
 import Link from "next/link";
 import Button from "@/app/ui/Button";
 import Badge from "@/app/ui/Badge";
@@ -21,7 +14,6 @@ import Image from "next/image";
 import Spanning from "@/app/components/Spanning";
 import { ActivePost } from "@/app/service/admin";
 import { toast } from "sonner";
-import { AddMessageBox } from "@/app/service/message";
 
 interface PostCardProps {
   post: dataPost;
